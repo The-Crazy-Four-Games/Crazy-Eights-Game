@@ -1,10 +1,14 @@
 # Project Name
 
-Developer Names:
+Developer Names:Ruida Chen, Ammar Sharbat, Alvin Qian, Jiaming Li
 
-Date of project start:
+Date of project start: 9/16/2025
 
-This project is ...
+This project is an implementation of the classic card game Crazy Eights with dozenal achieved .
+Players take turns discarding cards that match either the rank or the suit of the top card on the discard pile.
+The "8" cards are special wild cards that allow the player to choose a new suit.
+The goal is to be the first player to get rid of all your cards.
+
 
 The folders and files for this project are as follows:
 
