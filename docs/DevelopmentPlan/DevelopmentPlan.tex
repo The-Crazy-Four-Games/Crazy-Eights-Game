@@ -113,12 +113,12 @@ Roles are rotational to ensure balanced workload distribution, broaden experienc
 \section{Workflow Plan}
 
 \begin{enumerate}
-  \item \textbf{Update Local Repository}: Before starting any work session, pull the latest changes from the `main` branch to ensure the local repository is up to date.
-  \item \textbf{Branching}: Create a new feature (or fix) branch from `main` for each unit of work (feature, bug fix, refactor). Follow a consistent naming convention such as: feature/short-description or fix/issue-id.
+  \item \textbf{Update Local Repository}: Pull the latest changes from the `main` branch to ensure the local repository is up to date.
+  \item \textbf{Branching}: Create a new feature (or fix) branch from `main`. Follow a consistent naming convention such as: feature/short-description or fix/issue-id.
   \item \textbf{Coding}: Implement modules and functions according to the design and requirements. Follow the agreed coding standards and document code with comments where necessary.
-  \item \textbf{Unit Testing}: Write and execute unit tests for the newly implemented modules/functions to verify expected behaviour early. Tests must pass locally before proceeding.
+  \item \textbf{Unit Testing}: Write and execute unit tests for the newly implemented modules/functions to check expected behaviour. Tests must pass locally before pushing to the branch.
   \item \textbf{Commit and Push}: Commit changes with descriptive messages. Push to the remote feature branch.
-  \item \textbf{Review and Merge}: Open a pull request into `main`. Another team member reviews for correctness, style, test coverage, and documentation updates. The reviewer will leave comments and suggestions if needed. After at least one approval, the branch is merged into the main branch.
+  \item \textbf{Review and Merge}: Create a pull request into `main`. A team member reviews for feature logic, style, test coverage, and documentation updates. The reviewer will leave comments and suggestions if needed. After at least one approval, the branch is merged into the main branch.
 \end{enumerate}
 
 All project tasks are tracked through GitHub Issues and a Kanban board using GitHub Projects (Backlog / In Progress / Review / Done).
