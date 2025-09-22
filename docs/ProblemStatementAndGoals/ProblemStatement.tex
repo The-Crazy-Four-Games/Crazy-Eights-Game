@@ -1,19 +1,28 @@
 \documentclass{article}
 
-\usepackage{tabularx}
-\usepackage{booktabs}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+
+\usepackage{tabularx,booktabs,array,ragged2e,makecell}
+\usepackage[none]{hyphenat}
+\renewcommand\theadfont{\normalsize\bfseries}
+\renewcommand{\arraystretch}{1.2}
+\setlength{\tabcolsep}{6pt}
+
+
+\newcolumntype{L}{>{\RaggedRight\arraybackslash}X}
 
 \title{Problem Statement and Goals\\\progname}
-
 \author{\authname}
-
 \date{}
 
 \input{../Comments}
 \input{../Common}
 
-\begin{document}
 
+\begin{document}
     \maketitle
 
     \begin{table}[hp]
@@ -33,67 +42,102 @@
 
     \subsection{Problem}
 
+
     \subsection{Inputs and Outputs}
 
+
     \subsection{Stakeholders}
+
 
     \subsection{Environment}
 
     \section{Goals}
 
     \begin{table}[h!]
-        \caption{Minimum Viable Product (MVP) Goals} \label{TblMVPGoals}
-        \begin{tabularx}{\textwidth}{|l|X|X|}
+        \caption{Minimum Viable Product (MVP) Goals}\label{TblMVPGoals}
+        \begin{tabularx}{\textwidth}{|L|L|L|}
             \hline
             \textbf{Goal} & \textbf{Explanation} & \textbf{Reasoning} \\
             \hline
-            Two-Player Core Loop & Support a one-versus-one match with turn-taking, drawing, discarding, and win condition checks. Includes starter card, discard pile, and reshuffling the stock pile. & Two players represent the smallest playable unit. Completing this ensures the core gameplay is functional and testable. \\
+            Two-Player Core Loop &
+            Support a one-versus-one match with turn-taking, drawing, discarding, and win checks. Includes starter card, discard pile, and reshuffling the stock pile. &
+            Two players are the smallest playable unit; finishing this proves the core loop. \\
             \hline
-            Classic Rules Engine & Implement the standard Crazy Eights rules: match by suit or rank, “8” acts as wild, and drawing occurs if no valid move exists. & Ensuring correctness of the classic game establishes a solid baseline before adding variations. \\
+            Classic Rules Engine &
+            Implement standard Crazy Eights: match by suit or rank; an ``8'' is wild and lets the player declare a suit; draw if no valid move exists. &
+            Correct classic rules establish a solid baseline before adding variations. \\
             \hline
-            Dozenal (Base-12) Scoring/Display & Display scores, counters, or thresholds in base-12 notation while keeping classic rules unchanged. & Introduces dozenal in a simple, non-disruptive way that highlights novelty while retaining accessibility. \\
+            Dozenal (Base-12) Scoring/Display &
+            Display scores, counters, or thresholds in base-12 notation while keeping classic rules unchanged. &
+            Introduces dozenal in a simple, non-disruptive way that highlights novelty while retaining accessibility. \\
             \hline
-            Move Validation and Feedback & Provide immediate feedback for invalid moves, suit selection UI after playing an “8,” and clear state indicators. & Reduces errors, lowers learning curve, and improves user experience. \\
+            Move Validation and Feedback &
+            Provide immediate invalid-move feedback, clear suit selection UI after playing an ``8,'' and real-time state indicators. &
+            Reduces errors and learning curve; improves usability. \\
             \hline
-            Testability and Determinism & Support seeded shuffling and provide basic logs or replays. & Facilitates unit/integration testing and reproducibility during evaluation. \\
+            Testability and Determinism &
+            Support seeded shuffling and provide basic logs or replays for each session. &
+            Enables reproducible unit/integration testing and debugging. \\
             \hline
-            Stability and Performance & Ensure responsive UI (<200ms), no crashes, no deadlocks, and correct reshuffling. & Reliability is the baseline for acceptance and live demonstration. \\
+            Stability and Performance &
+            Ensure responsive UI , no crashes, no deadlocks, and correct reshuffling. &
+            Reliability is the baseline for acceptance and live demonstration. \\
             \hline
-            Minimal UI & Provide a desktop or web interface showing hand, discard pile, current state, and dozenal score tracker. & Covers essential user interactions while limiting complexity at MVP stage. \\
+            Minimal UI &
+            Provide a desktop~or web interface showing hand, discard pile, current state, and a dozenal score tracker. &
+            Covers essential interactions while limiting complexity at the MVP stage. \\
             \hline
         \end{tabularx}
     \end{table}
+
 
     \section{Stretch Goals}
 
     \begin{table}[h!]
-        \caption{Stretch Goals} \label{TblStretchGoals}
-        \begin{tabularx}{\textwidth}{|l|X|X|}
+        \caption{Stretch Goals}\label{TblStretchGoals}
+        \begin{tabularx}{\textwidth}{|L|L|L|}
             \hline
             \textbf{Goal} & \textbf{Explanation} & \textbf{Reasoning} \\
             \hline
-            3–4 Player Matches & Extend gameplay to support three or more players in a single match. & Crazy Eights is often played with more than two people, which increases replayability. \\
+            3--4 Player Matches &
+            Extend gameplay to three or more players with clear turn rotation and visualization. &
+            Increases replayability; closer to common play. \\
             \hline
-            Online Multiplayer & Allow players to create/join rooms and synchronize state across network connections. & Brings the game closer to real-world usage and demonstrates system design capability. \\
+            Online Multiplayer &
+            Create/join rooms and synchronize game state; provide basic reconnection. &
+            Demonstrates system design capability and supports real usage. \\
             \hline
-            Advanced Dozenal Variants & Add optional rule packs where cards related to 12 gain special effects or scoring thresholds use base-12 values. & Deepens the dozenal theme while keeping the classic mode intact. \\
+            AI Opponent &
+            Computer-controlled players with simple heuristics for card choice and suit declaration. &
+            Enables single-player testing and showcases extensibility. \\
             \hline
-            Rule Configurator & Provide toggles for house rules such as stacking eights or alternate scoring methods. & Demonstrates variability management and supports experimentation. \\
+            Advanced Dozenal Variants &
+            Optional rule packs (e.g., effects for 12-related cards; ). &
+            Deepens the dozenal theme while keeping the classic mode intact. \\
             \hline
-            Tutorial and Visual Guidance & Include first-game tutorial, invalid-move highlights, and play suggestions. & Lowers the learning curve and improves usability. \\
+            Rule Configurator &
+            Toggles for house rules (draw-until-playable, stacking eights, scoring methods in decimal or dozenal). &
+            Shows variability management; supports experimentation and future product-line thinking. \\
             \hline
-            Save/Replay System & Allow saving and replaying completed games. & Supports debugging, user study, and richer documentation. \\
+            Tutorial and Visual Guidance &
+            First-game tutorial, invalid-move highlights, and play suggestions. &
+            Lowers learning curve and improves usability. \\
             \hline
-            Cross-Platform Packaging & Deploy as a web app or desktop executable. & Lowers barrier for evaluators and external users to try the system. \\
+            Save/Replay System &
+            Save completed games and replay event sequences. &
+            Aids debugging, user study, and documentation. \\
+            \hline
+            Cross-Platform Packaging &
+            Deploy as a web app or desktop executable (Windows/macOS). &
+            Lowers the barrier for evaluators and external users to try the system. \\
             \hline
         \end{tabularx}
     \end{table}
 
-
     \section{Extras}
 
-    \newpage{}
 
+    \newpage{}
     \section*{Appendix --- Reflection}
 
     \input{../Reflection.tex}
@@ -103,7 +147,8 @@
         \item What pain points did you experience during this deliverable, and how
         did you resolve them?
         \item How did you and your team adjust the scope of your goals to ensure
-        they are suitable for a Capstone project?
+        they are suitable for a Capstone project (not overly ambitious but also of
+        appropriate complexity for a senior design project)?
     \end{enumerate}
 
 \end{document}
