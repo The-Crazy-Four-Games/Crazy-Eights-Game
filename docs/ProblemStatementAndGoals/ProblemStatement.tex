@@ -14,76 +14,96 @@
 
 \begin{document}
 
-\maketitle
+    \maketitle
 
-\begin{table}[hp]
-\caption{Revision History} \label{TblRevisionHistory}
-\begin{tabularx}{\textwidth}{llX}
-\toprule
-\textbf{Date} & \textbf{Developer(s)} & \textbf{Change}\\
-\midrule
-Date1 & Name(s) & Description of changes\\
-Date2 & Name(s) & Description of changes\\
-... & ... & ...\\
-\bottomrule
-\end{tabularx}
-\end{table}
+    \begin{table}[hp]
+        \caption{Revision History} \label{TblRevisionHistory}
+        \begin{tabularx}{\textwidth}{llX}
+            \toprule
+            \textbf{Date} & \textbf{Developer(s)} & \textbf{Change}\\
+            \midrule
+            Date1 & Name(s) & Description of changes\\
+            Date2 & Name(s) & Description of changes\\
+            ... & ... & ...\\
+            \bottomrule
+        \end{tabularx}
+    \end{table}
 
-\section{Problem Statement}
+    \section{Problem Statement}
 
-\wss{You should check your problem statement with the
-\href{https://github.com/smiths/capTemplate/blob/main/docs/Checklists/ProbState-Checklist.pdf}
-{problem statement checklist}.} 
+    \subsection{Problem}
 
-\wss{You can change the section headings, as long as you include the required
-information.}
+    \subsection{Inputs and Outputs}
 
-\subsection{Problem}
+    \subsection{Stakeholders}
 
-\subsection{Inputs and Outputs}
+    \subsection{Environment}
 
-\wss{Characterize the problem in terms of ``high level'' inputs and outputs.  
-Use abstraction so that you can avoid details.}
+    \section{Goals}
 
-\subsection{Stakeholders}
+    \begin{table}[h!]
+        \caption{Minimum Viable Product (MVP) Goals} \label{TblMVPGoals}
+        \begin{tabularx}{\textwidth}{|l|X|X|}
+            \hline
+            \textbf{Goal} & \textbf{Explanation} & \textbf{Reasoning} \\
+            \hline
+            Two-Player Core Loop & Support a one-versus-one match with turn-taking, drawing, discarding, and win condition checks. Includes starter card, discard pile, and reshuffling the stock pile. & Two players represent the smallest playable unit. Completing this ensures the core gameplay is functional and testable. \\
+            \hline
+            Classic Rules Engine & Implement the standard Crazy Eights rules: match by suit or rank, “8” acts as wild, and drawing occurs if no valid move exists. & Ensuring correctness of the classic game establishes a solid baseline before adding variations. \\
+            \hline
+            Dozenal (Base-12) Scoring/Display & Display scores, counters, or thresholds in base-12 notation while keeping classic rules unchanged. & Introduces dozenal in a simple, non-disruptive way that highlights novelty while retaining accessibility. \\
+            \hline
+            Move Validation and Feedback & Provide immediate feedback for invalid moves, suit selection UI after playing an “8,” and clear state indicators. & Reduces errors, lowers learning curve, and improves user experience. \\
+            \hline
+            Testability and Determinism & Support seeded shuffling and provide basic logs or replays. & Facilitates unit/integration testing and reproducibility during evaluation. \\
+            \hline
+            Stability and Performance & Ensure responsive UI (<200ms), no crashes, no deadlocks, and correct reshuffling. & Reliability is the baseline for acceptance and live demonstration. \\
+            \hline
+            Minimal UI & Provide a desktop or web interface showing hand, discard pile, current state, and dozenal score tracker. & Covers essential user interactions while limiting complexity at MVP stage. \\
+            \hline
+        \end{tabularx}
+    \end{table}
 
-\subsection{Environment}
+    \section{Stretch Goals}
 
-\wss{Hardware and Software Environment}
+    \begin{table}[h!]
+        \caption{Stretch Goals} \label{TblStretchGoals}
+        \begin{tabularx}{\textwidth}{|l|X|X|}
+            \hline
+            \textbf{Goal} & \textbf{Explanation} & \textbf{Reasoning} \\
+            \hline
+            3–4 Player Matches & Extend gameplay to support three or more players in a single match. & Crazy Eights is often played with more than two people, which increases replayability. \\
+            \hline
+            Online Multiplayer & Allow players to create/join rooms and synchronize state across network connections. & Brings the game closer to real-world usage and demonstrates system design capability. \\
+            \hline
+            Advanced Dozenal Variants & Add optional rule packs where cards related to 12 gain special effects or scoring thresholds use base-12 values. & Deepens the dozenal theme while keeping the classic mode intact. \\
+            \hline
+            Rule Configurator & Provide toggles for house rules such as stacking eights or alternate scoring methods. & Demonstrates variability management and supports experimentation. \\
+            \hline
+            Tutorial and Visual Guidance & Include first-game tutorial, invalid-move highlights, and play suggestions. & Lowers the learning curve and improves usability. \\
+            \hline
+            Save/Replay System & Allow saving and replaying completed games. & Supports debugging, user study, and richer documentation. \\
+            \hline
+            Cross-Platform Packaging & Deploy as a web app or desktop executable. & Lowers barrier for evaluators and external users to try the system. \\
+            \hline
+        \end{tabularx}
+    \end{table}
 
-\section{Goals}
 
-\section{Stretch Goals}
+    \section{Extras}
 
-\section{Extras}
+    \newpage{}
 
-\wss{For CAS 741: State whether the project is a research project. This
-designation, with the approval (or request) of the instructor, can be modified
-over the course of the term.}
+    \section*{Appendix --- Reflection}
 
-\wss{For SE Capstone: List your extras.  Potential extras include usability
-testing, code walkthroughs, user documentation, formal proof, GenderMag
-personas, Design Thinking, etc.  (The full list is on the course outline and in
-Lecture 02.) Normally the number of extras will be two.  Approval of the extras
-will be part of the discussion with the instructor for approving the project.
-The extras, with the approval (or request) of the instructor, can be modified
-over the course of the term.}
+    \input{../Reflection.tex}
 
-\newpage{}
-
-\section*{Appendix --- Reflection}
-
-\wss{Not required for CAS 741}
-
-\input{../Reflection.tex}
-
-\begin{enumerate}
-    \item What went well while writing this deliverable? 
-    \item What pain points did you experience during this deliverable, and how
-    did you resolve them?
-    \item How did you and your team adjust the scope of your goals to ensure
-    they are suitable for a Capstone project (not overly ambitious but also of
-    appropriate complexity for a senior design project)?
-\end{enumerate}  
+    \begin{enumerate}
+        \item What went well while writing this deliverable?
+        \item What pain points did you experience during this deliverable, and how
+        did you resolve them?
+        \item How did you and your team adjust the scope of your goals to ensure
+        they are suitable for a Capstone project?
+    \end{enumerate}
 
 \end{document}
