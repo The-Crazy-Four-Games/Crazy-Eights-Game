@@ -3,11 +3,12 @@
 \usepackage{booktabs}
 \usepackage{tabularx}
 
-\title{Development Plan\\\progname}
+\title{Development Plan\\The Crazy Eights}
 
-\author{\authname}
+\author{Ruida Chen \\ Alvin Qian \\ Ammar, Sharbat \\ Jiaming Li}
 
-\date{}
+
+\date{September 2025}
 
 \input{../Comments}
 \input{../Common}
@@ -135,57 +136,110 @@ All project tasks are tracked through GitHub Issues and a Kanban board using Git
 \section{Project Decomposition and Scheduling}
 
 \begin{itemize}
-  \item How will you be using GitHub projects?
-  \item Include a link to your GitHub project
+  \item Our team will use Github Projects as our core tool for task tracking and project management. Each feature will be decomposed into specific, verifiable small tasks, these tasks will be created in the form of Issues in Github Kanban Board. The Kanban board is divided into 4 stages: Todo, In Progress, Review and Done to visualize the workflow and ensure accountability. Team members will be assigned to different tasks, related pull request will be tied to these issues to maintain tracibility.
+  \item Link to our Kanban project: \url{https://github.com/orgs/The-Crazy-Four-Games/projects}
+  \item Decomposed Schedule:
+	\begin{itemize}
+		\item Week 03: Team Formed, Project Selected
+			\begin{itemize}
+			\item Create Github repo
+			\item Assign intial role
+			\item Decide on final project selection
+			\end{itemize}		
+		\item Week 04: Problem Statement, POC, Development Plan
+			\begin{itemize}
+			\item Draft initial problem statement and development plan
+			\item Set up CI/CD pipeline and Github branch strategy
+			\item Discuss the final programming languages and frameworks
+			\end{itemize}
+		\item Week 06: SRS + Hazard Analysis (Rev. 0)
+			\begin{itemize}
+			\item Draft System Requirements Specification (SRS)
+			\item Identify hazards and mitigation strategy
+			\end{itemize}
+		\item Week 08: V\&V Plan (Rev. 0)
+			\begin{itemize}
+			\item Define V\&V strategy
+			\item Break down into different tests and assigned responsibilities
+			\end{itemize}
+		\item Week 10: Design Document (Rev.-1)
+			\begin{itemize}
+			\item Decompose system into major modules (frontend, backend, db, api, etc.)
+			\item Document architecture diagrams
+			\end{itemize}
+		\item Week 11-12: Proof of Concept Demonstration
+			\begin{itemize}
+			\item Implement minimum working prototype
+			\item Prepare slides and live demo for demo presentation
+			\end{itemize}
+		\item Week 16: Design Document (Rev.0)
+			\begin{itemize}
+			\item Refine design based on the feedback of POC Demo
+			\item Add details for extensibility and scalability
+			\end{itemize}	
+		\item Week 18-19: Revision 0  Demonstration
+			\begin{itemize}
+			\item Implement key features and workflows
+			\item Conduct internal testing and bug fixing
+			\item Prepare live demo
+			\end{itemize}	
+		\item Week 22: V\&V Report Revision 0
+			\begin{itemize}
+			\item Execute test plan and record results
+			\item Analyze test coverage and tracibility
+			\end{itemize}	
+		\item Week 24: Final Demonstration (Rev.1)
+			\begin{itemize}
+			\item Finalize all core features
+			\item Optimize performance
+			\item Conduct mock presentation and user feedbacks
+			\end{itemize}	
+		\item Week 26: EXPO Demonstration
+			\begin{itemize}
+			\item Prepare polished project presentation for EXPO
+			\end{itemize}	
+		\item Week 26: Final Documentation (Rev.1)
+			\begin{itemize}
+			\item Finalize all documents
+			\end{itemize}	
+	\end{itemize}
 \end{itemize}
 
-\wss{How will the project be scheduled?  This is the big picture schedule, not
-details. You will need to reproduce information that is in the course outline
-for deadlines.}
 
 \section{Proof of Concept Demonstration Plan}
 
-What is the main risk, or risks, for the success of your project?  What will you
-demonstrate during your proof of concept demonstration to convince yourself that
-you will be able to overcome this risk?
+Main Risk
+
+\begin{itemize}
+	\item Implementation Complexity: Correctly enforcing the gameplay mechanism (e.g. turn-taking,  rule variation, base-12)
+	\item Ensuring required libraries and frameworks install and integrate smoothly across team members’ environments.
+	
+\end{itemize}
+PoC Demonstration Goals \\In our PoC demonstration, we will address these risks by showing:
+\begin{itemize}
+	\item A working prototype of Crazy Eights where players can take turns, match cards by suit/rank, and play an "8" as a special 
+	\item Successful integration between frontend and backend for real-time gameplay.
+\end{itemize}
 
 \section{Expected Technology}
 
-\wss{What programming language or languages do you expect to use?  What external
-libraries?  What frameworks?  What technologies.  Are there major components of
-the implementation that you expect you will implement, despite the existence of
-libraries that provide the required functionality.  For projects with machine
-learning, will you use pre-trained models, or be training your own model?  }
-
-\wss{The implementation decisions can, and likely will, change over the course
-of the project.  The initial documentation should be written in an abstract way;
-it should be agnostic of the implementation choices, unless the implementation
-choices are project constraints.  However, recording our initial thoughts on
-implementation helps understand the challenge level and feasibility of a
-project.  It may also help with early identification of areas where project
-members will need to augment their training.}
-
-Topics to discuss include the following:
 
 \begin{itemize}
-\item Specific programming language
-\item Specific libraries
-\item Pre-trained models
-\item Specific linter tool (if appropriate)
-\item Specific unit testing framework
-\item Investigation of code coverage measuring tools
-\item Specific plans for Continuous Integration (CI), or an explanation that CI
-  is not being done
-\item Specific performance measuring tools (like Valgrind), if
-  appropriate
-\item Tools you will likely be using?
+\item JavaScript, TypeScript
+\item PostgreSQL
+\item Github, git, Github projects
+\item Node.js,  React
+\item Jest
 \end{itemize}
 
-\wss{git, GitHub and GitHub projects should be part of your technology.}
 
 \section{Coding Standard}
 
-\wss{What coding standard will you adopt?}
+\begin{itemize}
+	\item Quality-Oriented Development: Code should be clear, maintainable and consistent across the whole project
+	\item Requirement and Specification-Based: All implementation will be tied to the requirements and specifications
+	\item Defensive Programming: Follow practices that reduce errors and improve robustness
+\end{itemize}
 
 \newpage{}
 
@@ -193,15 +247,14 @@ Topics to discuss include the following:
 
 \wss{Not required for CAS 741}
 
-\input{../Reflection.tex}
 
 \begin{enumerate}
     \item Why is it important to create a development plan prior to starting the
-    project?
+    project?\\ A clear development plan provides the team with structure and direction, it ensures that all team members have a common understanding of the project's goals, responsibilities and timelines. It can also reduce uncertainty, help the team identify risks early, and make it easier to track progress.
     \item In your opinion, what are the advantages and disadvantages of using
-    CI/CD?
+    CI/CD?\\ Advantages: CI/CD automates testing and deployment,  it reduces human errors and improves code quality.  Since it encourages frequent integration, problems are detected early. \\Disadvantages: Setting up CI/CD pipelines can be time-consuming, especially for small teams, it may introduce overhead if the project scope is small or team members are not familiar with this tool.
     \item What disagreements did your group have in this deliverable, if any,
-    and how did you resolve them?
+    and how did you resolve them?\\One disagreement our group had was whether to focus solely on developing the Crazy Eights card game, or to make it into a product line that could support multiple card games/number systems,  some members felt that the product line idea would make the project impressive and ambitious, while others were concerned about the limited timeline and feasibility. After a team discussion and seeking advice from the professor and supervisor, we resolved this by agreeing to prioritize Crazy Eights as the core deliverable, ensuring we can deliver a complete and functional game. At the same time, we left the product line concept as a strech goal that could be pursued if time and resources permit. This compromise allowed us to balance ambition with practicality, while keeping the team aligned.
 \end{enumerate}
 
 \newpage{}
@@ -214,29 +267,26 @@ Topics to discuss include the following:
 
 \subsection*{External Goals}
 
-\wss{What are your team's external goals for this project? These are not the
-goals related to the functionality or quality fo the project.  These are the
-goals on what the team wishes to achieve with the project.  Potential goals are
-to win a prize at the Capstone EXPO, or to have something to talk about in
-interviews, or to get an A+, etc.}
+\begin{itemize}
+	\item Deliver a polished product at the EXPO with hope of receiving positive feedback
+	\item Build a project that can be showcased in future interviews and portfolios
+	\item Aim for a strong course grade by following best practices and meeting all deliverable expectations
+	\item Strengthen our knowlegde of modern frameworks so that the project also contributes to our long-term career growth.
+\end{itemize}
 
 \subsection*{Attendance}
 
 \subsubsection*{Expectations}
 
-\wss{What are your team's expectations regarding meeting attendance (being on
-time, leaving early, missing meetings, etc.)?}
+Team members are expected to attend scheduled meetings(in-person or via Discord) on time and stay until the meeting is concluded.  Consistent attendance is essential to maintain good communication and progress.
 
 \subsubsection*{Acceptable Excuse}
 
-\wss{What constitutes an acceptable excuse for missing a meeting or a deadline?
-What types of excuses will not be considered acceptable?}
+Acceptable excuses for missing a meeting or a deadline include illness, family emergencies, or unavoidable academic conflicts.Unacceptable excuses include forgetting, oversleeping, etc.
 
 \subsubsection*{In Case of Emergency}
 
-\wss{What process will team members follow if they have an emergency and cannot
-attend a team meeting or complete their individual work promised for a team
-deliverable?}
+If a team member experiences an emergency, they should notify the team as soon as possible through Discord. They should also provide updates on the status of their assigned tasks and, if neccessary, delegate or share their work so that the team can adjust and continue meeting deadlines.
 
 \subsection*{Accountability and Teamwork}
 
