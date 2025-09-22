@@ -59,37 +59,78 @@ repo.}
 
 \section{Team Meeting Plan}
 
-\wss{How often will you meet? where?}
+\subsection*{Meeting Frequency}
+\begin{itemize}
+  \item Regular weekly meetings:
+  \begin{itemize}
+    \item One in-person meeting during scheduled tutorial time
+    \item One online meeting via Discord (time TBD by team availability)
+  \end{itemize}
+  \item Additional ad hoc meetings scheduled as needed for deadlines or unblocking issues
+  \item Bi-weekly supervisor meetings with Dr.~Paul Rapoport (virtual or in-person)
+\end{itemize}
 
-\wss{If the meeting is a physical location (not virtual), out of an abundance of
-caution for safety reasons you shouldn't put the location online}
+\subsection*{Meeting Format}
+\begin{itemize}
+  \item Primary format: Virtual meetings via Discord (voice channel)
+  \item Secondary format: In-person meetings during class/tutorials
+  \item Meeting roles (rotating):
+  \begin{itemize}
+    \item \textbf{Chair}: Responsible for
+    \begin{itemize}
+      \item Preparing and sharing agenda (12+ hours in advance)
+      \item Managing time allocation
+      \item Facilitating inclusive discussion
+    \end{itemize}
+  \item \textbf{Note-taker}: Records
+    \begin{itemize}
+      \item Key decisions
+      \item Action items with owners and deadlines
+      \item Risks and open questions
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
 
-\wss{How often will you meet with your industry advisor?  when?  where?}
-
-\wss{Will meetings be virtual?  At least some meetings should likely be
-in-person.}
-
-\wss{How will the meetings be structured?  There should be a chair for all meetings.  There should be an agenda for all meetings.}
+\subsection*{Attendance Policy}
+If unable to attend:
+\begin{itemize}
+  \item Notify team via Discord in advance
+  \item Review meeting notes independently
+  \item Complete assigned tasks asynchronously
+\end{itemize}
 
 \section{Team Communication Plan}
+We will use multiple coordinated channels to ensure clear, persistent, and efficient communication:
 
-\wss{Issues on GitHub should be part of your communication plan.}
+\begin{itemize}
+  \item \textbf{GitHub}: Version control, issue tracking, pull request review, and Kanban board management. 
+  \item \textbf{Discord}: Primary platform for quick text and voice communication. Daily informal updates, coordination of short-term tasks, and quick problem-solving occur here. Urgent blockers are first raised in Discord.
+  \item \textbf{In-Person (Tutorial / Scheduled Check-ins)}: Used for structured milestone work, live demonstrations, and supervisor touchpoints.
+\end{itemize}
 
 \section{Team Member Roles}
+Roles are rotational to ensure balanced workload distribution, broaden experience, and encourage shared ownership. Anticipated roles include:
 
-\wss{You should identify the types of roles you anticipate, like notetaker,
-leader, meeting chair, reviewer.  Assigning specific people to those roles is
-not necessary at this stage.  In a student team the role of the individuals will
-likely change throughout the year.}
+\begin{itemize}
+  \item \textbf{Team Liaison (Ammar Sharbat)}: Primary point of contact with the supervisor and course staff; coordinates meeting requests and relays external feedback.
+  \item \textbf{Developer (All members)}: Implements assigned features, writes and maintains tests, and updates related documentation.
+  \item \textbf{Reviewer (All members)}: Performs code reviews for pull requests, checks alignment with coding standards, and leaves comments if needed before approval.
+  \item \textbf{Meeting Chair/Note-taker (All members rotate)}: Facilitates meetings, ensures agenda is followed, and documents key discussion points and action items.
+\end{itemize}
+
 
 \section{Workflow Plan}
 
-\begin{itemize}
-	\item How will you be using git, including branches, pull request, etc.?
-	\item How will you be managing issues, including template issues, issue
-	classification, etc.?
-  \item Use of CI/CD
-\end{itemize}
+\begin{enumerate}
+  \item \textbf{Update Local Repository}: Before starting any work session, pull the latest changes from the `main` branch to ensure the local repository is up to date.
+  \item \textbf{Branching}: Create a new feature (or fix) branch from `main` for each unit of work (feature, bug fix, refactor). Follow a consistent naming convention such as: feature/short-description or fix/issue-id.
+  \item \textbf{Coding}: Implement modules and functions according to the design and requirements. Follow the agreed coding standards and document code with comments where necessary.
+  \item \textbf{Unit Testing}: Write and execute unit tests for the newly implemented modules/functions to verify expected behaviour early. Tests must pass locally before proceeding.
+  \item \textbf{Commit and Push}: Commit changes with descriptive messages. Push to the remote feature branch.
+  \item \textbf{Review and Merge}: Open a pull request into `main`. Another team member reviews for correctness, style, test coverage, and documentation updates. The reviewer will leave comments and suggestions if needed. After at least one approval, the branch is merged into the main branch.
+\end{enumerate}
+
+All project tasks are tracked through GitHub Issues and a Kanban board using GitHub Projects (Backlog / In Progress / Review / Done).
 
 \section{Project Decomposition and Scheduling}
 
@@ -201,40 +242,82 @@ deliverable?}
 
 \subsubsection*{Quality} 
 
-\wss{What are your team's expectations regarding the quality
-of team members' preparation for team meetings and the quality of the
-deliverables that members bring to the team?}
+\begin{itemize}
+  \item \textbf{Meeting Preparation:}
+  \begin{itemize}
+    \item Read the agenda and relevant issues/PRs prior to the meeting.
+    \item Come prepared with (a) a concise progress update, (b) explicit blockers, (c) questions to ask.
+  \item For design/architecture discussions, read any documentation shared at least 12 hours before the meeting.
+  \end{itemize}
+  \item \textbf{Expectation for a code task / issue:}
+  \begin{itemize}
+  \item Code compiles/runs locally without new warnings or linter errors.
+  \item Automated tests added or updated: cover new logic and edge cases.
+    \item All tests pass locally.
+  \item Documentation updated: inline comments for non-obvious logic; README/module documentation updated if behaviour, interfaces, or run steps change.
+    \item Peer review completed (minimum one approval) with review comments addressed or explicitly deferred via a follow-up issue.
+  \end{itemize}
+  \item \textbf{Timeliness:} Work items should be completed within their originally estimated iteration window.
+\end{itemize}
 
 \subsubsection*{Attitude}
 
-\wss{What are your team's expectations regarding team members' ideas,
-interactions with the team, cooperation, attitudes, and anything else regarding
-team member contributions?  Do you want to introduce a code of conduct?  Do you
-want a conflict resolution plan?  Can adopt existing codes of conduct.}
+\begin{itemize}
+  \item \textbf{Respect and Inclusion:} Listen actively and avoid interrupting. Credit ideas to originators; disagreements focus on the idea, never the person.
+  \item \textbf{Communication Responsiveness:} Weekday Discord messages acknowledged within 24 hours (a reaction or short reply). If unavailable (midterms, travel), communicate ahead of time if possible.
+  \item \textbf{Constructive Feedback:} Use specific, friendly, actionable language and pair it with reasoning.
+  \item \textbf{Conflict of Ideas:} Healthy debate is encouraged, and once a decision is recorded, team members support it unless new evidence emerges.
+  \item \textbf{Inclusivity:} Zero tolerance for harassment, discrimination, or disparaging language. Maintain a commitment to inclusivity across backgrounds and experience levels.
+\end{itemize}
+
+\paragraph{Conflict Resolution Process}
+\begin{enumerate}
+  \item \textit{Direct Discussion:} Involved members attempt a private, respectful conversation to clarify intent and desired outcome.
+  \item \textit{Mediated Conversation:} If unresolved, bring the issue to the next meeting or request a teammate to facilitate a short discussion.
+  \item \textit{Escalation:} If behaviour breaches the Code of Conduct, escalate to the supervisor / TA. Persistent issues may be elevated to the instructor.
+\end{enumerate}
 
 \subsubsection*{Stay on Track}
+The team will use clear metrics and regular check-ins to ensure progress and accountability.
 
-\wss{What methods will be used to keep the team on track? How will your team
-ensure that members contribute as expected to the team and that the team
-performs as expected? How will your team reward members who do well and manage
-members whose performance is below expectations?  What are the consequences for
-someone not contributing their fair share?}
+\paragraph{Metrics Tracked}
+\begin{itemize}
+  \item Meeting attendance (tutorials, scheduled meetings, supervisor check-ins)
+  \item Number of pull requests made and contributions to reviewing PRs
+\end{itemize}
 
-\wss{You may wish to use the project management metrics collected for the TA and
-instructor for this.}
+\paragraph{Recognition}
+Positive, on-time, high-quality contributions are acknowledged verbally in weekly meetings. Reusable good practices or discoveries are shared for team-wide adoption.
 
-\wss{You can set target metrics for attendance, commits, etc.  What are the
-consequences if someone doesn't hit their targets?  Do they need to bring the
-coffee to the next team meeting?  Does the team need to make an appointment with
-their TA, or the instructor?  Are there incentives for reaching targets early?}
+\paragraph{Managing Underperformance}
+\begin{enumerate}
+  \item Check-in to clarify blockers (scope, skill gap, time constraints).
+  \item Adjust: refine issue scope, pair program, or provide targeted resources.
+  \item If no improvement and no proactive communication: document an action plan with achievable concrete milestones.
+  \item Continued gaps will need to be escalated to TA / instructor for guidance.
+\end{enumerate}
+
+\paragraph{Consequences}
+If deadlines are repeatedly missed without notice:
+\begin{itemize}
+  \item Action plan logged (issue comment or team log) with dates.
+  \item Escalation path: (1) team check-in, (2) written plan, (3) supervisor/TA, (4) instructor if unresolved.
+\end{itemize}
 
 \subsubsection*{Team Building}
+Lightweight cohesion practices:
+\begin{itemize}
+  \item Open casual discussion on any topic for the first 5 minutes of each meeting.
+  \item Celebrate small wins (merged PRs, resolved issues) in meetings.
+  \item Share interesting articles, tools, or tips related to the project in Discord.
+\end{itemize}
 
-\wss{How will you build team cohesion (fun time, group rituals, etc.)? }
 
-\subsubsection*{Decision Making} 
-
-\wss{How will you make decisions in your group? Consensus?  Vote? How will you
-handle disagreements? }
+\subsubsection*{Decision Making}
+\begin{enumerate}
+  \item Open discussion aiming for consensus.
+  \item If no consensus, move on to a simple majority vote.
+  \item Record decision (issue comment, PR, or decision log); set as the final decision until new evidence justifies a change.
+\end{enumerate}
 
 \end{document}
