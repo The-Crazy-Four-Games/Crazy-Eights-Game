@@ -16,8 +16,11 @@ docs - Documentation for the project
 
 refs - Reference material used for the project, including papers
 
-Dozenal Counting System (also presents a case for why Dozenal is a better counting system than Decimal):
+Brief Introduction to the Dozenal Counting System (presents a case for why Dozenal is a better counting system than Decimal):
 https://dozenal.org/drupal/content/brief-introduction-dozenal-counting.html
+
+Fundamental Operations In The Duodecimal System - Jay Schiffman (Covers Addition, Subtraction, Multiplication, Division):
+https://dozenal.org/drupal/sites_bck/default/files/db31315_0.pdf
 
 src - Source code
 
