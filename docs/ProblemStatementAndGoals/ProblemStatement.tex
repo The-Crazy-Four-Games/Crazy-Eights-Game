@@ -10,6 +10,8 @@
 \renewcommand\theadfont{\normalsize\bfseries}
 \renewcommand{\arraystretch}{1.2}
 \setlength{\tabcolsep}{6pt}
+\usepackage{float}
+
 
 
 \newcolumntype{L}{>{\RaggedRight\arraybackslash}X}
@@ -53,9 +55,12 @@
 
     \section{Goals}
 
-    \begin{table}[h!]
-        \caption{Minimum Viable Product (MVP) Goals}\label{TblMVPGoals}
-        \begin{tabularx}{\textwidth}{|L|L|L|}
+    \subsection{Minimum Viable Product (MVP) Goals}
+
+    \subsubsection{Functional Goals}
+    \begin{table}[H]
+        \caption{MVP Functional Goals}\label{TblMVPFunctionalGoals}
+        \begin{tabular}{|p{0.22\textwidth}|p{0.46\textwidth}|p{0.28\textwidth}|}
             \hline
             \textbf{Goal} & \textbf{Explanation} & \textbf{Reasoning} \\
             \hline
@@ -71,6 +76,16 @@
             Display scores, counters, or thresholds in base-12 notation while keeping classic rules unchanged. &
             Introduces dozenal in a simple, non-disruptive way that highlights novelty while retaining accessibility. \\
             \hline
+        \end{tabular}
+    \end{table}
+
+    \subsubsection{Non-functional Goals}
+    \begin{table}[H]
+        \caption{MVP Non-functional Goals}\label{TblMVPNonFunctionalGoals}
+        \begin{tabular}{|p{0.22\textwidth}|p{0.46\textwidth}|p{0.28\textwidth}|}
+            \hline
+            \textbf{Goal} & \textbf{Explanation} & \textbf{Reasoning} \\
+            \hline
             Move Validation and Feedback &
             Provide immediate invalid-move feedback, clear suit selection UI after playing an ``8,'' and real-time state indicators. &
             Reduces errors and learning curve; improves usability. \\
@@ -80,7 +95,33 @@
             Enables reproducible unit/integration testing and debugging. \\
             \hline
             Stability and Performance &
-            Ensure responsive UI , no crashes, no deadlocks, and correct reshuffling. &
+            Ensure responsive UI \(<200\,\text{ms}\), no crashes, no deadlocks, and correct reshuffling. &
+            Reliability is the baseline for acceptance and live demonstration. \\
+            \hline
+            Minimal UI &
+            Provide a desktop~or web interface showing hand, discard pile, current state, and a dozenal score tracker. &
+            Covers essential interactions while limiting complexity at the MVP stage. \\
+            \hline
+        \end{tabular}
+    \end{table}
+
+    \subsubsection{Non-functional Goals}
+    \begin{table}[h!]
+        \caption{MVP Non-functional Goals}\label{TblMVPNonFunctionalGoals}
+        \begin{tabularx}{\textwidth}{|L|L|L|}
+            \hline
+            \textbf{Goal} & \textbf{Explanation} & \textbf{Reasoning} \\
+            \hline
+            Move Validation and Feedback &
+            Provide immediate invalid-move feedback, clear suit selection UI after playing an ``8,'' and real-time state indicators. &
+            Reduces errors and learning curve; improves usability. \\
+            \hline
+            Testability and Determinism &
+            Support seeded shuffling and provide basic logs or replays for each session. &
+            Enables reproducible unit/integration testing and debugging. \\
+            \hline
+            Stability and Performance &
+            Ensure responsive UI, no crashes, no deadlocks, and correct reshuffling. &
             Reliability is the baseline for acceptance and live demonstration. \\
             \hline
             Minimal UI &
@@ -90,12 +131,12 @@
         \end{tabularx}
     \end{table}
 
-
     \section{Stretch Goals}
 
-    \begin{table}[h!]
-        \caption{Stretch Goals}\label{TblStretchGoals}
-        \begin{tabularx}{\textwidth}{|L|L|L|}
+    \subsection{Functional Stretch Goals}
+    \begin{table}[H]
+        \caption{Functional Stretch Goals}\label{TblStretchFunctionalGoals}
+        \begin{tabular}{|p{0.22\textwidth}|p{0.46\textwidth}|p{0.28\textwidth}|}
             \hline
             \textbf{Goal} & \textbf{Explanation} & \textbf{Reasoning} \\
             \hline
@@ -112,16 +153,26 @@
             Enables single-player testing and showcases extensibility. \\
             \hline
             Advanced Dozenal Variants &
-            Optional rule packs (e.g., effects for 12-related cards; ). &
+            Optional rule packs (e.g., effects for 12-related cards; base-12 scoring thresholds such as \(60_{12}\)). &
             Deepens the dozenal theme while keeping the classic mode intact. \\
             \hline
             Rule Configurator &
             Toggles for house rules (draw-until-playable, stacking eights, scoring methods in decimal or dozenal). &
             Shows variability management; supports experimentation and future product-line thinking. \\
             \hline
+        \end{tabular}
+    \end{table}
+
+    \subsection{Non-functional Stretch Goals}
+    \begin{table}[H]
+        \caption{Non-functional Stretch Goals}\label{TblStretchNonFunctionalGoals}
+        \begin{tabular}{|p{0.22\textwidth}|p{0.46\textwidth}|p{0.28\textwidth}|}
+            \hline
+            \textbf{Goal} & \textbf{Explanation} & \textbf{Reasoning} \\
+            \hline
             Tutorial and Visual Guidance &
             First-game tutorial, invalid-move highlights, and play suggestions. &
-            Lowers learning curve and improves usability. \\
+            Lowers the learning curve and improves usability. \\
             \hline
             Save/Replay System &
             Save completed games and replay event sequences. &
@@ -131,7 +182,7 @@
             Deploy as a web app or desktop executable (Windows/macOS). &
             Lowers the barrier for evaluators and external users to try the system. \\
             \hline
-        \end{tabularx}
+        \end{tabular}
     \end{table}
 
     \section{Extras}
