@@ -13,9 +13,15 @@ The goal is to be the first player to get rid of all your cards.
 The folders and files for this project are as follows:
 
 docs - Documentation for the project
+
 refs - Reference material used for the project, including papers
+
 Dozenal Counting System (also presents a case for why Dozenal is a better counting system than Decimal):
 https://dozenal.org/drupal/content/brief-introduction-dozenal-counting.html
+
 src - Source code
+
 test - Test cases
+
 etc.
+
