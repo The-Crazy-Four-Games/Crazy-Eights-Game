@@ -8,6 +8,7 @@
 
 \usepackage{booktabs}
 \usepackage{tabularx}
+\usepackage{hyperref}
 \hypersetup{
     bookmarks=true,         % show bookmarks bar?
       colorlinks=true,      % false: boxed links; true: colored links
@@ -46,13 +47,18 @@
 
 \section*{Revision History}
 
-\begin{tabularx}{\textwidth}{p{3cm}p{2cm}X}
-\toprule {\textbf{Date}} & {\textbf{Version}} & {\textbf{Notes}}\\
-\midrule
-Date 1 & 1.0 & Notes\\
-Date 2 & 1.1 & Notes\\
-\bottomrule
-\end{tabularx}
+\begin{table}[hp]
+    \caption{Revision History} \label{TblRevisionHistory}
+    \begin{tabularx}{\textwidth}{llX}
+        \toprule
+        \textbf{Date} & \textbf{Developer(s)} & \textbf{Change}\\
+        \midrule
+        9.29 & Jiaming Li & Purpose of the Project\\
+        9.30 & Jiaming Li & Scope of the Product\\
+        9.30 & Jiaming Li & FR\\
+        \bottomrule
+    \end{tabularx}
+\end{table}
 
 ~\\
 
@@ -140,17 +146,148 @@ involved in the Project}
 \subsection{Data Dictionary}
 \lips
 
+
 \section{The Scope of the Product}
+
 \subsection{Product Boundary}
-\lips
+The product to be developed is a digital card game application based on the traditional \textit{Crazy 8s} rules, modified to integrate the \textbf{Dozenal (base-12) number system}.
+The system boundary includes:
+\begin{itemize}
+    \item A game engine that supports core Crazy 8s mechanics (drawing, discarding, turn-taking, winning conditions).
+    \item Adaptations of rules, card values, and scoring to incorporate Dozenal arithmetic and representations.
+    \item A user interface allowing players to interact with the game (play cards, view scores, receive feedback).
+    \item Educational prompts or visual aids to help players understand Dozenal concepts.
+\end{itemize}
+External systems not included in the boundary are: general learning platforms, multiplayer servers beyond basic peer-to-peer/local play, and integrations with unrelated educational tools.
+
 \subsection{Product Use Case Table}
-\lips
-\subsection{Individual Product Use Cases (PUC's)}
-\lips
+The following table summarizes the primary product use cases (PUCs):
+
+\subsection{Product Use Case Table}
+The following table summarizes the primary product use cases (PUCs):
+
+\begin{tabularx}{\textwidth}{|l|X|}
+    \hline
+    \textbf{PUC \#} & \textbf{Description} \\
+    \hline
+    PUC-1 & Player starts a new Crazy 8s game with Dozenal-enabled deck. \\
+    \hline
+    PUC-2 & Player takes a turn by drawing or discarding a card. \\
+    \hline
+    PUC-3 & System validates whether the played card is legal (same suit, same Dozenal value, or sum = 12). \\
+    \hline
+    PUC-4 & Player views scores and progress, displayed in both decimal and Dozenal. \\
+    \hline
+    PUC-5 & System provides hints or explanations to support Dozenal learning. \\
+    \hline
+    PUC-6 & Game ends when a player wins; final scores are calculated and displayed. \\
+    \hline
+\end{tabularx}
+
+\subsection{Individual Product Use Cases (PUCs)}
+
+\noindent\textbf{UC1: Start a New Game}
+\begin{enumerate}
+    \item Player opens the application and selects ``New Game''.
+    \item The system initializes a Dozenal-enabled deck (0--B, 10).
+    \item The system shuffles the deck.
+    \item The system deals cards to each player.
+    \item The game state is displayed on the interface.
+\end{enumerate}
+
+\noindent\textbf{UC2: Take a Turn}
+\begin{enumerate}
+    \item The system indicates that it is the player’s turn.
+    \item The player chooses either to play a card or to draw from the deck.
+    \item If the player chooses a card, the system checks its validity against the discard pile.
+    \item If valid, the card is placed onto the discard pile.
+    \item If invalid, the system notifies the player and the card remains in the hand.
+    \item If the player chooses to draw, the system gives one card from the deck to the player.
+\end{enumerate}
+
+\noindent\textbf{UC3: Validate Move}
+\begin{enumerate}
+    \item The player selects a card to play.
+    \item The system retrieves the top card from the discard pile.
+    \item The system checks if the move is legal under Dozenal rules:
+    \begin{enumerate}
+        \item same suit, or
+        \item same Dozenal value, or
+        \item sum of the two values equals 12 (base-12).
+    \end{enumerate}
+    \item If the move is legal, the system accepts the card and updates the discard pile.
+    \item If not, the system rejects the move and notifies the player.
+\end{enumerate}
+
+\noindent\textbf{UC4: View Scores}
+\begin{enumerate}
+    \item A round ends or the player requests to view scores.
+    \item The system calculates points for each player.
+    \item The system converts the scores into both decimal and Dozenal.
+    \item The system displays the results on screen.
+\end{enumerate}
+
+\noindent\textbf{UC5: Provide Hints}
+\begin{enumerate}
+    \item The player hovers over or selects a card.
+    \item The system analyzes the current game state.
+    \item The system provides a hint (e.g., ``This card is valid because its sum with the top card equals 12 (base-12).'').
+    \item The hint is displayed as text or a visual highlight.
+\end{enumerate}
+
+\noindent\textbf{UC6: End Game}
+\begin{enumerate}
+    \item A player discards their last card.
+    \item The system checks if the game-ending condition is satisfied.
+    \item If satisfied, the system declares the winner.
+    \item The system calculates final scores in both decimal and Dozenal.
+    \item The results are displayed on the final game screen.
+\end{enumerate}
+
+
 
 \section{Functional Requirements}
-\subsection{Functional Requirements}
-\lips
+
+\subsection{Game Manager}
+
+\begin{enumerate}
+    \item \textbf{Start new game:} Game manager shall allow the player to start a new Crazy 8s game with a Dozenal-enabled deck. (FR-1) \\
+    \textbf{Rationale:} Players need a way to initialize the game state; starting a new game is the foundation for all other gameplay functions.
+
+    \item \textbf{Turn management:} Game manager shall manage player turns, ensuring that each player either discards a valid card or draws a card. (FR-2) \\
+    \textbf{Rationale:} Turn-taking enforces fairness and ensures game flow consistency.
+
+    \item \textbf{Rule validation:} Game manager shall validate that each played card is legal under Dozenal rules. A valid move is defined as either: (a) same suit as the previous card, (b) same Dozenal value as the previous card, or (c) the sum of the two card values equals 12 in Dozenal. (FR-3) \\
+    \textbf{Rationale:} Prevents illegal moves, guarantees consistency, and introduces the core educational mechanic of Dozenal arithmetic.
+
+    \item \textbf{Special cards:} Game manager shall implement special card effects (e.g., 8s are wild) while supporting extensions with Dozenal-specific effects. (FR-4) \\
+    \textbf{Rationale:} Special cards increase engagement and add flexibility in teaching Dozenal-based rules.
+
+    \item \textbf{End of game:} Game manager shall determine when the game ends (e.g., when a player runs out of cards) and declare the winner. (FR-5) \\
+    \textbf{Rationale:} A clear end condition is required for meaningful gameplay and reinforcement of learning objectives.
+\end{enumerate}
+
+
+\subsection{Score Manager}
+
+\begin{enumerate}
+    \item \textbf{Calculate score:} Score manager shall calculate points for each round in both decimal and Dozenal. (FR-6) \\
+    \textbf{Rationale:} Displaying scores in both systems reinforces learning by encouraging comparison between familiar decimal and new Dozenal formats.
+
+    \item \textbf{Display score:} Score manager shall display both decimal and Dozenal results on the user interface. (FR-7) \\
+    \textbf{Rationale:} Visual feedback supports player understanding and helps users internalize Dozenal representations.
+\end{enumerate}
+
+
+\subsection{Education Support}
+
+\begin{enumerate}
+    \item \textbf{Hints:} System shall provide hints or explanations when a player performs an action involving Dozenal arithmetic. (FR-8) \\
+    \textbf{Rationale:} On-demand guidance lowers the learning curve and supports players with varying levels of familiarity.
+
+    \item \textbf{Highlight valid moves:} System shall visually highlight valid moves based on Dozenal rules. (FR-9) \\
+    \textbf{Rationale:} Reduces frustration, ensures players stay engaged, and reinforces Dozenal rules through visual learning.
+\end{enumerate}
 
 \section{Look and Feel Requirements}
 \subsection{Appearance Requirements}
