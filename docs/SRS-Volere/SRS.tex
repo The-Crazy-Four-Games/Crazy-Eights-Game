@@ -8,6 +8,7 @@
 
 \usepackage{booktabs}
 \usepackage{tabularx}
+\usepackage{hyperref}
 \hypersetup{
     bookmarks=true,         % show bookmarks bar?
       colorlinks=true,      % false: boxed links; true: colored links
@@ -24,16 +25,10 @@
 
 \begin{document}
 
-\title{Software Requirements Specification for \progname: subtitle describing software}
-\author{
-    Team \#25, The Crazy Four \\[1ex]
-    Ruida Chen \\
-    Ammar Sharbat \\
-    Alvin Qian \\
-    Jiaming Li
-}
-\date{30.09.2025}
-	
+\title{Software Requirements Specification for \progname: subtitle describing software} 
+\author{\authname}
+\date{\today}
+    
 \maketitle
 
 ~\newpage
@@ -114,7 +109,23 @@ The goals of this project are:
 \section{Naming Conventions and Terminology}
 \subsection{Glossary of All Terms, Including Acronyms, Used by Stakeholders
 involved in the Project}
-\lips
+
+\begin{itemize}
+    \item \textbf{Base-10 (Decimal)}: The standard numerical system using ten digits (0--9), commonly used in arithmetic and everyday calculations.
+    \item \textbf{Base-12 (Dozenal)}: A numerical system using twelve digits (0--9, A, B), where A represents 10 and B represents 11 in decimal. Has divisibility advantages (divisors: 2, 3, 4, 6).
+    \item \textbf{Crazy Eights}: A classic card game where players match cards by suit or rank, with the ``8'' card acting as a wild card allowing the player to declare a new suit.
+    \item \textbf{MVP}: Minimum Viable Product, the initial version of the Crazy Eights software with core functionality, including two-player gameplay, classic rules, and dozenal scoring.
+    \item \textbf{Functional Goals}: Features and behaviors the software must implement, such as gameplay mechanics and dozenal score display.
+    \item \textbf{Non-functional Goals}: Quality attributes of the software, such as usability, performance, and stability.
+    \item \textbf{Stretch Goals}: Optional features or enhancements, such as multiplayer support or advanced dozenal rule variants, to be implemented if time permits.
+    \item \textbf{GitHub}: The platform used for version control, issue tracking, and Kanban board management.
+    \item \textbf{Discord}: The communication platform for team coordination, quick updates, and voice meetings.
+    \item \textbf{Kanban Board}: A project management tool in GitHub Projects, divided into stages (Backlog, In Progress, Review, Done) to track tasks.
+    \item \textbf{CI/CD}: Continuous Integration/Continuous Deployment, an automated process for testing and deploying code changes.
+    \item \textbf{SRS}: Software Requirements Specification, this document outlining the requirements for the Crazy Eights project.
+    \item \textbf{PoC}: Proof of Concept, a prototype demonstrating core gameplay mechanics to validate feasibility.
+    \item \textbf{UI}: User Interface, the visual and interactive components of the software, such as the game board and score display.
+\end{itemize}
 
 \section{Relevant Facts And Assumptions}
 \subsection{Relevant Facts}
@@ -126,19 +137,122 @@ involved in the Project}
 
 \section{The Scope of the Work}
 \subsection{The Current Situation}
-\lips
+
+The current numerical system used around the world is predominantly decimal (base-10). This system, while widely adopted, has limitations in representing fractions cleanly, as its prime factors (2 and 5) result in recurring decimals for simple ratios 1/3 or 1/6. On the other hand, the dozenal (base-12) system, with divisors 2, 3, 4, and 6, offers a more intuitive and concise fraction representations, historically used in trade and measurement systems (e.g., dozens, hours). However, dozenal is underutilized in education and practice, leaving students, educators, and professionals reliant on decimal despite its inefficiencies for certain calculations. There is no current fun and engaging way to demonstrate the practical advantages of dozenal, such as a card game like Crazy Eights, to promote its adoption.
+
 \subsection{The Context of the Work}
-\lips
+
+The project focuses on the software implementation of the Crazy Eights card game that incorporates dozenal (base-12) scoring and display to highlight the benefits of the dozenal system. The context includes:
+
+\begin{itemize}
+    \item \textbf{Educational Context}: The project will simplify mathematical understanding for the user by showing dozenal's advantages in a familiar and fun game format.
+    \item \textbf{Technical Context}: The software will be developed using a modern tech stack for web applications (JavaScript, TypeScript, Node.js, React, PostgreSQL) and use GitHub CI/CD pipelines for version control and testing.
+    \item \textbf{Stakeholder Context}: Key stakeholders include students, educators, mathematicians, computer scientists, and the general public, all of whom could benefit from clearer fraction representations and easier mental arithmetic.
+\end{itemize}
+
 \subsection{Work Partitioning}
-\lips
+
+The workload is divided into the following major phases, aligned with the development plan:
+
+\begin{enumerate}
+    \item \textbf{Problem Definition and Planning (Weeks 3--4)}: Draft problem statement, development plan, and initial proof of concept (PoC) to establish scope and feasibility.
+    \item \textbf{Requirements and Hazard Analysis (Week 6)}: Develop the SRS and identify potential risks and mitigation strategies.
+    \item \textbf{Verification and Validation Planning (Week 8)}: Define testing strategies to ensure the software meets functional and non-functional requirements.
+    \item \textbf{System Design (Weeks 10--16)}: Create and refine architecture diagrams, decompose the system into modules (frontend, backend, database, API), and document extensibility.
+    \item \textbf{Implementation and Testing (Weeks 11--19)}: Develop the MVP (two-player game with classic rules and dozenal scoring), conduct unit and integration testing, and prepare for demonstrations.
+    \item \textbf{Demonstrations and Refinement (Weeks 19--24)}: Conduct Revision 0 and final demonstrations, incorporating feedback to improve functionality and performance.
+    \item \textbf{Final Documentation and EXPO (Week 26)}: Finalize documentation and present a polished product at the EXPO.
+\end{enumerate}
+
+Each task is tracked via GitHub Issues and the Kanban board, with responsibilities assigned to team members based on rotating roles (developer, reviewer, meeting chair, note-taker).
+
 \subsection{Specifying a Business Use Case (BUC)}
-\lips
+
+\textbf{BUC: Play a Game of Crazy Eights with Dozenal Scoring}
+
+\begin{itemize}
+    \item \textbf{Actors}: Two players, the software system.
+    \item \textbf{Trigger}: A player creates a new game session using the UI.
+    \item \textbf{Description}: Two players take turns matching cards by suit or rank, with the ``8'' card acting as a wild card that allows the player to declare a new suit. If no valid move can be made, the player draws from the stock pile. The game ends when one player discards all their cards, and the score is calculated and displayed in dozenal notation.
+    \item \textbf{Preconditions}: The user is logged in. The software is running on a web interface, with a functional UI displaying the hand, discard pile, stock pile, and score tracker.
+    \item \textbf{Postconditions}: The game concludes with a winner, points are displayed in dozenal and must be counted by the users to see the final score. The user can log Off or start a new game.
+    \item \textbf{Basic Flow}:
+    \begin{enumerate}
+        \item The system deals cards to both players and initializes the discard pile with a starter card.
+        \item Players take turns, selecting a card to play (matching suit or rank) or drawing from the stock pile.
+        \item If an ``8'' is played, the player selects a new suit via the UI.
+        \item The system checks moves and gives immediate feedback for invalid moves.
+        \item The game keeps going until one player has no cards left, triggering user score counting and calculation challenge in dozenal.
+        \item The system displays the final score.
+    \end{enumerate}
+    \item \textbf{Exceptions}:
+    \begin{itemize}
+        \item Invalid move attempted: The system highlights the error and prompts the player to select a valid card or draw.
+        \item Stock pile exhausted: The system reshuffles the discard pile to replenish the stock pile.
+    \end{itemize}
+    \item \textbf{Assumptions}: Players are familiar with basic card game mechanics and the system supports a stable internet connection for play.
+\end{itemize}
 
 \section{Business Data Model and Data Dictionary}
 \subsection{Business Data Model}
-\lips
+
+These are the key entities and relationships involved in the Crazy Eights game with dozenal scoring.
+
+\begin{itemize}
+    \item \textbf{Entities}:
+    \begin{itemize}
+        \item \textbf{Player}: Represents a game participant, holding a hand of cards and a score.
+        \item \textbf{Card}: Represents a single playing card with a suit and rank.
+        \item \textbf{Deck}: A collection of cards, divided into the stock pile and discard pile.
+        \item \textbf{Game Session}: Tracks the state of a single game, including players, current turn, discard pile, and scores.
+        \item \textbf{Score}: Tracks points in dozenal notation, calculated based on game rules.
+    \end{itemize}
+    \item \textbf{Relationships}:
+    \begin{itemize}
+        \item A \textbf{Game Session} has 2 \textbf{Players} (MVP) or 2--4 \textbf{Players} (stretch goal).
+        \item Each \textbf{Player} has a \textbf{Hand} (subset of \textbf{Cards}).
+        \item A \textbf{Deck} consists of 52 \textbf{Cards}, split into \textbf{Stock Pile} and \textbf{Discard Pile}.
+        \item A \textbf{Game Session} produces a \textbf{Score} for each \textbf{Player} in dozenal notation.
+        \item A \textbf{Card} played in a \textbf{Game Session} affects the \textbf{Discard Pile} and may trigger a suit change (if an ``8'').
+    \end{itemize}
+\end{itemize}
+
 \subsection{Data Dictionary}
-\lips
+
+\begin{itemize}
+    \item \textbf{Player}:
+    \begin{itemize}
+        \item \textbf{ID}: Unique identifier for a player (integer).
+        \item \textbf{Name}: Display name for the player (string).
+        \item \textbf{Hand}: List of cards held by the player (array of Card objects).
+        \item \textbf{Score}: Player's cumulative score in dozenal notation (string, such as ``1A'' for 22 in decimal).
+    \end{itemize}
+    \item \textbf{Card}:
+    \begin{itemize}
+        \item \textbf{Suit}: One of four suits (Hearts, Diamonds, Clubs, Spades) (string).
+        \item \textbf{Rank}: Card value (2--10, J, Q, K, A, 8) (string).
+        \item \textbf{IsWild}: Boolean indicating if the card is an ``8'' (true/false).
+    \end{itemize}
+    \item \textbf{Deck}:
+    \begin{itemize}
+        \item \textbf{Stock Pile}: List of cards available for drawing (array of Card objects).
+        \item \textbf{Discard Pile}: List of played cards (array of Card objects).
+    \end{itemize}
+    \item \textbf{Game Session}:
+    \begin{itemize}
+        \item \textbf{Session ID}: Unique identifier for the game session (string).
+        \item \textbf{Current Turn}: ID of the player whose turn it is (integer).
+        \item \textbf{Status}: Game state (Active, Completed) (string).
+        \item \textbf{Starter Card}: The first card in the discard pile (Card object).
+        \item \textbf{Last Played Suit}: The active suit after an ``8'' is played (string).
+    \end{itemize}
+    \item \textbf{Score}:
+    \begin{itemize}
+        \item \textbf{Player ID}: Links to the player (integer).
+        \item \textbf{Dozenal Value}: Score in base-12 notation (string, such as ``14'' for 16 in decimal).
+        \item \textbf{Calculation Method}: Rules for scoring (sum of remaining cards in the opponents hands) (string).
+    \end{itemize}
+\end{itemize}
 
 \section{The Scope of the Product}
 \subsection{Product Boundary}
@@ -200,11 +314,29 @@ involved in the Project}
 
 \section{Maintainability and Support Requirements}
 \subsection{Maintenance Requirements}
-\lips
+
+\begin{itemize}
+    \item \textbf{Code Maintainability}: The codebase must be modular, with clear separation of concerns to facilitate updates and debugging. Inline comments for non-obvious logic and updated README/module documentation are required, as specified in the development plan.
+    \item \textbf{Version Control}: All changes must be tracked via GitHub, with descriptive commit messages and pull requests requiring at least one peer review to ensure maintainability.
+    \item \textbf{Extensibility}: The system must support adding new features without requiring significant refactoring. This is achieved by using a modular architecture and Object oriented Design principles.
+    \item \textbf{Documentation Updates}: Any change in behavior, interfaces, or setup instructions must be reflected in the documentation to ensure future developers can maintain the system. Local deployment instructions documented in the README to simplify setup for developers and maintainers.
+\end{itemize}
+
 \subsection{Supportability Requirements}
-\lips
+
+\begin{itemize}
+    \item \textbf{Error Reporting}: The system must provide clear, user-friendly feedback for invalid moves. Logs or replays of game sessions must be available for debugging, as specified in the non-functional goals.
+    \item \textbf{User Support}: A tutorial or visual guidance (stretch goal) must be provided to assist new players in understanding gameplay and dozenal scoring. This reduces the need for extensive manual support.
+    \item \textbf{Cross-Platform Support}: The software must run on different web environments (Windows, macOS, or browsers). 
+\end{itemize}
+
 \subsection{Adaptability Requirements}
-\lips
+
+\begin{itemize}
+    \item \textbf{Rule Flexibility}: The system must support toggling house rules (e.g., draw-until-playable, stacking eights) via a rule configurator (stretch goal), allowing adaptation to different play styles without code changes.
+    \item \textbf{Scalability for Players}: The architecture must accommodate extending from two-player (MVP) to 3--4 player games (stretch goal) by modifying session management and turn logic.
+    \item \textbf{Numeric System Extensibility}: The scoring system must allow switching between dozenal and decimal displays, ensuring adaptability for users unfamiliar with base-12.
+\end{itemize}
 
 \section{Security Requirements}
 \subsection{Access Requirements}
@@ -220,7 +352,12 @@ involved in the Project}
 
 \section{Cultural Requirements}
 \subsection{Cultural Requirements}
-\lips
+
+\begin{itemize}
+    \item \textbf{Numeric System Accessibility}: The software must present dozenal (base-12) in an intuitive, non-disruptive way. This includes clear UI elements for dozenal scores (using A and B for 10 and 11) and optional tutorials (stretch goal) to explain dozenal notation to users unfamiliar with it.
+    \item \textbf{Inclusivity}: The system must avoid cultural biases in its design, ensuring that gameplay and terminology (suits, ranks) are universally recognizable across cultures familiar with standard playing cards. No culturally specific references or imagery should be used in the UI to maintain broad accessibility.
+    \item \textbf{Educational Alignment}: The software must align with educational goals by demonstrating the practical benefits of dozenal in a game context, making it appealing to students and educators. This supports the cultural shift toward exploring alternative numeric systems, as advocated by stakeholders like dozenal enthusiasts.
+\end{itemize}
 
 \section{Compliance Requirements}
 \subsection{Legal Requirements}
