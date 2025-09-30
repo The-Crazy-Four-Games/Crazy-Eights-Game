@@ -90,21 +90,44 @@ The goals of this project are:
 
 \section{Mandated Constraints}
 \subsection{Solution Constraints}
-\lips
+	\begin{itemize}
+		\item All source code must be managed using Github, with frequent commits and version control.
+		\item The system must be developed using React for frontend and Node.js for backend.
+	\end{itemize}
 \subsection{Implementation Environment of the Current System}
-\lips
+\begin{itemize}
+		\item The backend must operate on Node.js (LTS version, e.g., 18+) with a relational database such as PostgreSQL or MySQL.
+		\item The application must be deployable on modern web browsers (Chrome, Firefox, Edge)
+	\end{itemize}
 \subsection{Partner or Collaborative Applications}
-\lips
+	\begin{itemize}
+		\item The team must use GitHub for code collaboration and issue tracking.
+		\item  Discord are required for real-time communication and coordination.
+	\end{itemize}
 \subsection{Off-the-Shelf Software}
-\lips
+	\begin{itemize}
+		\item The system must rely primarily on open-source libraries.
+		\item Proprietary software must not be required for end users to run the application.
+	\end{itemize}
 \subsection{Anticipated Workplace Environment}
-\lips
+	\begin{itemize}
+		\item End users are expected to interact with the application primarily on web browsers.
+	\end{itemize}
 \subsection{Schedule Constraints}
-\lips
+	\begin{itemize}
+		\item The project must be completed within the academic deadline.
+		\item Progress reports and milestone check-ins with the TA are mandatory.
+	\end{itemize}
 \subsection{Budget Constraints}
-\lips
+	\begin{itemize}
+		\item Total financial budget is under 500 Canadian Dollars.
+		\item Open source and free tools are primary to be used.
+	\end{itemize}
 \subsection{Enterprise Constraints}
-\lips
+	\begin{itemize}
+		\item The project must comply with academic integrity and university policies.
+		\item Data collection and storage must follow privacy, security, and ethical guidelines.
+	\end{itemize}
 
 \section{Naming Conventions and Terminology}
 \subsection{Glossary of All Terms, Including Acronyms, Used by Stakeholders
@@ -268,37 +291,78 @@ These are the key entities and relationships involved in the Crazy Eights game w
 
 \section{Look and Feel Requirements}
 \subsection{Appearance Requirements}
-\lips
+	\begin{itemize}
+		\item \textbf{Layout}: The user interface must have a clean and minimalistic layout, ensuring readability and ease of navigation.
+		\item \textbf{Responsiveness}: The system must be responsive, adapting automatically to different screen sizes.
+	\end{itemize}
 \subsection{Style Requirements}
-\lips
+	\begin{itemize}
+		\item \textbf{Consistency}: The application must follow a consistent design theme(e.g.: color, button style, typography).
+	\end{itemize}
 
 \section{Usability and Humanity Requirements}
 \subsection{Ease of Use Requirements}
-\lips
+	\begin{itemize}
+		\item \textbf{Simplicity}: The interface must minimize the number of steps needed to perform core tasks.
+		\item Data collection and storage must follow privacy, security, and ethical guidelines.
+	\end{itemize}
 \subsection{Personalization and Internationalization Requirements}
-\lips
+	\begin{itemize}
+		\item \textbf{Language Options}: The system must support at least English and one additional language for international users.
+	\end{itemize}
 \subsection{Learning Requirements}
-\lips
+	\begin{itemize}
+		\item \textbf{Onboarding}A short interactive tutorial must explain the rules of the game and how counting in different bases works.
+	\end{itemize}
 \subsection{Understandability and Politeness Requirements}
-\lips
+	\begin{itemize}
+		\item \textbf{Friendly Wording}: Prompts like “Invalid Move” must be displayed as polite guidance.
+		\item \textbf{Clear Instructions}: Rules and base-conversion explanations must be phrased in simple and non-technical terms.
+	\end{itemize}
 \subsection{Accessibility Requirements}
-\lips
+	\begin{itemize}
+		\item\textbf{Keyboard Support}: All main actions must be accessible via keyboard shortcuts
+	\end{itemize}
 
 \section{Performance Requirements}
 \subsection{Speed and Latency Requirements}
-\lips
+	\begin{itemize}
+		\item\textbf{Low latency}: Game actions must update across all players’ screens within 300 ms.
+		\item \textbf{Fast loading}: The game lobby and first match must load within 5 seconds on a stable internet connection.
+	\end{itemize}
+
 \subsection{Safety-Critical Requirements}
-\lips
+	\begin{itemize}
+		\item\textbf{Cheat Prevention}: The system must prevent unauthorized manipulation (e.g., directly altering game state through client-side tools).
+		\item \textbf{Data Integrity}: No game state (e.g. deck composition, player hand) should be lost or corrupted due to refresh or reconnect.
+	\end{itemize}
+
 \subsection{Precision or Accuracy Requirements}
-\lips
+	\begin{itemize}
+		\item\textbf{Card Rules}: Card-matching and counting rules must be enforced with 100\% accuracy according to the chosen numeral base.
+	\end{itemize}
+
 \subsection{Robustness or Fault-Tolerance Requirements}
-\lips
+	\begin{itemize}
+		\item\textbf{Reconnection}: If a player disconnects, they must be able to rejoin within 30 seconds without losing progress.
+	\end{itemize}
+
 \subsection{Capacity Requirements}
-\lips
+	\begin{itemize}
+		\item\textbf{Concurrent Players}: The system must support at least 200 concurrent users during testing.
+	\end{itemize}
+
 \subsection{Scalability or Extensibility Requirements}
-\lips
+	\begin{itemize}
+		\item\textbf{Game Modes}: The system must allow for adding new rule variations (e.g., different numeral bases or wild card effects) with minimal code changes.
+		\item \textbf{Server Scaling}: The backend must be deployable in a scalable environment (e.g., Docker, cloud hosting) to handle larger user bases.
+	\end{itemize}
+
 \subsection{Longevity Requirements}
-\lips
+	\begin{itemize}
+		\item\textbf{Maintainability}: The codebase must be modular and documented, so future developers can update rules easily.
+	\end{itemize}
+
 
 \section{Operational and Environmental Requirements}
 \subsection{Expected Physical Environment}
