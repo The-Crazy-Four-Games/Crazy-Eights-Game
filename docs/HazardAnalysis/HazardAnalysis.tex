@@ -14,7 +14,13 @@
 
 \title{Hazard Analysis\\\progname}
 
-\author{\authname}
+\author{
+    Team \#25, The Crazy Four \\[1ex]
+    Ruida Chen \\
+    Ammar Sharbat \\
+    Alvin Qian \\
+    Jiaming Li
+}
 
 \date{}
 
@@ -51,24 +57,38 @@ Date2 & Name(s) & Description of changes\\
 
 \pagenumbering{arabic}
 
-\wss{You are free to modify this template.}
 
 \section{Introduction}
 
-\wss{You can include your definition of what a hazard is here.}
+For a card game that entertains users by applying different game rules in different numerical systems to teach various number bases, reliability of the software and the user safety are neccessary attributes. In this context, a hazard is defined as any situation within the system or in the surrounding environment that may cause harm, such as confusion, data loss or resulting in incorrect learning outcomes. In this project, hazards are not limited to physical concerns; they mainly focus on software-related risks. These issues may cause users to become frustrated or reduce the educational value of the game. The Failure Modes and Effects Analysis (FMEA) method is used to identify and evaluate these possible failure modes within key components, guiding the team to improve system fairness, learning accuracy, and overall robustness.
 
 \section{Scope and Purpose of Hazard Analysis}
 
-\wss{You should say what \textbf{loss} could be incurred because of the
-hazards.}
+The purpose of this hazard analysis is to identify components of the card game system that may lead to undesirable outcomes and to understand the potential losses that could occur if such hazards are realized. These losses may include:
+\begin{itemize}
+	\item Loss of learning effectiveness, where players receive incorrect results or misleading explanations about numeral bases.
+	\item Loss of user trust or engagement, caused by unfair scoring, interface errors, or game desynchronization.
+	\item Loss of data integrity, resulting in corrupted game records or incorrect user progress tracking.
+	\item Loss of system availability, due to server failure or communication breakdowns during active sessions.
+\end{itemize}
+The analysis considers both situations when the system functions incorrectly and when it behaves as designed but under unexpected conditions (e.g., network lag or user misuse). By identifying potential hazards early, this document supports the design of a more stable, accurate, and user-centered learning experience.
 
 \section{System Boundaries and Components}
+\subsection{Frontend}
+This component provides the main interface for players to interact with the system, it captures user inputs such as playing, drawing, or skipping cards and provides visual feedback and animations during gameplay.
+\subsection{Backend Server}
+This component manages the overall system logic, coordinating user sessions, handle requests, and enforcing gameplay.
+\subsection{Database}
+This component stores persistent data such as player account information, game history, and user configuration settings.
+\subsection{Real-Time Communication Layer}
+This component maintains live connections between clients and the server to synchronize player actions in real time.
+\subsection{Game Rule Module}
+This component enforces the game's core rules, such as base conversion calculations, card validation, and scoring.
+\subsection{Auth \& User Management System}
+This component handles user registration, login, and session verification.
+\subsection{External Libraries and APIs}
+This component relies on several open-source frameworks and libraries.
 
-\wss{Dividing the system into components will help you brainstorm the hazards.
-You shouldn't do a full design of the components, just get a feel for the major
-ones.  For projects that involve hardware, the components will typically include
-each individual piece of hardware.  If your software will have a database, or an
-important library, these are also potential components.}
 
 \section{Critical Assumptions}
 
@@ -116,7 +136,12 @@ Which requirements will be implemented in the future?}
     did they come about?
     \item Other than the risk of physical harm (some projects may not have any
     appreciable risks of this form), list at least 2 other types of risk in
-    software products. Why are they important to consider?
+    software products. Why are they important to consider? 
+	\begin{itemize}
+	\item Usability and human-error risks: Poorly designed user interfaces, low-quality GUI animation, unclear instructions can cause user to make mistake or misunderstand the system, these risks are important because they directly affect user satisfaction, learning outcomes and overall quality of the software.
+	\item Data integrity and privacy risks: These occur when user data is lost, corrupted or exposed due to software defects, inappropriate authentication. Such risks are critical because they can lead to permanent loss of user information and legal issues, breaches can severely damage credibility and violate data protection regulations.
+	
+	\end{itemize}
 \end{enumerate}
 
 \end{document}
