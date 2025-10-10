@@ -3,6 +3,9 @@
 \usepackage{booktabs}
 \usepackage{tabularx}
 \usepackage{hyperref}
+\usepackage{booktabs,longtable,tabularx,ragged2e}
+\usepackage{changepage}
+
 
 \hypersetup{
     colorlinks=true,       % false: boxed links; true: colored links
@@ -42,7 +45,7 @@
 \toprule
 \textbf{Date} & \textbf{Developer(s)} & \textbf{Change}\\
 \midrule
-Date1 & Name(s) & Description of changes\\
+10.9 & Jiaming Li & FMEA\\
 Date2 & Name(s) & Description of changes\\
 ... & ... & ...\\
 \bottomrule
@@ -118,15 +121,82 @@ A7 & Client devices provide basic accessibility aids such as keyboard, focus nav
 \end{itemize}
 
 \section{Failure Mode and Effect Analysis}
+\setlength{\LTleft}{-3cm}
+\setlength{\LTright}{0pt}
+    \begin{small}
+        \begin{longtable}{@{}p{2.6cm} p{3.2cm} p{3.0cm} p{3.0cm} p{6.0cm} p{1.2cm} p{1.2cm}@{}}
+            \caption{Failure Mode and Effect Analysis (FMEA)}\label{tab:fmea}\\
+            \toprule
+            \textbf{Component} & \textbf{Failure Modes} & \textbf{Effects of Failure} &
+            \textbf{Causes of Failure} & \textbf{Recommended Action} & \textbf{SR} & \textbf{Ref.}\\
+            \midrule
+            \endfirsthead
+            \toprule
+            \textbf{Component} & \textbf{Failure Modes} & \textbf{Effects of Failure} &
+            \textbf{Causes of Failure} & \textbf{Recommended Action} & \textbf{SR} & \textbf{Ref.}\\
+            \midrule
+            \endhead
+            \bottomrule
+            \endfoot
 
-\wss{Include your FMEA table here. This is the most important part of this document.}
-\wss{The safety requirements in the table do not have to have the prefix SR.
-The most important thing is to show traceability to your SRS. You might trace to
-requirements you have already written, or you might need to add new
-requirements.}
-\wss{If no safety requirement can be devised, other mitigation strategies can be
-entered in the table, including strategies involving providing additional
-documentation, and/or test cases.}
+
+            Game Engine &
+            Incorrect Dozenal validation (e.g., misinterpreting sum = 12). &
+            Invalid moves; breaks gameplay logic and educational purpose. &
+            Logic bug; base–10/12 conversion error. &
+            (a) Add unit tests for all Dozenal comparisons; (b) property-based tests for edge cases. &
+            SR-1 & H1-1 \\ \midrule
+
+            UI Layer &
+            Hints/feedback not displayed during gameplay. &
+            Player confusion; reduced educational value. &
+            Rendering delay; missing event callback. &
+            (a) Async UI event queue with logging; (b) fallback text-only hint when animation fails. &
+            SR-2 & H1-2 \\ \midrule
+
+            Login Manager &
+            Player unable to log in or session lost. &
+            Loss of access to saved data or multiplayer mode. &
+            Session timeout; invalid credential cache. &
+            (a) Guest-mode fallback; (b) local session cache; retry with exponential backoff. &
+            SR-3 & H1-3 \\ \midrule
+
+            Data Manager &
+            Save corruption during file write. &
+            Loss of player profile or progress. &
+            Non-atomic save; unexpected shutdown. &
+            (a) Atomic writes + checksum on load; (b) periodic backups and restore flow. &
+            SR-4 & H1-4 \\ \midrule
+
+            Score Calculator &
+            Wrong Dozenal–decimal conversion or totals. &
+            Inconsistent scores; undermines trust. &
+            Arithmetic bug; type overflow. &
+            (a) Secondary calculator cross-check; (b) property-based tests on random inputs. &
+            SR-5 & H1-5 \\ \midrule
+
+            Network (future) &
+            Desynchronized multiplayer state. &
+            Different states across clients. &
+            Packet loss; high latency. &
+            (a) State-hash verification; (b) timeout-based resync; authoritative host. &
+            SR-6 & H1-6 \\ \midrule
+
+            Educational Feedback &
+            Incorrect/misleading Dozenal explanation. &
+            Players learn wrong concepts. &
+            Faulty rule mapping; stale content. &
+            (a) Peer-reviewed hint knowledge base; (b) versioning and CI checks. &
+            SR-7 & H1-7 \\ \midrule
+
+            Security Layer &
+            Unencrypted data at rest/in transit. &
+            Privacy breach; data leak. &
+            Missing encryption; insecure local storage. &
+            (a) AES-256 at rest; (b) HTTPS/TLS in transit; (c) secrets in OS keystore. &
+            SR-8 & H1-8 \\
+        \end{longtable}
+    \end{small}
 
 \section{Safety and Security Requirements}
 
@@ -154,6 +224,9 @@ Which requirements will be implemented in the future?}
     deliverable, and which did you think of while doing this deliverable? For
     the latter ones (ones you thought of while doing the Hazard Analysis), how
     did they come about?
+    \paragraph{Answer:}
+    Before this deliverable, our team had already considered general risks such as scheduling conflicts, Git merge issues, and limited testing time near deadlines.
+    During the Hazard Analysis, we identified new, more specific risks, including Dozenal validation logic errors, data corruption during saving, and inaccurate educational feedback. These emerged as we analyzed each system component in the FMEA table, which led us to think more deeply about technical failures and their impact on users.
     \item Other than the risk of physical harm (some projects may not have any
     appreciable risks of this form), list at least 2 other types of risk in
     software products. Why are they important to consider? 
