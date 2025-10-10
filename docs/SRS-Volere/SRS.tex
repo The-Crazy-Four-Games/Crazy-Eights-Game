@@ -9,6 +9,7 @@
 \usepackage{booktabs}
 \usepackage{tabularx}
 \usepackage{hyperref}
+\usepackage{graphicx}
 \hypersetup{
     bookmarks=true,         % show bookmarks bar?
       colorlinks=true,      % false: boxed links; true: colored links
@@ -54,8 +55,14 @@
         \textbf{Date} & \textbf{Developer(s)} & \textbf{Change}\\
         \midrule
         9.29 & Jiaming Li & Purpose of the Project\\
+        9.30 & Ruida Chen & Section3, 10 ,11,  12\\
         9.30 & Jiaming Li & Scope of the Product\\
         9.30 & Jiaming Li & FR\\
+        9.30 & Alvin Qian & Section 4,6,7\\
+        10.1 & Alvin Qian & Section 14,16\\
+        10.9 & Ruida Chen & Section 20,21,22\\
+        10.9 & Jiaming Li & Section 17,18,19\\
+        10.9 & Alvin Qian & Appendix and Reflection\\
         \bottomrule
     \end{tabularx}
 \end{table}
@@ -146,7 +153,9 @@ involved in the Project}
 
 \begin{itemize}
     \item \textbf{Base-10 (Decimal)}: The standard numerical system using ten digits (0--9), commonly used in arithmetic and everyday calculations.
-    \item \textbf{Base-12 (Dozenal)}: A numerical system using twelve digits (0--9, A, B), where A represents 10 and B represents 11 in decimal. Has divisibility advantages (divisors: 2, 3, 4, 6).
+    \item \textbf{Base-12 (Dozenal)}: A numerical system using twelve digits (0--9, \reflectbox{2}, \reflectbox{3}), where \reflectbox{2} represents 10 and \reflectbox{3} represents 11 in decimal. Has divisibility advantages (divisors: 2, 3, 4, 6).
+    \item \textbf{Base-8 (Octal)}: A numerical system using eight digits (0--7). Each octal digit represents three binary digits (bits). Commonly used in computing and digital systems due to easy conversion with binary.
+    \item \textbf{Base-16 (Hexadecimal)}: A numerical system using sixteen digits (0--9, A--F), where A through F represent decimal values 10 to 15. Widely used in programming and computer memory addressing for its compact binary representation.
     \item \textbf{Crazy Eights}: A classic card game where players match cards by suit or rank, with the ``8'' card acting as a wild card allowing the player to declare a new suit.
     \item \textbf{MVP}: Minimum Viable Product, the initial version of the Crazy Eights software with core functionality, including two-player gameplay, classic rules, and dozenal scoring.
     \item \textbf{Functional Goals}: Features and behaviors the software must implement, such as gameplay mechanics and dozenal score display.
@@ -259,7 +268,7 @@ These are the key entities and relationships involved in the Crazy Eights game w
         \item \textbf{ID}: Unique identifier for a player (integer).
         \item \textbf{Name}: Display name for the player (string).
         \item \textbf{Hand}: List of cards held by the player (array of Card objects).
-        \item \textbf{Score}: Player's cumulative score in dozenal notation (string, such as ``1A'' for 22 in decimal).
+        \item \textbf{Score}: Player's cumulative score in dozenal notation (string, such as ``1\reflectbox{2}'' for 22 in decimal).
     \end{itemize}
     \item \textbf{Card}:
     \begin{itemize}
@@ -309,23 +318,47 @@ The following table summarizes the primary product use cases (PUCs):
     \hline
     \textbf{PUC \#} & \textbf{Description} \\
     \hline
-    PUC-1 & Player starts a new Crazy 8s game with Dozenal-enabled deck. \\
+    PUC-1 & Player logs into the system or creates a new account to enable personalized features and multiplayer access. \\
     \hline
-    PUC-2 & Player takes a turn by drawing or discarding a card. \\
+    PUC-2 & Player views their personal profile, including gameplay history, win/loss record, and achievements. \\
     \hline
-    PUC-3 & System validates whether the played card is legal (same suit, same Dozenal value, or sum = 12). \\
+    PUC-3 & Player starts a new Crazy 8s game with Dozenal-enabled deck. \\
     \hline
-    PUC-4 & Player views scores and progress, displayed in both decimal and Dozenal. \\
+    PUC-4 & Player takes a turn by drawing or discarding a card. \\
     \hline
-    PUC-5 & System provides hints or explanations to support Dozenal learning. \\
+    PUC-5 & System validates whether the played card is legal (same suit, same Dozenal value, or sum = 12). \\
     \hline
-    PUC-6 & Game ends when a player wins; final scores are calculated and displayed. \\
+    PUC-6 & Player views scores and progress, displayed in both decimal and Dozenal. \\
+    \hline
+    PUC-7 & System provides hints or explanations to support Dozenal learning. \\
+    \hline
+    PUC-8 & Game ends when a player wins; final scores are calculated and displayed. \\
     \hline
 \end{tabularx}
 
 \subsection{Individual Product Use Cases (PUCs)}
 
-\noindent\textbf{UC1: Start a New Game}
+\noindent\textbf{UC1: Player Login}
+\begin{enumerate}
+    \item Player opens the game application and selects ``Login'' or ``Create Account''.
+    \item The system prompts the player to enter credentials (username and password) or choose guest mode.
+    \item The system validates login information against the stored database.
+    \item If credentials are valid, the player is granted access to personalized data (game progress, scores, and settings).
+    \item If the player selects guest mode, a temporary profile is generated for the session.
+    \item The system displays the main menu or lobby after login.
+\end{enumerate}
+
+\noindent\textbf{UC2: See Player Profile}
+\begin{enumerate}
+    \item The player selects ``View Profile'' from the main menu.
+    \item The system retrieves player data (username, past game records, win/loss ratio, and achievements) from the database.
+    \item The system displays profile information on screen.
+    \item If the player is logged in as a guest, the system displays a message such as ``Profile unavailable for guest mode''.
+    \item The player may choose to return to the main menu or edit available settings (if logged in).
+\end{enumerate}
+
+
+\noindent\textbf{UC3: Start a New Game}
 \begin{enumerate}
     \item Player opens the application and selects ``New Game''.
     \item The system initializes a Dozenal-enabled deck (0--B, 10).
@@ -334,7 +367,7 @@ The following table summarizes the primary product use cases (PUCs):
     \item The game state is displayed on the interface.
 \end{enumerate}
 
-\noindent\textbf{UC2: Take a Turn}
+\noindent\textbf{UC4: Take a Turn}
 \begin{enumerate}
     \item The system indicates that it is the player’s turn.
     \item The player chooses either to play a card or to draw from the deck.
@@ -344,7 +377,7 @@ The following table summarizes the primary product use cases (PUCs):
     \item If the player chooses to draw, the system gives one card from the deck to the player.
 \end{enumerate}
 
-\noindent\textbf{UC3: Validate Move}
+\noindent\textbf{UC5: Validate Move}
 \begin{enumerate}
     \item The player selects a card to play.
     \item The system retrieves the top card from the discard pile.
@@ -358,7 +391,7 @@ The following table summarizes the primary product use cases (PUCs):
     \item If not, the system rejects the move and notifies the player.
 \end{enumerate}
 
-\noindent\textbf{UC4: View Scores}
+\noindent\textbf{UC6: View Scores}
 \begin{enumerate}
     \item A round ends or the player requests to view scores.
     \item The system calculates points for each player.
@@ -366,7 +399,7 @@ The following table summarizes the primary product use cases (PUCs):
     \item The system displays the results on screen.
 \end{enumerate}
 
-\noindent\textbf{UC5: Provide Hints}
+\noindent\textbf{UC7: Provide Hints}
 \begin{enumerate}
     \item The player hovers over or selects a card.
     \item The system analyzes the current game state.
@@ -374,7 +407,7 @@ The following table summarizes the primary product use cases (PUCs):
     \item The hint is displayed as text or a visual highlight.
 \end{enumerate}
 
-\noindent\textbf{UC6: End Game}
+\noindent\textbf{UC8: End Game}
 \begin{enumerate}
     \item A player discards their last card.
     \item The system checks if the game-ending condition is satisfied.
@@ -428,15 +461,38 @@ The following table summarizes the primary product use cases (PUCs):
     \textbf{Rationale:} Reduces frustration, ensures players stay engaged, and reinforces Dozenal rules through visual learning.
 \end{enumerate}
 
+\subsection{Login Manager}
+\begin{enumerate}
+    \item \textbf{Account creation:} The system shall allow players to create a new account with a unique username and password. (FR-10)
+    \item \textbf{Login/Logout:} The system shall allow players to log in and log out at any time without losing progress. (FR-11)
+    \item \textbf{Guest mode:} The system shall allow players to start a temporary session without login. (FR-12)
+    \item \textbf{Credential validation:} The system shall validate player credentials against stored records before granting access. (FR-13)
+    \item \textbf{Rationale:} Ensures users can have persistent profiles for tracking progress and enables multiplayer authentication.
+\end{enumerate}
+
+\subsection{Data Manager}
+\begin{enumerate}
+    \item \textbf{Data storage:} The system shall securely store user data, including usernames, game history, and Dozenal scores. (FR-14)
+    \item \textbf{Data retrieval:} The system shall allow retrieval of stored user data when logging in or viewing profiles. (FR-15)
+    \item \textbf{Data update:} The system shall update stored data after each game or when profile information changes. (FR-16)
+    \item \textbf{Data deletion:} The system shall allow players to delete their data permanently upon request. (FR-17)
+    \item \textbf{Rationale:} Supports persistent user experience, analytics, and compliance with data privacy expectations.
+\end{enumerate}
+
 \section{Look and Feel Requirements}
 \subsection{Appearance Requirements}
 	\begin{itemize}
 		\item \textbf{Layout}: The user interface must have a clean and minimalistic layout, ensuring readability and ease of navigation.
 		\item \textbf{Responsiveness}: The system must be responsive, adapting automatically to different screen sizes.
+		\item \textbf{Visual Hierarchy}: Key elements such as active player indicators, playable cards, and turn timers must be visually distinguishable using contrast, color, or animation.
+		\item \textbf{Color Palette}: The color scheme should promote clarity and engagement.
 	\end{itemize}
 \subsection{Style Requirements}
 	\begin{itemize}
-		\item \textbf{Consistency}: The application must follow a consistent design theme(e.g.: color, button style, typography).
+		\item \textbf{Consistency}: The application must follow a unified design language, maintaining consistent typography, iconography, and button styles across all screens.
+		\item \textbf{Animations}: Smooth 2-D animations should be implemented for card movements, dealing, and discarding actions. These animations should be realistic but not distracting, maintaining short transition times. When a wild card is played, a distinct animation and color shift should visually emphasize its effect while maintaining overall style consistency.
+		\item \textbf{In-Game Hints}: Hints should appear contextually (e.g., glowing borders, pulsing icons) rather than as intrusive pop-ups. They should guide the player without interrupting the flow of the game.
+		
 	\end{itemize}
 
 \section{Usability and Humanity Requirements}
@@ -502,7 +558,6 @@ The following table summarizes the primary product use cases (PUCs):
 		\item\textbf{Maintainability}: The codebase must be modular and documented, so future developers can update rules easily.
 	\end{itemize}
 
-
 \section{Operational and Environmental Requirements}
 \subsection{Expected Physical Environment}
 \lips
@@ -557,66 +612,183 @@ The following table summarizes the primary product use cases (PUCs):
 \subsection{Cultural Requirements}
 
 \begin{itemize}
-    \item \textbf{Numeric System Accessibility}: The software must present dozenal (base-12) in an intuitive, non-disruptive way. This includes clear UI elements for dozenal scores (using A and B for 10 and 11) and optional tutorials (stretch goal) to explain dozenal notation to users unfamiliar with it.
+    \item \textbf{Numeric System Accessibility}: The software must present dozenal (base-12) in an intuitive, non-disruptive way. This includes clear UI elements for dozenal scores (using \reflectbox{2} and \reflectbox{3} for 10 and 11) and optional tutorials (stretch goal) to explain dozenal notation to users unfamiliar with it.
     \item \textbf{Inclusivity}: The system must avoid cultural biases in its design, ensuring that gameplay and terminology (suits, ranks) are universally recognizable across cultures familiar with standard playing cards. No culturally specific references or imagery should be used in the UI to maintain broad accessibility.
     \item \textbf{Educational Alignment}: The software must align with educational goals by demonstrating the practical benefits of dozenal in a game context, making it appealing to students and educators. This supports the cultural shift toward exploring alternative numeric systems, as advocated by stakeholders like dozenal enthusiasts.
 \end{itemize}
 
 \section{Compliance Requirements}
+
 \subsection{Legal Requirements}
-\lips
+The game must comply with intellectual property laws and digital content distribution regulations.
+All assets (images, fonts, and sounds) used in the game must be open-source, royalty-free, or properly licensed.
+
 \subsection{Standards Compliance Requirements}
-\lips
+The software shall follow standard software development practices such as version control (Git), documentation standards (LaTeX-based SRS), and accessibility guidelines (WCAG 2.1 Level AA).
+The codebase should be compliant with modern C++/Python style conventions (PEP8 or equivalent).
 
 \section{Open Issues}
-\lips
+\begin{itemize}
+    \item Whether multiplayer mode will be implemented in the current phase or postponed to a future release.
+    \item The extent of educational feedback (how deeply to explain Dozenal math).
+    \item Balancing game difficulty to maintain both fun and learning value.
+    \item Need to confirm visual design theme (educational vs. playful aesthetic).
+\end{itemize}
 
 \section{Off-the-Shelf Solutions}
+
 \subsection{Ready-Made Products}
-\lips
+Existing Crazy 8s card games (e.g., UNO or digital clones) offer partial gameplay models, but none integrate an educational Dozenal arithmetic component.
+No direct off-the-shelf solution currently fulfills both entertainment and mathematical learning objectives.
+
 \subsection{Reusable Components}
-\lips
+\begin{itemize}
+    \item Card rendering engines from open-source projects such as \textit{Pygame} or \textit{Godot} assets.
+    \item Math libraries for number-base conversion (decimal $\leftrightarrow$ Dozenal).
+    \item UI component libraries for game menus, card animations, and scoreboards.
+\end{itemize}
+
 \subsection{Products That Can Be Copied}
-\lips
+Some structural aspects (turn management, shuffling algorithms) can be adapted from existing open-source card game repositories, provided licensing terms (e.g., MIT, GPL) are respected.
+However, educational Dozenal mechanics must be developed in-house to align with project-specific learning goals.
+
 
 \section{New Problems}
 \subsection{Effects on the Current Environment}
-\lips
+\begin{itemize}
+	\item The system is a newly devleoped web-based game and does not replace or interfere with any existing enviroment, minimal impact is expected aside from standard hosting and network usage.
+\end{itemize}
 \subsection{Effects on the Installed Systems}
-\lips
+\begin{itemize}
+	\item No existing software systems are modified or replaced by this product. The game operates independently on standard browsers and web servers.
+\end{itemize}
 \subsection{Potential User Problems}
-\lips
+\begin{itemize}
+	\item Users may experience confusion if base-conversion rules are misunderstood. These issues will be mitigated through clear feedback, tutorials, and consistent UI design.
+\end{itemize}
 \subsection{Limitations in the Anticipated Implementation Environment That May
 Inhibit the New Product}
-\lips
+\begin{itemize}
+	\item The main limitation is dependency on stable internet connectivity. Poor network conditions may degrade real-time synchronization or cause delayed responses.
+\end{itemize}
 \subsection{Follow-Up Problems}
-\lips
-
+\begin{itemize}
+	\item As the system evolves, maintaining compatibility with browser updates and third-party libraries (e.g., React, Socket.io) may introduce future maintenance challenges.
+\end{itemize}
 \section{Tasks}
 \subsection{Project Planning}
-\lips
+\begin{itemize}
+	\item The project life cycle will follow the deliverable outline for SFWRENG 4G06: Capstone. By April the project must be completed in its entirety.
+\end{itemize}
 \subsection{Planning of the Development Phases}
-\lips
+\begin{itemize}
+	\item Requirements and Design Phase - Gather functional and non-functional requirements, identifying key components.
+	\item Prototyping Phase - Develop an early functional prototype focusing on core interactions and user interface flow.
+	\item MVP Phase - Implement the main gameplay logic, user authentication, and basic scoring system as our MVP.
+	\item Finalize Phase - Polish the user interface, improve performance, deploy the final version to the hosting environment and prepare presentation.
+	
+\end{itemize}
 
 \section{Migration to the New Product}
-\subsection{Requirements for Migration to the New Product}
-\lips
-\subsection{Data That Has to be Modified or Translated for the New System}
-\lips
+Not applicable.
 
+% =========================
+% 23. Costs
+% =========================
 \section{Costs}
-\lips
+
+\subsection{Assumptions}
+\begin{itemize}
+  \item Academic, non-commercial deployment targeting a small user group during the term.
+  \item Free tiers are acceptable for hosting and CI where reliability is sufficient for demos.
+  \item Budget ceiling: 500 CAD (see Section ``Budget Constraints'').
+\end{itemize}
+
+\subsection{One-time Costs}
+\begin{table}[hp]
+  \caption{One-time Purchases (CAD)}\label{tab:one_time_costs}
+  \begin{tabularx}{\textwidth}{lXrrr}
+    \toprule
+    \textbf{Item} & \textbf{Purpose} & \textbf{Unit} & \textbf{Total} \\
+    \midrule
+    Domain name (1 year) & Simple memorable URL for demos & 1 & 20 \\
+    \midrule
+    \multicolumn{4}{r}{\textbf{Subtotal}} & \textbf{20} \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\subsection{Recurring Costs}
+\begin{itemize}
+  \item App hosting utilize free tier where possible
+  \item DB hosting and Free tier Postgres, small instance
+  \item Domain name renweal cost could be recurring if we plan on hosting it longer term
+\end{itemize}
+
+\subsection{Total and Headroom}
+\noindent Estimated total spend for the term: \textbf{100 CAD}. This stays within the 500 CAD cap and leaves headroom for risk mitigation or stretch features.
+
+\subsection{Cost Control Plan}
+\begin{itemize}
+  \item Prefer free tiers for hosting, CI, and CDN. Upgrade only if load or reliability requires it.
+  \item Reuse open-source UI kits and icon packs with permissive licenses.
+  \item Cap incentives to pre-approved number of sessions.
+\end{itemize}
+
 \section{User Documentation and Training}
+
 \subsection{User Documentation Requirements}
-\lips
+\begin{itemize}
+  \item \textbf{In-app help}: Contextual tooltips for controls, hover help for Dozenal terms, and an always-available ``How to play'' panel.
+  \item \textbf{Quick Start}: Setup, start a match, play a turn, view scores. Written for first-time users.
+  \item \textbf{Rules and Dozenal guide}: Clear rules of Crazy Eights plus a simple Dozenal primer with examples for A and B, and conversions between base 10 and base 12.
+  \item \textbf{FAQ}: Troubleshooting (cannot play a card, reconnect flow, what counts as a valid move).
+\end{itemize}
+
 \subsection{Training Requirements}
-\lips
+\begin{itemize}
+  \item \textbf{Onboarding tutorial}: 3 to 5 steps covering play a card, draw a card, wild eight, and reading Dozenal scores. Skippable and repeatable.
+  \item \textbf{Practice mode}: Solo mode against a simple bot to learn pace and rules without pressure.
+\end{itemize}
 
 \section{Waiting Room}
 \lips
 
 \section{Ideas for Solution}
-\lips
+
+\subsection{Architecture Overview}
+\begin{itemize}
+  \item \textbf{Frontend}: React with TypeScript. State managed via a small store (Zustand or Redux Toolkit). WebSocket client for live turns. Component library and keyboard-first interactions.
+  \item \textbf{Backend}: Node.js with TypeScript. HTTP API for auth and lobby. WebSocket for game sessions and events. Server-authoritative game state.
+  \item \textbf{Data}: Postgres for user profiles, match history, and telemetry. In-memory room state with periodic snapshots to DB.
+  \item \textbf{Game engine}: Pure TypeScript module with deterministic rules, validators, scoring, and base conversion utilities. No UI concerns.
+  \item \textbf{CI/CD}: GitHub Actions for lint, tests, type-checks, and deploy to a free-tier host.
+\end{itemize}
+
+\subsection{Implementation Options}
+\begin{tabularx}{\textwidth}{lX}
+  \toprule
+  \textbf{Option} & \textbf{Summary, Pros, Cons} \\
+  \midrule
+  A. Local-first 2P hot-seat & \textit{Summary}: Single browser, two players, no backend. \textit{Pros}: Fast MVP, minimal infra. \textit{Cons}: No remote play, no persistence. \\
+  \midrule
+  B. Server-authoritative WebSocket & \textit{Summary}: Lobby, rooms, turns via WS. \textit{Pros}: Fair play, replay logs, reconnect support. \textit{Cons}: More code and testing. \\
+  \midrule
+\end{tabularx}
+
+\subsection{Recommended Path}
+\begin{enumerate}
+  \item Build the game engine as a pure library with full tests.
+  \item Ship Option A for fast validation and UI polish.
+  \item Upgrade to Option B for sessions, persistence, and reconnection.
+\end{enumerate}
+
+\subsection{Key Non-functional Techniques}
+\begin{itemize}
+  \item \textbf{Fairness}: Server-side validation for all moves. Shuffle with seeded RNG and record seed for audits.
+  \item \textbf{Resilience}: Rejoin token and state rehydrate on reconnect.
+  \item \textbf{Accessibility}: Semantic HTML, focus order, ARIA labels, and keyboard shortcuts for all core actions.
+\end{itemize}
 
 \newpage{}
 \section*{Appendix --- Reflection}
