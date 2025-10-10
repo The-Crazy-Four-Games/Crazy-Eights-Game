@@ -5,7 +5,9 @@
 \usepackage{hyperref}
 \usepackage{booktabs,longtable,tabularx,ragged2e}
 \usepackage{changepage}
-
+\usepackage{tabularx}  % for flexible-width tables
+\usepackage{booktabs}  % for \toprule, \midrule, \bottomrule
+\usepackage{float}     % for [H] placement specifier
 
 \hypersetup{
     colorlinks=true,       % false: boxed links; true: colored links
@@ -46,7 +48,7 @@
 \textbf{Date} & \textbf{Developer(s)} & \textbf{Change}\\
 \midrule
 10.9 & Jiaming Li & FMEA\\
-Date2 & Name(s) & Description of changes\\
+10.9 & Alvin Qian & Added Assumptions\\
 ... & ... & ...\\
 \bottomrule
 \end{tabularx}
@@ -95,8 +97,14 @@ This component relies on several open-source frameworks and libraries.
 \section{Critical Assumptions}
 
 The assumptions below focus on a realistic deployment and user population. 
+\subsection*{Assumptions deliberately not made}
+\begin{itemize}
+  \item We do not assume client input is trusted. All moves are validated on the server.
+  \item We do not assume stable connectivity for the entire session. Rejoin and reconciliation are required features.
+  \item We do not assume prior knowledge of base 12. In app explanations and hints are mandatory.
+\end{itemize}
 
-\begin{table}[hp]
+\begin{table}[H]
 \caption{Critical Assumptions and Implications}\label{tab:assumptions}
 \begin{tabularx}{\textwidth}{lX X X}
 \toprule
@@ -112,13 +120,6 @@ A7 & Client devices provide basic accessibility aids such as keyboard, focus nav
 \bottomrule
 \end{tabularx}
 \end{table}
-
-\subsection*{Assumptions deliberately not made}
-\begin{itemize}
-  \item We do not assume client input is trusted. All moves are validated on the server.
-  \item We do not assume stable connectivity for the entire session. Rejoin and reconciliation are required features.
-  \item We do not assume prior knowledge of base 12. In app explanations and hints are mandatory.
-\end{itemize}
 
 \section{Failure Mode and Effect Analysis}
 \setlength{\LTleft}{-3cm}
