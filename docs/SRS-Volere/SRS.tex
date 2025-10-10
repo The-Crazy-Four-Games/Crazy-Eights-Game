@@ -9,6 +9,7 @@
 \usepackage{booktabs}
 \usepackage{tabularx}
 \usepackage{hyperref}
+\usepackage{graphicx}
 \hypersetup{
     bookmarks=true,         % show bookmarks bar?
       colorlinks=true,      % false: boxed links; true: colored links
@@ -146,7 +147,7 @@ involved in the Project}
 
 \begin{itemize}
     \item \textbf{Base-10 (Decimal)}: The standard numerical system using ten digits (0--9), commonly used in arithmetic and everyday calculations.
-    \item \textbf{Base-12 (Dozenal)}: A numerical system using twelve digits (0--9, A, B), where A represents 10 and B represents 11 in decimal. Has divisibility advantages (divisors: 2, 3, 4, 6).
+    \item \textbf{Base-12 (Dozenal)}: A numerical system using twelve digits (0--9, \reflectbox{2}, \reflectbox{3}), where \reflectbox{2} represents 10 and \reflectbox{3} represents 11 in decimal. Has divisibility advantages (divisors: 2, 3, 4, 6).
     \item \textbf{Crazy Eights}: A classic card game where players match cards by suit or rank, with the ``8'' card acting as a wild card allowing the player to declare a new suit.
     \item \textbf{MVP}: Minimum Viable Product, the initial version of the Crazy Eights software with core functionality, including two-player gameplay, classic rules, and dozenal scoring.
     \item \textbf{Functional Goals}: Features and behaviors the software must implement, such as gameplay mechanics and dozenal score display.
@@ -259,7 +260,7 @@ These are the key entities and relationships involved in the Crazy Eights game w
         \item \textbf{ID}: Unique identifier for a player (integer).
         \item \textbf{Name}: Display name for the player (string).
         \item \textbf{Hand}: List of cards held by the player (array of Card objects).
-        \item \textbf{Score}: Player's cumulative score in dozenal notation (string, such as ``1A'' for 22 in decimal).
+        \item \textbf{Score}: Player's cumulative score in dozenal notation (string, such as ``1\reflectbox{2}'' for 22 in decimal).
     \end{itemize}
     \item \textbf{Card}:
     \begin{itemize}
@@ -433,10 +434,15 @@ The following table summarizes the primary product use cases (PUCs):
 	\begin{itemize}
 		\item \textbf{Layout}: The user interface must have a clean and minimalistic layout, ensuring readability and ease of navigation.
 		\item \textbf{Responsiveness}: The system must be responsive, adapting automatically to different screen sizes.
+		\item \textbf{Visual Hierarchy}: Key elements such as active player indicators, playable cards, and turn timers must be visually distinguishable using contrast, color, or animation.
+		\item \textbf{Color Palette}: The color scheme should promote clarity and engagement.
 	\end{itemize}
 \subsection{Style Requirements}
 	\begin{itemize}
-		\item \textbf{Consistency}: The application must follow a consistent design theme(e.g.: color, button style, typography).
+		\item \textbf{Consistency}: The application must follow a unified design language, maintaining consistent typography, iconography, and button styles across all screens.
+		\item \textbf{Animations}: Smooth 2-D animations should be implemented for card movements, dealing, and discarding actions. These animations should be realistic but not distracting, maintaining short transition times. When a wild card is played, a distinct animation and color shift should visually emphasize its effect while maintaining overall style consistency.
+		\item \textbf{In-Game Hints}: Hints should appear contextually (e.g., glowing borders, pulsing icons) rather than as intrusive pop-ups. They should guide the player without interrupting the flow of the game.
+		
 	\end{itemize}
 
 \section{Usability and Humanity Requirements}
@@ -557,7 +563,7 @@ The following table summarizes the primary product use cases (PUCs):
 \subsection{Cultural Requirements}
 
 \begin{itemize}
-    \item \textbf{Numeric System Accessibility}: The software must present dozenal (base-12) in an intuitive, non-disruptive way. This includes clear UI elements for dozenal scores (using A and B for 10 and 11) and optional tutorials (stretch goal) to explain dozenal notation to users unfamiliar with it.
+    \item \textbf{Numeric System Accessibility}: The software must present dozenal (base-12) in an intuitive, non-disruptive way. This includes clear UI elements for dozenal scores (using \reflectbox{2} and \reflectbox{3} for 10 and 11) and optional tutorials (stretch goal) to explain dozenal notation to users unfamiliar with it.
     \item \textbf{Inclusivity}: The system must avoid cultural biases in its design, ensuring that gameplay and terminology (suits, ranks) are universally recognizable across cultures familiar with standard playing cards. No culturally specific references or imagery should be used in the UI to maintain broad accessibility.
     \item \textbf{Educational Alignment}: The software must align with educational goals by demonstrating the practical benefits of dozenal in a game context, making it appealing to students and educators. This supports the cultural shift toward exploring alternative numeric systems, as advocated by stakeholders like dozenal enthusiasts.
 \end{itemize}
@@ -581,28 +587,42 @@ The following table summarizes the primary product use cases (PUCs):
 
 \section{New Problems}
 \subsection{Effects on the Current Environment}
-\lips
+\begin{itemize}
+	\item The system is a newly devleoped web-based game and does not replace or interfere with any existing enviroment, minimal impact is expected aside from standard hosting and network usage.
+\end{itemize}
 \subsection{Effects on the Installed Systems}
-\lips
+\begin{itemize}
+	\item No existing software systems are modified or replaced by this product. The game operates independently on standard browsers and web servers.
+\end{itemize}
 \subsection{Potential User Problems}
-\lips
+\begin{itemize}
+	\item Users may experience confusion if base-conversion rules are misunderstood. These issues will be mitigated through clear feedback, tutorials, and consistent UI design.
+\end{itemize}
 \subsection{Limitations in the Anticipated Implementation Environment That May
 Inhibit the New Product}
-\lips
+\begin{itemize}
+	\item The main limitation is dependency on stable internet connectivity. Poor network conditions may degrade real-time synchronization or cause delayed responses.
+\end{itemize}
 \subsection{Follow-Up Problems}
-\lips
-
+\begin{itemize}
+	\item As the system evolves, maintaining compatibility with browser updates and third-party libraries (e.g., React, Socket.io) may introduce future maintenance challenges.
+\end{itemize}
 \section{Tasks}
 \subsection{Project Planning}
-\lips
+\begin{itemize}
+	\item The project life cycle will follow the deliverable outline for SFWRENG 4G06: Capstone. By April the project must be completed in its entirety.
+\end{itemize}
 \subsection{Planning of the Development Phases}
-\lips
+\begin{itemize}
+	\item Requirements and Design Phase - Gather functional and non-functional requirements, identifying key components.
+	\item Prototyping Phase - Develop an early functional prototype focusing on core interactions and user interface flow.
+	\item MVP Phase - Implement the main gameplay logic, user authentication, and basic scoring system as our MVP.
+	\item Finalize Phase - Polish the user interface, improve performance, deploy the final version to the hosting environment and prepare presentation.
+	
+\end{itemize}
 
 \section{Migration to the New Product}
-\subsection{Requirements for Migration to the New Product}
-\lips
-\subsection{Data That Has to be Modified or Translated for the New System}
-\lips
+Not applicable.
 
 % =========================
 % 23. Costs
