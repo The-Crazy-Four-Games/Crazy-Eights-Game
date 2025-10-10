@@ -309,23 +309,47 @@ The following table summarizes the primary product use cases (PUCs):
     \hline
     \textbf{PUC \#} & \textbf{Description} \\
     \hline
-    PUC-1 & Player starts a new Crazy 8s game with Dozenal-enabled deck. \\
+    PUC-1 & Player logs into the system or creates a new account to enable personalized features and multiplayer access. \\
     \hline
-    PUC-2 & Player takes a turn by drawing or discarding a card. \\
+    PUC-2 & Player views their personal profile, including gameplay history, win/loss record, and achievements. \\
     \hline
-    PUC-3 & System validates whether the played card is legal (same suit, same Dozenal value, or sum = 12). \\
+    PUC-3 & Player starts a new Crazy 8s game with Dozenal-enabled deck. \\
     \hline
-    PUC-4 & Player views scores and progress, displayed in both decimal and Dozenal. \\
+    PUC-4 & Player takes a turn by drawing or discarding a card. \\
     \hline
-    PUC-5 & System provides hints or explanations to support Dozenal learning. \\
+    PUC-5 & System validates whether the played card is legal (same suit, same Dozenal value, or sum = 12). \\
     \hline
-    PUC-6 & Game ends when a player wins; final scores are calculated and displayed. \\
+    PUC-6 & Player views scores and progress, displayed in both decimal and Dozenal. \\
+    \hline
+    PUC-7 & System provides hints or explanations to support Dozenal learning. \\
+    \hline
+    PUC-8 & Game ends when a player wins; final scores are calculated and displayed. \\
     \hline
 \end{tabularx}
 
 \subsection{Individual Product Use Cases (PUCs)}
 
-\noindent\textbf{UC1: Start a New Game}
+\noindent\textbf{UC1: Player Login}
+\begin{enumerate}
+    \item Player opens the game application and selects ``Login'' or ``Create Account''.
+    \item The system prompts the player to enter credentials (username and password) or choose guest mode.
+    \item The system validates login information against the stored database.
+    \item If credentials are valid, the player is granted access to personalized data (game progress, scores, and settings).
+    \item If the player selects guest mode, a temporary profile is generated for the session.
+    \item The system displays the main menu or lobby after login.
+\end{enumerate}
+
+\noindent\textbf{UC2: See Player Profile}
+\begin{enumerate}
+    \item The player selects ``View Profile'' from the main menu.
+    \item The system retrieves player data (username, past game records, win/loss ratio, and achievements) from the database.
+    \item The system displays profile information on screen.
+    \item If the player is logged in as a guest, the system displays a message such as ``Profile unavailable for guest mode''.
+    \item The player may choose to return to the main menu or edit available settings (if logged in).
+\end{enumerate}
+
+
+\noindent\textbf{UC3: Start a New Game}
 \begin{enumerate}
     \item Player opens the application and selects ``New Game''.
     \item The system initializes a Dozenal-enabled deck (0--B, 10).
@@ -334,7 +358,7 @@ The following table summarizes the primary product use cases (PUCs):
     \item The game state is displayed on the interface.
 \end{enumerate}
 
-\noindent\textbf{UC2: Take a Turn}
+\noindent\textbf{UC4: Take a Turn}
 \begin{enumerate}
     \item The system indicates that it is the player’s turn.
     \item The player chooses either to play a card or to draw from the deck.
@@ -344,7 +368,7 @@ The following table summarizes the primary product use cases (PUCs):
     \item If the player chooses to draw, the system gives one card from the deck to the player.
 \end{enumerate}
 
-\noindent\textbf{UC3: Validate Move}
+\noindent\textbf{UC5: Validate Move}
 \begin{enumerate}
     \item The player selects a card to play.
     \item The system retrieves the top card from the discard pile.
@@ -358,7 +382,7 @@ The following table summarizes the primary product use cases (PUCs):
     \item If not, the system rejects the move and notifies the player.
 \end{enumerate}
 
-\noindent\textbf{UC4: View Scores}
+\noindent\textbf{UC6: View Scores}
 \begin{enumerate}
     \item A round ends or the player requests to view scores.
     \item The system calculates points for each player.
@@ -366,7 +390,7 @@ The following table summarizes the primary product use cases (PUCs):
     \item The system displays the results on screen.
 \end{enumerate}
 
-\noindent\textbf{UC5: Provide Hints}
+\noindent\textbf{UC7: Provide Hints}
 \begin{enumerate}
     \item The player hovers over or selects a card.
     \item The system analyzes the current game state.
@@ -374,7 +398,7 @@ The following table summarizes the primary product use cases (PUCs):
     \item The hint is displayed as text or a visual highlight.
 \end{enumerate}
 
-\noindent\textbf{UC6: End Game}
+\noindent\textbf{UC8: End Game}
 \begin{enumerate}
     \item A player discards their last card.
     \item The system checks if the game-ending condition is satisfied.
@@ -426,6 +450,24 @@ The following table summarizes the primary product use cases (PUCs):
 
     \item \textbf{Highlight valid moves:} System shall visually highlight valid moves based on Dozenal rules. (FR-9) \\
     \textbf{Rationale:} Reduces frustration, ensures players stay engaged, and reinforces Dozenal rules through visual learning.
+\end{enumerate}
+
+\subsection{Login Manager}
+\begin{enumerate}
+    \item \textbf{Account creation:} The system shall allow players to create a new account with a unique username and password. (FR-10)
+    \item \textbf{Login/Logout:} The system shall allow players to log in and log out at any time without losing progress. (FR-11)
+    \item \textbf{Guest mode:} The system shall allow players to start a temporary session without login. (FR-12)
+    \item \textbf{Credential validation:} The system shall validate player credentials against stored records before granting access. (FR-13)
+    \item \textbf{Rationale:} Ensures users can have persistent profiles for tracking progress and enables multiplayer authentication.
+\end{enumerate}
+
+\subsection{Data Manager}
+\begin{enumerate}
+    \item \textbf{Data storage:} The system shall securely store user data, including usernames, game history, and Dozenal scores. (FR-14)
+    \item \textbf{Data retrieval:} The system shall allow retrieval of stored user data when logging in or viewing profiles. (FR-15)
+    \item \textbf{Data update:} The system shall update stored data after each game or when profile information changes. (FR-16)
+    \item \textbf{Data deletion:} The system shall allow players to delete their data permanently upon request. (FR-17)
+    \item \textbf{Rationale:} Supports persistent user experience, analytics, and compliance with data privacy expectations.
 \end{enumerate}
 
 \section{Look and Feel Requirements}
@@ -502,7 +544,6 @@ The following table summarizes the primary product use cases (PUCs):
 		\item\textbf{Maintainability}: The codebase must be modular and documented, so future developers can update rules easily.
 	\end{itemize}
 
-
 \section{Operational and Environmental Requirements}
 \subsection{Expected Physical Environment}
 \lips
@@ -563,21 +604,40 @@ The following table summarizes the primary product use cases (PUCs):
 \end{itemize}
 
 \section{Compliance Requirements}
+
 \subsection{Legal Requirements}
-\lips
+The game must comply with intellectual property laws and digital content distribution regulations.
+All assets (images, fonts, and sounds) used in the game must be open-source, royalty-free, or properly licensed.
+
 \subsection{Standards Compliance Requirements}
-\lips
+The software shall follow standard software development practices such as version control (Git), documentation standards (LaTeX-based SRS), and accessibility guidelines (WCAG 2.1 Level AA).
+The codebase should be compliant with modern C++/Python style conventions (PEP8 or equivalent).
 
 \section{Open Issues}
-\lips
+\begin{itemize}
+    \item Whether multiplayer mode will be implemented in the current phase or postponed to a future release.
+    \item The extent of educational feedback (how deeply to explain Dozenal math).
+    \item Balancing game difficulty to maintain both fun and learning value.
+    \item Need to confirm visual design theme (educational vs. playful aesthetic).
+\end{itemize}
 
 \section{Off-the-Shelf Solutions}
+
 \subsection{Ready-Made Products}
-\lips
+Existing Crazy 8s card games (e.g., UNO or digital clones) offer partial gameplay models, but none integrate an educational Dozenal arithmetic component.
+No direct off-the-shelf solution currently fulfills both entertainment and mathematical learning objectives.
+
 \subsection{Reusable Components}
-\lips
+\begin{itemize}
+    \item Card rendering engines from open-source projects such as \textit{Pygame} or \textit{Godot} assets.
+    \item Math libraries for number-base conversion (decimal $\leftrightarrow$ Dozenal).
+    \item UI component libraries for game menus, card animations, and scoreboards.
+\end{itemize}
+
 \subsection{Products That Can Be Copied}
-\lips
+Some structural aspects (turn management, shuffling algorithms) can be adapted from existing open-source card game repositories, provided licensing terms (e.g., MIT, GPL) are respected.
+However, educational Dozenal mechanics must be developed in-house to align with project-specific learning goals.
+
 
 \section{New Problems}
 \subsection{Effects on the Current Environment}
