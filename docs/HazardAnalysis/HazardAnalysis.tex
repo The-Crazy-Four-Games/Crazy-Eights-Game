@@ -89,13 +89,33 @@ This component handles user registration, login, and session verification.
 \subsection{External Libraries and APIs}
 This component relies on several open-source frameworks and libraries.
 
-
 \section{Critical Assumptions}
 
-\wss{These assumptions that are made about the software or system.  You should
-minimize the number of assumptions that remove potential hazards.  For instance,
-you could assume a part will never fail, but it is generally better to include
-this potential failure mode.}
+The assumptions below focus on a realistic deployment and user population. 
+
+\begin{table}[hp]
+\caption{Critical Assumptions and Implications}\label{tab:assumptions}
+\begin{tabularx}{\textwidth}{lX X X}
+\toprule
+\textbf{ID} & \textbf{Assumption} & \textbf{Rationale} & \textbf{If violated} \\
+\midrule
+A1 & Users access the game on a supported desktop or laptop browser (Chrome, Firefox, Edge) with JavaScript, cookies, and local storage enabled. & Limits test matrix and aligns with target environment. & UI features malfunction, loss of state persistence, inaccessible components. \\
+A2 & Average network latency under 300 ms and packet loss under 1\% during play. & Real time turns and fairness depend on timely messages. & Turn desync, duplicate actions, stale state decisions. \\
+A3 & Server and database share a synchronized time source via NTP and timeouts use a monotonic clock. & Consistent session expiry and replay ordering. & Expired tokens accepted, rejoin windows miscalculated, audit confusion. \\
+A4 & WebSocket over TLS 1.2 or higher is available from client networks. & Required for live play and low latency. & Falls back to polling or blocks play which raises latency and server load. \\
+A5 & Database durability is at least write ahead logging with fsync on commit. & Protects match history and user settings. & Corrupted or missing results after crashes or restarts. \\
+A6 & No personally sensitive data beyond username and optional email is stored and there are no financial transactions. & Reduces compliance and breach impact. & If sensitive data is later added, privacy risk and legal exposure increase. \\
+A7 & Client devices provide basic accessibility aids such as keyboard, focus navigation, and screen reader support. & Meets usability and accessibility requirements. & Some users cannot operate the game which creates rule misunderstanding hazards. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsection*{Assumptions deliberately not made}
+\begin{itemize}
+  \item We do not assume client input is trusted. All moves are validated on the server.
+  \item We do not assume stable connectivity for the entire session. Rejoin and reconciliation are required features.
+  \item We do not assume prior knowledge of base 12. In app explanations and hints are mandatory.
+\end{itemize}
 
 \section{Failure Mode and Effect Analysis}
 
