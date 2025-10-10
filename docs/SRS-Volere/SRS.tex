@@ -604,19 +604,102 @@ Inhibit the New Product}
 \subsection{Data That Has to be Modified or Translated for the New System}
 \lips
 
+% =========================
+% 23. Costs
+% =========================
 \section{Costs}
-\lips
+
+\subsection{Assumptions}
+\begin{itemize}
+  \item Academic, non-commercial deployment targeting a small user group during the term.
+  \item Free tiers are acceptable for hosting and CI where reliability is sufficient for demos.
+  \item Budget ceiling: 500 CAD (see Section ``Budget Constraints'').
+\end{itemize}
+
+\subsection{One-time Costs}
+\begin{table}[hp]
+  \caption{One-time Purchases (CAD)}\label{tab:one_time_costs}
+  \begin{tabularx}{\textwidth}{lXrrr}
+    \toprule
+    \textbf{Item} & \textbf{Purpose} & \textbf{Unit} & \textbf{Total} \\
+    \midrule
+    Domain name (1 year) & Simple memorable URL for demos & 1 & 20 \\
+    \midrule
+    \multicolumn{4}{r}{\textbf{Subtotal}} & \textbf{20} \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\subsection{Recurring Costs}
+\begin{itemize}
+  \item App hosting utilize free tier where possible
+  \item DB hosting and Free tier Postgres, small instance
+\end{itemize}
+
+\subsection{Total and Headroom}
+\noindent Estimated total spend for the term: \textbf{250--330 CAD}. This stays within the 500 CAD cap and leaves headroom for risk mitigation or stretch features.
+
+\subsection{Cost Control Plan}
+\begin{itemize}
+  \item Prefer free tiers for hosting, CI, and CDN. Upgrade only if load or reliability requires it.
+  \item Reuse open-source UI kits and icon packs with permissive licenses.
+  \item Cap incentives to pre-approved number of sessions.
+\end{itemize}
+
 \section{User Documentation and Training}
+
 \subsection{User Documentation Requirements}
-\lips
+\begin{itemize}
+  \item \textbf{In-app help}: Contextual tooltips for controls, hover help for Dozenal terms, and an always-available ``How to play'' panel.
+  \item \textbf{Quick Start}: Setup, start a match, play a turn, view scores. Written for first-time users.
+  \item \textbf{Rules and Dozenal guide}: Clear rules of Crazy Eights plus a simple Dozenal primer with examples for A and B, and conversions between base 10 and base 12.
+  \item \textbf{FAQ}: Troubleshooting (cannot play a card, reconnect flow, what counts as a valid move).
+\end{itemize}
+
 \subsection{Training Requirements}
-\lips
+\begin{itemize}
+  \item \textbf{Onboarding tutorial}: 3 to 5 steps covering play a card, draw a card, wild eight, and reading Dozenal scores. Skippable and repeatable.
+  \item \textbf{Practice mode}: Solo mode against a simple bot to learn pace and rules without pressure.
+\end{itemize}
 
 \section{Waiting Room}
 \lips
 
 \section{Ideas for Solution}
-\lips
+
+\subsection{Architecture Overview}
+\begin{itemize}
+  \item \textbf{Frontend}: React with TypeScript. State managed via a small store (Zustand or Redux Toolkit). WebSocket client for live turns. Component library and keyboard-first interactions.
+  \item \textbf{Backend}: Node.js with TypeScript. HTTP API for auth and lobby. WebSocket for game sessions and events. Server-authoritative game state.
+  \item \textbf{Data}: Postgres for user profiles, match history, and telemetry. In-memory room state with periodic snapshots to DB.
+  \item \textbf{Game engine}: Pure TypeScript module with deterministic rules, validators, scoring, and base conversion utilities. No UI concerns.
+  \item \textbf{CI/CD}: GitHub Actions for lint, tests, type-checks, and deploy to a free-tier host.
+\end{itemize}
+
+\subsection{Implementation Options}
+\begin{tabularx}{\textwidth}{lX}
+  \toprule
+  \textbf{Option} & \textbf{Summary, Pros, Cons} \\
+  \midrule
+  A. Local-first 2P hot-seat & \textit{Summary}: Single browser, two players, no backend. \textit{Pros}: Fast MVP, minimal infra. \textit{Cons}: No remote play, no persistence. \\
+  \midrule
+  B. Server-authoritative WebSocket & \textit{Summary}: Lobby, rooms, turns via WS. \textit{Pros}: Fair play, replay logs, reconnect support. \textit{Cons}: More code and testing. \\
+  \midrule
+\end{tabularx}
+
+\subsection{Recommended Path}
+\begin{enumerate}
+  \item Build the game engine as a pure library with full tests.
+  \item Ship Option A for fast validation and UI polish.
+  \item Upgrade to Option B for sessions, persistence, and reconnection.
+\end{enumerate}
+
+\subsection{Key Non-functional Techniques}
+\begin{itemize}
+  \item \textbf{Fairness}: Server-side validation for all moves. Shuffle with seeded RNG and record seed for audits.
+  \item \textbf{Resilience}: Rejoin token and state rehydrate on reconnect.
+  \item \textbf{Accessibility}: Semantic HTML, focus order, ARIA labels, and keyboard shortcuts for all core actions.
+\end{itemize}
 
 \newpage{}
 \section*{Appendix --- Reflection}
