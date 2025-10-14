@@ -730,12 +730,53 @@ The software shall follow standard software development practices such as versio
 The codebase should be compliant with modern C++/Python style conventions (PEP8 or equivalent).
 
 \section{Open Issues}
-\begin{itemize}
-    \item Whether multiplayer mode will be implemented in the current phase or postponed to a future release.
-    \item The extent of educational feedback (how deeply to explain Dozenal math).
-    \item Balancing game difficulty to maintain both fun and learning value.
-    \item Need to confirm visual design theme (educational vs. playful aesthetic).
-\end{itemize}
+
+\subsection{Which Supported bases?}
+  \begin{itemize}
+    \item \textbf{Description:} Decide whether to support only Decimal and Dozenal, or to include multiple other bases (Base-8: Octal, Base-16: Hexadecimal, Base-6: Senary, Base-9: Nonary).
+    \item \textbf{Stakeholders:} Educators; Students.
+    \item \textbf{Action:} No action assigned; discussion required.
+    \item \textbf{Status:} Open.
+    \item \textbf{Target resolution:} Educational stakeholders will give guidance on curriculum fit and scope.
+  \end{itemize}
+
+\subsection{Deck creation for supported bases}
+  \begin{itemize}
+    \item \textbf{Description:} Create physical or print-ready decks for additional number systems. (Decimal and Dozenal decks exist:\\
+    \url{https://www.thegamecrafter.com/games/k6t}.)
+    \item \textbf{Stakeholder:} Dr. Paul Rapoport
+    \item \textbf{Action:} Design and create decks for Octal and Hexadecimal; estimate cost and lead time.
+    \item \textbf{Resolution:} Dr. Rapoport will inquire and report back to the team with feasibility info.
+    \item \textbf{Status:} Pending response.
+  \end{itemize}
+
+\subsection{Counting mechanics vs. player enjoyment and game understandability}
+  \begin{itemize}
+    \item \textbf{Description:} How to add meaningful counting mechanics (teaching) while keeping game fun and understandable? Current ideas include:
+    \begin{itemize}
+      \item For non-winners, sum remaining cards at end of round to reduce point tally.
+      \item Trigger an arithmetic task each time a wild card (10) is played.
+      \item Other lightweight counting mini-games embedded in rounds.
+    \end{itemize}
+    \item \textbf{Stakeholders:} Dr. Paul Rapoport, UI/UX Designers, Educators, Students.
+    \item \textbf{Action:} Continue ideation and small-scale playtests to evaluate engagement.
+    \item \textbf{Status:} Ongoing.
+  \end{itemize}
+
+\subsection{Unspecified issues:}
+  \begin{itemize}
+    \item Multiplayer mode: whether to implement in current phase or postpone to future release.
+    \item Educational feedback: how to deeply explain Dozenal math within a card game.
+    \item Game difficulty: balancing fun and learning value.
+    \item Visual design theme: educational vs. playful aesthetic.
+  \end{itemize}
+  
+\subsection{Fit criterion:}
+  \begin{itemize}
+    \item Each open item has a GitHub Issue.
+    \item Each Issue lists owner, stakeholders explicit next-action, and a tentative resolution date or review milestone.
+    \item Closure requires documented decision, implementation plan, or formal deferral with rationale.
+  \end{itemize}
 
 \section{Off-the-Shelf Solutions}
 
