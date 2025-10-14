@@ -93,7 +93,7 @@ The goals of this project are:
 
 \subsection{Client}
 \begin{itemize}
-  \item \textbf{Team \#25 — The Crazy Four (Ruida Chen, Ammar Sharbat, Alvin Qian, Jiaming Li)}: primary sponsor of the deliverable; approves acceptance criteria for academic evaluation and EXPO demonstration.
+  \item \textbf{Supervisor} Dr. Spencer Smith - primary sponsor of the deliverable; approves acceptance criteria for academic evaluation and EXPO demonstration.
   \item \textbf{Supervisor:} Dr. Paul Rapoport — academic acceptance authority and milestone reviewer.
 \end{itemize}
 
@@ -213,13 +213,64 @@ involved in the Project}
     \item \textbf{UI}: User Interface, the visual and interactive components of the software, such as the game board and score display.
 \end{itemize}
 
-\section{Relevant Facts And Assumptions}
+\section{Relevant Facts and Assumptions}
+
 \subsection{Relevant Facts}
-\lips
+\begin{itemize}
+  \item \textbf{Prevalence of decimal:} Users are overwhelmingly familiar with base-10; dozenal notation is novel for most.
+  \item \textbf{Educational effectiveness:} Game-based learning improves numeracy engagement (backed by pedagogical literature).
+  \item \textbf{Resource constraints:} Project budget is capped at 500 CAD and timeline is an academic term.
+  \item \textbf{Technology stack:} Planned stack is React (frontend), Node.js (backend), PostgreSQL (data).
+  \item \textbf{Browser target:} Modern desktop browsers (Chrome, Firefox, Edge) are the primary runtime environment.
+\end{itemize}
+
 \subsection{Business Rules}
-\lips
+\begin{itemize}
+  \item \textbf{Scoring rule:} Round score equals sum of opponents' remaining card values (displayed in both decimal and dozenal).
+  \item \textbf{Account rule:} Registered usernames must be unique; guest mode creates impermanent sessions.
+  \item \textbf{Open-source rule:} All deliverables must use appropriately licensed assets; avoid proprietary-only dependencies.
+\end{itemize}
+
 \subsection{Assumptions}
-\lips
+\begin{itemize}
+  \item \textbf{Connectivity:} Players typically have a stable internet connection for multiplayer sessions.
+  \item \textbf{Device:} Primary devices are desktop/laptop; mobile support is a stretch-goal.
+  \item \textbf{Play familiarity:} Players understand basic card game mechanics (matching suit or rank).
+  \item \textbf{Team availability:} Team members will perform peer review before merges as per Development Plan.
+  \item \textbf{Third-party components:} Standard open-source libraries (React, Socket.io, PG client) will be available and compatible.
+\end{itemize}
+
+% ------------------------------------------------------------
+\section{Operational and Environmental Requirements}
+
+\subsection{Expected Physical Environment}
+\begin{itemize}
+  \item The product will be used on desktop/laptop computers in classrooms, homes, and demo booths under normal indoor lighting and noise conditions.
+  \item Typical input devices: keyboard and mouse; keyboard-only interaction must be supported for main flows.
+  \item No special physical environment (temperature, humidity, dust) requirements are expected.
+\end{itemize}
+
+\subsection{Requirements for Interfacing with Adjacent Systems}
+\begin{itemize}
+  \item \textbf{Authentication API:} Integrate with a simple backend-auth service (REST endpoints) for account creation and login.
+  \item \textbf{Telemetry / Analytics (optional):} Provide an HTTP endpoint to export anonymized session metrics for research (GDPR-compliant).
+  \item \textbf{Hosting / CI:} Integration with GitHub Actions for tests and deploy; target hosting platform must accept standard Docker containers or static web app hosting.
+\end{itemize}
+
+\subsection{Productization Requirements}
+\begin{itemize}
+  \item Distribution as a web application (hosted) and a developer-local deployment (Docker-compose) for evaluation.
+  \item Installation for in-person demos should require at most three documented steps (clone, install, run).
+\end{itemize}
+
+\subsection{Release Requirements}
+\begin{itemize}
+  \item Release cadence: a demonstration-ready milestone (PoC) and a final-revision release for EXPO.
+  \item Releases must be tagged in GitHub with release notes and a reproducible build artifact (Docker image or static bundle).
+\end{itemize}
+
+\subsubsection*{Fit criterion}
+Acceptance when: (a) core flows run on supported browsers; (b) documented REST endpoints respond to auth and telemetry; (c) dev deployment runs end-to-end using provided Docker-compose with README steps validated by at least one tester.
 
 \section{The Scope of the Work}
 \subsection{The Current Situation}
