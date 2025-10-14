@@ -72,21 +72,23 @@
 ~\newpage
 \section{Purpose of the Project}
 \subsection{User Business}
-The purpose of this project is to design and implement an educational card game based on the traditional \textit{Crazy 8s} rule set, but adapted to integrate the \textbf{Dozenal (base-12) number system}.
+The purpose is to study, evaluate and facilitate opportunities for gamification in supporting mathematical learning. Our team wants to determine whether concepts in numerical arithmetic (such as base conversions, or divisibility in Dozenal) can be effectively taught through play.\\\\
+We aim to accomplish the aformentioned by designing and implementing an educational card game based on the traditional \textit{Crazy 8s} rule set, but with the following differences and additions:
 \begin{itemize}
-    \item This project addresses the lack of accessible and engaging tools that introduce alternative number systems in a playful and intuitive way.
-    \item By combining a familiar card game mechanic with Dozenal representations and operations, users can gradually build comfort and intuition with the base-12 system.
-    \item The primary business value lies in providing a lightweight, fun, and interactive educational tool for students, hobbyists, and anyone interested in number systems beyond decimal.
+    \item Switching the wild card from ``8'' to ``10'' to improve awareness of number system orders (i.e. 10 in base-10 is a Decimal is 10 in base-12 is a Dozenal).
+    \item Incorporating counting within the game, to improve understanding of number bases and basic arithmetic.
+    \item Integrating the \textbf{Dozenal (base-12) number system} using a special Dozenal deck of cards. We also want to add other potential number bases (e.g. Octal, Hexadecimal, etc).
 \end{itemize}
-Additionally, the game offers an opportunity to evaluate how gamification can support mathematical learning, and whether abstract concepts (such as base conversions or divisibility in Dozenal) can be effectively taught through play.
 
 \subsection{Goals of the Project}
 The goals of this project are:
 \begin{itemize}
-    \item Educational Integration: Seamlessly incorporate Dozenal concepts (symbols 0--B, factorization, arithmetic) into the gameplay, ensuring that players learn by playing without requiring formal prior knowledge.
-    \item Gameplay Design: Deliver a working digital version of \textit{Crazy 8s} that is intuitive, responsive, and enjoyable, while maintaining the familiar flow of the original game and introducing Dozenal-specific mechanics (e.g., matching rules, scoring, or special cards).
-    \item Accessibility and Engagement: Create a user-friendly interface that lowers the barrier to learning, accessible for casual users while offering depth for learners who want to explore Dozenal further.
-    \item Scalability / Stretch Goals: Explore the potential for extending the system to other educational card or board games, and investigate how different number bases can be taught through similar game mechanics.
+    \item Educational Integration: Seamlessly incorporate Dozenal concepts (numerical symbols, factorization, arithmetic) into the gameplay, ensuring that players learn by playing without requiring formal prior knowledge.
+    \item Gameplay Design: Deliver a working digital version of this variant of \textit{Crazy 8s} that is intuitive, responsive, and enjoyable, while maintaining the familiar flow of the original game and introducing Dozenal-specific mechanics.
+    \item Accessibility: Create a user-friendly interface that lowers the barrier to learning, accessible for casual users while offering depth for learners who want to explore Dozenal further.
+    \item Testability: Implement robust testing strategies to ensure correctness of game logic, Dozenal calculations, and user interactions.
+    \item Measuring Educational Impact (Stretch Goal): Assessing impact by collecting user data through user engagement, playtesting, progress monitoring and player feedback collection.
+    \item Scalability (Stretch Goal): Explore the potential for extending the system to other educational card or board games, and investigate how different number bases can be taught through similar game mechanics.
 \end{itemize}
 
 \section{Stakeholders}
@@ -278,14 +280,14 @@ Each task is tracked via GitHub Issues and the Kanban board, with responsibiliti
 \begin{itemize}
     \item \textbf{Actors}: Two players, the software system.
     \item \textbf{Trigger}: A player creates a new game session using the UI.
-    \item \textbf{Description}: Two players take turns matching cards by suit or rank, with the ``8'' card acting as a wild card that allows the player to declare a new suit. If no valid move can be made, the player draws from the stock pile. The game ends when one player discards all their cards, and the score is calculated and displayed in dozenal notation.
+    \item \textbf{Description}: Two players take turns matching cards by suit or rank, with the ``10'' card acting as a wild card that allows the player to declare a new suit. If no valid move can be made, the player draws from the stock pile. The game ends when one player discards all their cards, and the score is calculated and displayed in dozenal notation.
     \item \textbf{Preconditions}: The user is logged in. The software is running on a web interface, with a functional UI displaying the hand, discard pile, stock pile, and score tracker.
     \item \textbf{Postconditions}: The game concludes with a winner, points are displayed in dozenal and must be counted by the users to see the final score. The user can log Off or start a new game.
     \item \textbf{Basic Flow}:
     \begin{enumerate}
         \item The system deals cards to both players and initializes the discard pile with a starter card.
         \item Players take turns, selecting a card to play (matching suit or rank) or drawing from the stock pile.
-        \item If an ``8'' is played, the player selects a new suit via the UI.
+        \item If an ``10'' is played, the player selects a new suit via the UI.
         \item The system checks moves and gives immediate feedback for invalid moves.
         \item The game keeps going until one player has no cards left, triggering user score counting and calculation challenge in dozenal.
         \item The system displays the final score.
@@ -318,7 +320,7 @@ These are the key entities and relationships involved in the Crazy Eights game w
         \item Each \textbf{Player} has a \textbf{Hand} (subset of \textbf{Cards}).
         \item A \textbf{Deck} consists of 52 \textbf{Cards}, split into \textbf{Stock Pile} and \textbf{Discard Pile}.
         \item A \textbf{Game Session} produces a \textbf{Score} for each \textbf{Player} in dozenal notation.
-        \item A \textbf{Card} played in a \textbf{Game Session} affects the \textbf{Discard Pile} and may trigger a suit change (if an ``8'').
+        \item A \textbf{Card} played in a \textbf{Game Session} affects the \textbf{Discard Pile} and may trigger a suit change (if a ``10'').
     \end{itemize}
 \end{itemize}
 
@@ -335,8 +337,8 @@ These are the key entities and relationships involved in the Crazy Eights game w
     \item \textbf{Card}:
     \begin{itemize}
         \item \textbf{Suit}: One of four suits (Hearts, Diamonds, Clubs, Spades) (string).
-        \item \textbf{Rank}: Card value (2--10, J, Q, K, A, 8) (string).
-        \item \textbf{IsWild}: Boolean indicating if the card is an ``8'' (true/false).
+        \item \textbf{Rank}: Card value (2--10, J, Q, K, A) (string).
+        \item \textbf{IsWild}: Boolean indicating if the card is an ``10'' (true/false).
     \end{itemize}
     \item \textbf{Deck}:
     \begin{itemize}
@@ -349,7 +351,7 @@ These are the key entities and relationships involved in the Crazy Eights game w
         \item \textbf{Current Turn}: ID of the player whose turn it is (integer).
         \item \textbf{Status}: Game state (Active, Completed) (string).
         \item \textbf{Starter Card}: The first card in the discard pile (Card object).
-        \item \textbf{Last Played Suit}: The active suit after an ``8'' is played (string).
+        \item \textbf{Last Played Suit}: The active suit after an ``10'' is played (string).
     \end{itemize}
     \item \textbf{Score}:
     \begin{itemize}
@@ -494,7 +496,7 @@ The following table summarizes the primary product use cases (PUCs):
     \item \textbf{Rule validation:} Game manager shall validate that each played card is legal under Dozenal rules. A valid move is defined as either: (a) same suit as the previous card, (b) same Dozenal value as the previous card, or (c) the sum of the two card values equals 12 in Dozenal. (FR-3) \\
     \textbf{Rationale:} Prevents illegal moves, guarantees consistency, and introduces the core educational mechanic of Dozenal arithmetic.
 
-    \item \textbf{Special cards:} Game manager shall implement special card effects (e.g., 8s are wild) while supporting extensions with Dozenal-specific effects. (FR-4) \\
+    \item \textbf{Special cards:} Game manager shall implement special card effects (e.g., 10s are wild) while supporting extensions with Dozenal-specific effects. (FR-4) \\
     \textbf{Rationale:} Special cards increase engagement and add flexibility in teaching Dozenal-based rules.
 
     \item \textbf{End of game:} Game manager shall determine when the game ends (e.g., when a player runs out of cards) and declare the winner. (FR-5) \\
