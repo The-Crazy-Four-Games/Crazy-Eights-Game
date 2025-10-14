@@ -625,7 +625,7 @@ The following table summarizes the primary product use cases (PUCs):
 \subsection{Expected Physical Environment}
 \begin{itemize}
   \item The product will be used on desktop/laptop computers in classrooms, homes, and demo booths under normal indoor lighting and noise conditions.
-  \item Typical input devices: keyboard and mouse; keyboard-only interaction must be supported for main flows.
+  \item Typical input devices: keyboard and mouse; mouse will be primary input device; keyboard interaction considered a stretch goal.
   \item No special physical environment (temperature, humidity, dust) requirements are expected.
 \end{itemize}
 
@@ -677,15 +677,36 @@ The following table summarizes the primary product use cases (PUCs):
 
 \section{Security Requirements}
 \subsection{Access Requirements}
-\lips
+\begin{itemize}
+  \item Role model: \textbf{Guest}, \textbf{Registered Player}, and \textbf{Administrator/Team Maintainer}. Define permitted APIs for each role.
+  \item Registered players may access persistent profile data and match history for their account only.
+  \item Administrators may access system logs and anonymized telemetry; no arbitrary user personal data access without consent.
+\end{itemize}
+
 \subsection{Integrity Requirements}
-\lips
+\begin{itemize}
+  \item Server-authoritative game state: all moves validated server-side for any online session to prevent client tampering.
+  \item Persistent data (user profiles, match results) must be stored atomically; partial writes are unacceptable.
+  \item Backups: periodic DB snapshots for recovery as defined in deployment docs.
+\end{itemize}
+
 \subsection{Privacy Requirements}
-\lips
+\begin{itemize}
+  \item Collect minimal PII: username and optional display name; e-mail only if explicitly provided for account recovery.
+  \item Users must be informed (privacy notice) before data collection; opt-out option for telemetry must be available.
+\end{itemize}
+
 \subsection{Audit Requirements}
-\lips
+\begin{itemize}
+  \item Maintain tamper-evident logs for administrative actions and system errors for at least 30 days.
+  \item For online sessions, optionally retain replay logs (seed and sequence) to permit investigation of disputes; stored replays must be anonymized when used outside the originating account.
+\end{itemize}
+
 \subsection{Immunity Requirements}
-\lips
+\begin{itemize}
+  \item The product shall be resilient to basic web threats (e.g., injection, CSRF) by following standard secure-coding practices and OWASP guidance.
+  \item External penetration testing is a stretch goal; at minimum, use linting and dependency-audit tools in CI.
+\end{itemize}
 
 \section{Cultural Requirements}
 \subsection{Cultural Requirements}
