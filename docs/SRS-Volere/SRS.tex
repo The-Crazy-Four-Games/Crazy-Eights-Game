@@ -240,38 +240,6 @@ involved in the Project}
   \item \textbf{Third-party components:} Standard open-source libraries (React, Socket.io, PG client) will be available and compatible.
 \end{itemize}
 
-% ------------------------------------------------------------
-\section{Operational and Environmental Requirements}
-
-\subsection{Expected Physical Environment}
-\begin{itemize}
-  \item The product will be used on desktop/laptop computers in classrooms, homes, and demo booths under normal indoor lighting and noise conditions.
-  \item Typical input devices: keyboard and mouse; keyboard-only interaction must be supported for main flows.
-  \item No special physical environment (temperature, humidity, dust) requirements are expected.
-\end{itemize}
-
-\subsection{Requirements for Interfacing with Adjacent Systems}
-\begin{itemize}
-  \item \textbf{Authentication API:} Integrate with a simple backend-auth service (REST endpoints) for account creation and login.
-  \item \textbf{Telemetry / Analytics (optional):} Provide an HTTP endpoint to export anonymized session metrics for research (GDPR-compliant).
-  \item \textbf{Hosting / CI:} Integration with GitHub Actions for tests and deploy; target hosting platform must accept standard Docker containers or static web app hosting.
-\end{itemize}
-
-\subsection{Productization Requirements}
-\begin{itemize}
-  \item Distribution as a web application (hosted) and a developer-local deployment (Docker-compose) for evaluation.
-  \item Installation for in-person demos should require at most three documented steps (clone, install, run).
-\end{itemize}
-
-\subsection{Release Requirements}
-\begin{itemize}
-  \item Release cadence: a demonstration-ready milestone (PoC) and a final-revision release for EXPO.
-  \item Releases must be tagged in GitHub with release notes and a reproducible build artifact (Docker image or static bundle).
-\end{itemize}
-
-\subsubsection*{Fit criterion}
-Acceptance when: (a) core flows run on supported browsers; (b) documented REST endpoints respond to auth and telemetry; (c) dev deployment runs end-to-end using provided Docker-compose with README steps validated by at least one tester.
-
 \section{The Scope of the Work}
 \subsection{The Current Situation}
 
@@ -653,16 +621,33 @@ The following table summarizes the primary product use cases (PUCs):
 	\end{itemize}
 
 \section{Operational and Environmental Requirements}
+
 \subsection{Expected Physical Environment}
-\lips
-\subsection{Wider Environment Requirements}
-\lips
+\begin{itemize}
+  \item The product will be used on desktop/laptop computers in classrooms, homes, and demo booths under normal indoor lighting and noise conditions.
+  \item Typical input devices: keyboard and mouse; keyboard-only interaction must be supported for main flows.
+  \item No special physical environment (temperature, humidity, dust) requirements are expected.
+\end{itemize}
+
 \subsection{Requirements for Interfacing with Adjacent Systems}
-\lips
+\begin{itemize}
+  \item \textbf{Authentication API:} Integrate with a simple backend-auth service (REST endpoints) for account creation and login.
+  \item \textbf{Telemetry / Analytics (optional):} Provide an HTTP endpoint to export anonymized session metrics for research (GDPR-compliant).
+  \item \textbf{Hosting / CI:} Integration with GitHub Actions for tests and deploy; target hosting platform must accept standard Docker containers or static web app hosting.
+\end{itemize}
+
 \subsection{Productization Requirements}
-\lips
+\begin{itemize}
+  \item Distribution as a web application (hosted) and a developer-local deployment (Docker-compose) for evaluation.
+  \item Installation for in-person demos should require at most three documented steps (clone, install, run).
+\end{itemize}
+
 \subsection{Release Requirements}
-\lips
+\begin{itemize}
+  \item Release cadence: a demonstration-ready milestone (PoC) and a final-revision release for EXPO.
+  \item Releases must be tagged in GitHub with release notes and a reproducible build artifact (Docker image or static bundle). 
+  \item \textbf{Fit Criterion:} Acceptance when: (a) core flows run on supported browsers; (b) documented REST endpoints respond to auth and telemetry; (c) dev deployment runs end-to-end using provided Docker-compose with README steps validated by at least one tester.
+\end{itemize}
 
 \section{Maintainability and Support Requirements}
 \subsection{Maintenance Requirements}
