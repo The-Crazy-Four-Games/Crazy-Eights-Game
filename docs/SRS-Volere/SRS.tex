@@ -1030,11 +1030,118 @@ Not applicable.
   \item \textbf{Practice mode}: Solo mode against a simple bot to learn pace and rules without pressure.
 \end{itemize}
 
-\section{Waiting Room}
-\lips
+
+% ---------------------------
+% Section 25: Waiting Room (Stretch / Unimplemented Requirements)
+% This section contains only unimplemented / stretch requirements as requested.
+% Requirements are formatted to mirror the corresponding SRS sections
+% (Look & Feel -> Section 10, Usability -> Section 11, Performance -> Section 5 / 12, etc.)
+% ---------------------------
+
+\section{Waiting Room (Stretch Requirements)}
+
+\subsection{Purpose and scope}
+This section lists unimplemented features (stretch goals) relating to the Crazy 10s game project. Each item below is intentionally classified as a post-MVP requirement; these will be considered for Crazy10s v1.1 (Rank 1) or v1.2 (Rank 2) per the urgency ranking in the very bottom of this section.
+
+\subsection{Functional Stretch Requirements}
+\begin{enumerate}
+  
+  \item \textbf{4-player match support (Stretch-L2)}\\
+  \textbf{Description:} Extend session logic to allow 3--4 players, clear turn rotation, and UI to display additional hands.\\
+  \textbf{Form (FR-style):} Add FR: "Multi-player session management must support up to 4 players with deterministic turn order and correct scoring."\\
+  \textbf{Motivation:} Increased replayability and social gameplay.\\
+  \textbf{Considerations:} Complexity in balancing learning vs. play-time; may increase server load.\\
+  \textbf{Fit Criterion:} A 4-player match can be started, played to completion, and score computed correctly.
+  
+  \item \textbf{Invite and classroom session tools (Stretch-L1)}\\
+  \textbf{Description:} Teachers create class sessions, bulk-invite students, and view join status.\\
+  \textbf{Form:} Teacher dashboard extension FR.\\
+  \textbf{Motivation:} Simplify classroom management and improve adoption.\\
+  \textbf{Fit Criterion:} Teacher creates a session and sees join statuses in real time in the lobby.
+\end{enumerate}
+
+\subsection{UI / Look-and-Feel Stretch Requirements (mapped to Section 10)}
+\begin{enumerate}
+  \item \textbf{In-game optional hints (Stretch-U1)}\\
+  \textbf{Appearance / Style Form:} Hints shall be available as an opt-in toggle in the lobby settings (per-player or per-session). Visual hint styles: glowing border, subtle tooltip.\\
+  \textbf{Motivation:} Supports novice players during early learning but avoid over-assistance for experienced users.\\
+  \textbf{Considerations:} Hints must be accessible (ARIA) and optional; do not clutter the interface by default.\\
+  \textbf{Fit Criterion:} A player toggles hints in the lobby and receives contextual, non-blocking hints during gameplay when enabled.
+  
+  \item \textbf{Detailed onboarding preview in lobby (Stretch-U1)}\\
+  \textbf{Appearance Form:} Lobby displays a short interactive primer about dozenal or the active base; includes a "Quick Try" button to demo the counting mechanic.\\
+  \textbf{Motivation:} Lowers barrier to entry for classroom audiences.\\
+  \textbf{Fit Criterion:} Primer launches from lobby and completes without entering a full match.
+\end{enumerate}
+
+\subsection{Education / Learning Stretch Requirements (mapped to Section 11)}
+\begin{enumerate}
+  \item \textbf{Advanced arithmetic mini-challenges (Stretch-E1)}\\
+  \textbf{Description / Form:} When enabled in lobby, certain wild-card plays trigger short arithmetic mini-challenges (e.g., compute sum in active base). These are optional and configurable.\\
+  \textbf{Motivation:} Deepen learning for engaged classes.\\
+  \textbf{Considerations:} Must be skippable and have accessibility support; avoid disrupting game flow.\\
+  \textbf{Fit Criterion:} When enabled, mini-challenges appear at correct trigger points and accept valid answers in the active base.
+\end{enumerate}
+
+\subsection{Internationalization and Language Stretch Requirements (mapped to Section 11.2)}
+\begin{enumerate}
+  \item \textbf{Optional language support (Stretch-I2)}\\
+  \textbf{Description:} Add support for one additional language (e.g., French) as a stretch feature.\\
+  \textbf{Form:} UI strings externalized; language selectable in lobby settings.\\
+  \textbf{Motivation:} Broaden potential evaluators/users beyond English.\\
+  \textbf{Considerations:} Translation quality is critical for pedagogical text; may require SME review.\\
+  \textbf{Fit Criterion:} UI renders in selected language and sample dozenal primer is translated without truncation.
+\end{enumerate}
+
+\subsection{Performance / Capacity Stretch Requirements (mapped to Section 12)}
+\begin{enumerate}
+  \item \textbf{Higher concurrent capacity (Stretch-P2)}\\
+  \textbf{Description:} Scale hosting to support >200 concurrent users for studies or demonstrations.\\
+  \textbf{Form:} Performance requirement with load-test acceptance criteria.\\
+  \textbf{Motivation:} Useful for large demo sessions or class-wide studies.\\
+  \textbf{Considerations:} Higher cost and CI load-testing required.\\
+  \textbf{Fit Criterion:} Simulated load test demonstrates system remains responsive per p95 latency target at target concurrency.
+\end{enumerate}
+
+\subsection{Integration / Deck Production Stretch Requirements}
+\begin{enumerate}
+  \item \textbf{Physical deck production workflow (Stretch-D2)}\\
+  \textbf{Description:} Provide printable/print-on-demand assets and ordering instructions to create physical dozenal, octal, or hex decks.\\
+  \textbf{Form:} Documentation and asset package in repo.\\
+  \textbf{Motivation:} Supports tactile classroom use and outreach.\\
+  \textbf{Considerations:} Licensing and cost to be estimated.\\
+  \item \textbf{Fit Criterion:} Provided print assets produce a proof print and match on-screen representations.
+\end{enumerate}
+
+% ---------------------------
+% Urgency ranking and release buckets
+% Rank 1 = high priority stretch items (v1.1). Rank 2 = lower priority (v1.2).
+% ---------------------------
+
+\subsection{Urgency Ranking}
+Each unimplemented stretch requirement above is assigned an urgency rank:
+\begin{itemize}
+  \item \textbf{Rank 1 (v1.1)}: High-priority stretch items likely to be scheduled immediately after MVP if resources permit.
+  \item \textbf{Rank 2 (v1.2)}: Lower-priority stretch items for later releases or exploratory work.
+\end{itemize}
+
+\subsection{Crazy10s v1.1 (Rank 1) --- Priority stretch items}
+\begin{itemize}
+  \item Invite \& classroom session tools (Stretch-L1)
+  \item In-game optional hints (Stretch-U1)
+  \item Advanced arithmetic mini-challenges (Stretch-E1)
+  \item Physical deck production workflow (Stretch-D2) --- planning/asset creation phase
+\end{itemize}
+
+\subsection{Crazy10s v1.2 (Rank 2) --- Lower priority stretch items}
+\begin{itemize}
+  \item 4-player match support (Stretch-L2)
+  \item Detailed onboarding preview in lobby (additional polish) (Stretch-U1)
+  \item Optional language support (Stretch-I2)
+  \item Higher concurrent capacity (Stretch-P2)
+\end{itemize}
 
 \section{Ideas for Solution}
-
 \subsection{Architecture Overview}
 \begin{itemize}
   \item \textbf{Frontend}: React with TypeScript. State managed via a small store (Zustand or Redux Toolkit). WebSocket client for live turns. Component library and keyboard-first interactions.
