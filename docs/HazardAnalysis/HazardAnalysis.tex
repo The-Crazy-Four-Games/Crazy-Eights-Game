@@ -199,16 +199,123 @@ A7 & Client devices provide basic accessibility aids such as keyboard, focus nav
             SR-8 & H1-8 \\
         \end{longtable}
     \end{small}
-
+    
 \section{Safety and Security Requirements}
 
-\wss{Newly discovered requirements.  These should also be added to the SRS.  (A
-rationale design process how and why to fake it.)}
+This section defines the safety and security requirements derived from the 
+identified hazards in the FMEA. These requirements are intended to prevent or 
+mitigate the effects of hazards related to gameplay integrity, data protection, 
+and user learning outcomes.
 
+\subsection{Safety Requirements}
+
+\begin{itemize}
+  \item \textbf{SR-1: Dozenal Arithmetic Validation}
+  \\The system shall correctly validate card combinations and arithmetic 
+  operations in base-12 to prevent incorrect gameplay outcomes or user 
+  confusion.
+
+  \item \textbf{SR-2: User Interface Feedback Consistency}
+  \\The system shall provide real-time and clear visual or textual feedback 
+  after every action to prevent user uncertainty and ensure the learning goal 
+  of base comprehension is maintained.
+
+  \item \textbf{SR-3: Reliable Data Persistence}
+  \\All player progress and results shall be stored atomically to prevent data 
+  corruption, including crash recovery and session reconnection mechanisms.
+
+  \item \textbf{SR-4: Accurate Scoring and Conversion Algorithms}
+  \\The system shall verify numeric conversions between bases through redundant 
+  validation logic or automated testing to avoid incorrect scoring or 
+  educational misinformation.
+
+  \item \textbf{SR-5: Controlled Session Timeout and Recovery}
+  \\If a session disconnect occurs, the server shall maintain game state and 
+  allow the player to resume without desynchronization.
+
+  \item \textbf{SR-6: Accessibility Safeguards}
+  \\The interface shall meet WCAG accessibility requirements (keyboard 
+  navigation, readable colors, screen reader compatibility) to prevent user 
+  exclusion and reduce operational hazards.
+\end{itemize}
+
+\subsection{Security Requirements}
+
+\begin{itemize}
+  \item \textbf{SR-7: Encrypted Data Transmission}
+  \\All client-server communication shall use TLS 1.2 or higher to protect 
+  against eavesdropping and session hijacking.
+
+  \item \textbf{SR-8: Secure Data Storage}
+  \\All user-related data stored on the server shall be encrypted using 
+  AES-256 and stored without plaintext credentials.
+
+  \item \textbf{SR-9: Authentication and Session Protection}
+  \\Session tokens shall expire after a defined idle period, and invalid 
+  sessions shall not be reused to avoid unauthorized access.
+
+  \item \textbf{SR-10: Input Validation and Sanitization}
+  \\The system shall validate all client input at the server level to prevent 
+  malicious commands or injection attacks.
+
+  \item \textbf{SR-11: Versioned Educational Content}
+  \\All explanatory Dozenal rules and hints shall be version-controlled and 
+  verified for correctness before deployment to prevent misinformation hazards.
+\end{itemize}
+
+\newpage
 \section{Roadmap}
 
-\wss{Which safety requirements will be implemented as part of the capstone timeline?
-Which requirements will be implemented in the future?}
+The following roadmap identifies which safety and security requirements will be 
+implemented within the capstone timeline and which will be deferred for future 
+development.
+
+\subsection{Implemented in Capstone (Crazy10s v1.0)}
+
+\begin{itemize}
+  \item \textbf{SR-1} — Dozenal Arithmetic Validation  
+  \item \textbf{SR-2} — User Interface Feedback Consistency  
+  \item \textbf{SR-3} — Reliable Data Persistence  
+  \item \textbf{SR-4} — Accurate Scoring and Conversion Algorithms  
+  \item \textbf{SR-7} — Encrypted Data Transmission  
+  \item \textbf{SR-10} — Input Validation and Sanitization  
+\end{itemize}
+
+\subsection{Deferred for Future Release (Crazy10s v1.1 and beyond)}
+
+\begin{itemize}
+  \item \textbf{SR-5} — Controlled Session Timeout and Recovery (v1.1)  
+  \item \textbf{SR-6} — Accessibility Safeguards (v1.1)  
+  \item \textbf{SR-8} — Secure Data Storage (v1.1)  
+  \item \textbf{SR-9} — Authentication and Session Protection (v1.2)  
+  \item \textbf{SR-11} — Versioned Educational Content (v1.2)
+\end{itemize}
+
+\noindent
+These later milestones will focus on improved reliability, broader user 
+inclusion, and content safety, building on the foundation of a functioning, 
+secure educational game platform.
+
+\newpage
+\section*{Appendix --- Reflection}
+
+\paragraph{1. What went well while writing this deliverable?}
+
+The team effectively applied a structured hazard analysis approach based on 
+the FMEA framework presented in the lecture. Collaboration between team members 
+enabled comprehensive identification of software-specific hazards such as data 
+corruption, UI feedback delays, and incorrect base validation. Establishing 
+traceability between hazards and safety requirements provided clarity and 
+strengthened the link between system reliability and user learning outcomes.
+
+\paragraph{2. What pain points did you experience during this deliverable, and how did you resolve them?}
+
+The primary challenge was distinguishing between functional errors and genuine 
+hazards with user-impact implications. It was also difficult to quantify how 
+certain risks (like UI confusion) could degrade educational outcomes. The team 
+resolved these by referencing real examples from other projects in the capstone 
+repository, holding internal review meetings, and restructuring the FMEA table 
+to better align with user-centric risks rather than only technical failures.
 
 \newpage{}
 
