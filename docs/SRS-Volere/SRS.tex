@@ -435,7 +435,7 @@ The following table summarizes the primary product use cases (PUCs):
 \begin{enumerate}
     \item The system indicates that it is the player’s turn.
     \item The player chooses either to play a card or to draw from the deck.
-    \item If the player chooses a card, the system checks its validity against the discard pile.
+    \item If the player chooses a card, the system goes through \textbf{UC5} to check its validity against the discard pile.
     \item If valid, the card is placed onto the discard pile.
     \item If invalid, the system notifies the player and the card remains in the hand.
     \item If the player chooses to draw, the system gives one card from the deck to the player.
@@ -735,7 +735,7 @@ The codebase should be compliant with modern C++/Python style conventions (PEP8 
   \begin{itemize}
     \item \textbf{Description:} Decide whether to support only Decimal and Dozenal, or to include multiple other bases (Base-8: Octal, Base-16: Hexadecimal, Base-6: Senary, Base-9: Nonary).
     \item \textbf{Stakeholders:} Educators; Students.
-    \item \textbf{Action:} No action assigned; discussion required.
+    \item \textbf{Action:} 1. Fix inconsistencies within SRS documented about which number bases to implement. Discussion required.
     \item \textbf{Status:} Open.
     \item \textbf{Target resolution:} Educational stakeholders will give guidance on curriculum fit and scope.
   \end{itemize}
@@ -763,13 +763,149 @@ The codebase should be compliant with modern C++/Python style conventions (PEP8 
     \item \textbf{Status:} Ongoing.
   \end{itemize}
 
-\subsection{Unspecified issues:}
-  \begin{itemize}
-    \item Multiplayer mode: whether to implement in current phase or postpone to future release.
-    \item Educational feedback: how to deeply explain Dozenal math within a card game.
-    \item Game difficulty: balancing fun and learning value.
-    \item Visual design theme: educational vs. playful aesthetic.
-  \end{itemize}
+\subsection{Multiplayer mode implementation decision (ISS-04)}
+\begin{itemize}
+  \item \textbf{Description:} Decide whether online multiplayer (server-authoritative WebSocket rooms, reconnection, scaling) is in-scope for MVP or deferred to a post-MVP release. Identify minimal online feature set if approved.
+  \item \textbf{Stakeholders:} Course Instructor; Dr. Paul Rapoport; Developers; QA.
+  \item \textbf{Action:} Convene a design decision meeting; produce an options analysis (local hot-seat vs server-authoritative) with estimated engineering effort and acceptance criteria.
+  \item \textbf{Status:} Open.
+  \item \textbf{Target resolution:} Decision recorded in GitHub Issue and linked to an implementation milestone or deferral note.
+\end{itemize}
+
+\subsection{Educational feedback granularity and optional hints (ISS-05)}
+\begin{itemize}
+  \item \textbf{Description:} Determine the default level of educational feedback (none, minimal, optional per-game setting). Rapoport recommended hints be optional to avoid over-assistance.
+  \item \textbf{Stakeholders:} Dr. Paul Rapoport; Educators; Students; UX Designers.
+  \item \textbf{Action:} Draft an “Hints/pedagogy” matrix for modes (Off / Minimal / Full), map to UI options, and prepare a small A/B playtest.
+  \item \textbf{Status:} Open.
+  \item \textbf{Target resolution:} Hints implemented as opt-in per-player or per-session; documented in Settings and Instructor Notes.
+\end{itemize}
+
+\subsection{Multiple-round scoring to 100 and base-consistent thresholds (ISS-06)}
+\begin{itemize}
+  \item \textbf{Description:} Clarify multi-round scoring rules (target score e.g., 100) and whether thresholds are expressed and accumulated in the active base (decimal or dozenal).
+  \item \textbf{Stakeholders:} Dr. Paul Rapoport; Course Instructor.
+  \item \textbf{Action:} Specify scoring rules and sample round calculations in both decimal and dozenal; include acceptance tests.
+  \item \textbf{Status:} Open.
+  \item \textbf{Target resolution:} SRS updated with explicit scoring calculation examples and unit tests in repo.
+\end{itemize}
+
+\subsection{Card deck cardinality and representation discrepancy (ISS-07)}
+\begin{itemize}
+  \item \textbf{Description:} Resolve inconsistency: SRS currently states \"52 cards\" (decimal) and elsewhere implies a different card count for dozenal (e.g., 64). Decide canonical deck construction per base and document mapping of ranks (0..?).
+  \item \textbf{Stakeholders:} Developers; Dr. Paul Rapoport; Game Designers.
+  \item \textbf{Action:} Produce a deck specification per base (ranks, face-cards, zero inclusion) and update Data Dictionary and Business Data Model.
+  \item \textbf{Status:} Open.
+  \item \textbf{Target resolution:} Deck spec reviewed and accepted; design files / test vectors added to repo.
+\end{itemize}
+
+\subsection{Rank ordering and rank semantics (Ace/1/face cards) (ISS-08)}
+\begin{itemize}
+  \item \textbf{Description:} Formalize rank ordering (is Ace low or high?) and whether face-cards participate in arithmetic rules; clarify how face cards map to numeric values when arithmetic is required.
+  \item \textbf{Stakeholders:} Game Designers; Dr. Paul Rapoport.
+  \item \textbf{Action:} Document rank-to-value mapping for each base and add example scenarios demonstrating validity checks (UC5).
+  \item \textbf{Status:} Open.
+  \item \textbf{Target resolution:} Data Dictionary updated to include numeric mapping for face cards and Ace.
+\end{itemize}
+
+\subsection{Sum-target rule ambiguity (10 vs 11 / base-dependence) (ISS-09)}
+\begin{itemize}
+  \item \textbf{Description:} Rapoport suggests using sum-to-11 (in base) rather than sum-to-10 to avoid duplication and to make face cards usable. Determine canonical “sum-target” and implications for move validity and pacing.
+  \item \textbf{Stakeholders:} Dr. Paul Rapoport; Game Designers; Educators.
+  \item \textbf{Action:} Evaluate both options via short gameplay simulations; choose target (10 or 11) and document trade-offs and acceptance tests.
+  \item \textbf{Status:} Open.
+  \item \textbf{Target resolution:} Update FR-3 and UC5 to reflect chosen rule; add test cases.
+\end{itemize}
+
+\subsection{Optional zero-card and deck-extension (ISS-10)}
+\begin{itemize}
+  \item \textbf{Description:} Evaluate whether to include a zero card to support arithmetic rules involving face-card pairings (as suggested in review).
+  \item \textbf{Stakeholders:} Dr. Paul Rapoport; Designers.
+  \item \textbf{Action:} Prototype a deck variant and test for balance and educational clarity.
+  \item \textbf{Status:} Open.
+  \item \textbf{Target resolution:} Decision recorded; deck files added or rejected with rationale.
+\end{itemize}
+
+\subsection{Queen rule and optional house rules (ISS-11)}
+\begin{itemize}
+  \item \textbf{Description:} Include Queen-rule and other house-rule toggles (e.g., 2-rule) as optional settings in the Rule Configurator.
+  \item \textbf{Stakeholders:} Players; Educators.
+  \item \textbf{Action:} Add to Stretch Goals / Rule Configurator and document expected behaviour and UI toggle locations.
+  \item \textbf{Status:} Open.
+  \item \textbf{Target resolution:} Rule configurator UI/FRs added in a future sprint.
+\end{itemize}
+
+\subsection{Base-display and conversion policy (ISS-12)}
+\begin{itemize}
+  \item \textbf{Description:} Clarify whether UI will show both decimal and dozenal simultaneously or provide optional conversion toggles; Rapoport recommended making conversion optional.
+  \item \textbf{Stakeholders:} UX Designers; Educators.
+  \item \textbf{Action:} Add an options matrix in SRS: (A) Dozenal-only UI, (B) Dual-display (Dozenal+Decimal), (C) Optional conversion toggle. Select default.
+  \item \textbf{Status:} Open.
+  \item \textbf{Target resolution:} SRS updated and acceptance tests added verifying display modes.
+\end{itemize}
+
+\subsection{Mobile / phone responsiveness feasibility (ISS-13)}
+\begin{itemize}
+  \item \textbf{Description:} Rapoport doubts phone support is feasible; determine whether mobile support is stretch or omitted.
+  \item \textbf{Stakeholders:} Developers; Dr. Paul Rapoport.
+  \item \textbf{Action:} Classify “mobile” as stretch-goal or out-of-scope for MVP and document reasoning.
+  \item \textbf{Status:} Open.
+  \item \textbf{Target resolution:} Decision and update to \S10.responsiveness and Release Notes.
+\end{itemize}
+
+\subsection{Language support clarification (ISS-14)}
+\begin{itemize}
+  \item \textbf{Description:} Rapoport advised English-only for now; confirm language scope and mark translations as stretch.
+  \item \textbf{Stakeholders:} Dr. Paul Rapoport; Course Instructor.
+  \item \textbf{Action:} Set default language list (English) and mark other languages as stretch goals in SRS.
+  \item \textbf{Status:} Open.
+  \item \textbf{Target resolution:} SRS updated; internationalization backlog item created if required.
+\end{itemize}
+
+\subsection{Capacity target re-evaluation (ISS-15)}
+\begin{itemize}
+  \item \textbf{Description:} Reassess the 200 concurrent users testing target; confirm whether this is practical within the budget and hosting constraints.
+  \item \textbf{Stakeholders:} Team Lead; DevOps; Dr. Paul Rapoport.
+  \item \textbf{Action:} Produce an estimate of server costs and a scaled test plan; consider lower initial target (e.g., 20--50) for MVP.
+  \item \textbf{Status:} Open.
+  \item \textbf{Target resolution:} Update Capacity Requirements and CI load plan.
+\end{itemize}
+
+\subsection{Option A ambiguity (ISS-16)}
+\begin{itemize}
+  \item \textbf{Description:} Clarify “Option A: Local-first 2P hot-seat” — whether it implies two players on same device or AI opponent; Rapoport flagged confusion.
+  \item \textbf{Stakeholders:} Team; Course Instructor.
+  \item \textbf{Action:} Update Implementation Options with precise definitions and demo acceptance criteria for Option A and Option B.
+  \item \textbf{Status:} Open.
+  \item \textbf{Target resolution:} Implementation Options section clarified and accepted.
+\end{itemize}
+
+\subsection{Animations and hand ordering requirement (ISS-17)}
+\begin{itemize}
+  \item \textbf{Description:} Define card ordering animation spec (how cards are sorted and animated) and ensure it is included in Look-and-Feel Requirements.
+  \item \textbf{Stakeholders:} UI/UX; Frontend Developers.
+  \item \textbf{Action:} Draft a brief spec and add to \S10 Style Requirements; include accessibility considerations for motion.
+  \item \textbf{Status:} Open.
+  \item \textbf{Target resolution:} Animation spec committed and demoed in PoC.
+\end{itemize}
+
+\subsection{Reuse of existing domain and cost feasibility (ISS-18)}
+\begin{itemize}
+  \item \textbf{Description:} Investigate possibility of reusing existing dozenal-domain names or prior projects (Rapoport note) to reduce brand/setup costs.
+  \item \textbf{Stakeholders:} Team Liaison; Dr. Paul Rapoport.
+  \item \textbf{Action:} Research available domains and prior dozenal projects; report cost/availability and licensing constraints.
+  \item \textbf{Status:} Open.
+  \item \textbf{Target resolution:} Domain decision and purchase plan or deferral documented.
+\end{itemize}
+
+\subsection{Missing Fit Criteria and placeholder content (ISS-19)}
+\begin{itemize}
+  \item \textbf{Description:} Several sections still contain \verb|\lips| placeholders and lack explicit Fit Criteria (measurable acceptance criteria).
+  \item \textbf{Stakeholders:} All authors; Document Owner.
+  \item \textbf{Action:} Replace placeholders with substantive requirements and add Fit Criteria for each section before submission; track in issue tracker.
+  \item \textbf{Status:} Open.
+  \item \textbf{Target resolution:} All placeholders replaced and Fit Criteria added; document review pass.
+\end{itemize}
   
 \subsection{Fit criterion:}
   \begin{itemize}
