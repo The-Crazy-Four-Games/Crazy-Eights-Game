@@ -49,8 +49,8 @@
 \midrule
 10.9 & Jiaming Li & FMEA\\
 10.9 & Ruida Chen & Introduction, Scope and Purpose, Components, Reflection Q4\\
-10.9 & Alvin Qian & Added Assumptions\\
-... & ... & ...\\
+10.9 & Alvin Qian & Assumptions\\
+10.14 & Ammar Sharbat & Safety and Security Requirements, Roadmap, Reflection Q1 and Q2\\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -121,6 +121,8 @@ A7 & Client devices provide basic accessibility aids such as keyboard, focus nav
 \bottomrule
 \end{tabularx}
 \end{table}
+
+\newpage{}
 
 \section{Failure Mode and Effect Analysis}
 \setlength{\LTleft}{-3cm}
@@ -296,54 +298,44 @@ These later milestones will focus on improved reliability, broader user
 inclusion, and content safety, building on the foundation of a functioning, 
 secure educational game platform.
 
-\newpage
-\section*{Appendix --- Reflection}
-
-\paragraph{1. What went well while writing this deliverable?}
-
-The team effectively applied a structured hazard analysis approach based on 
-the FMEA framework presented in the lecture. Collaboration between team members 
-enabled comprehensive identification of software-specific hazards such as data 
-corruption, UI feedback delays, and incorrect base validation. Establishing 
-traceability between hazards and safety requirements provided clarity and 
-strengthened the link between system reliability and user learning outcomes.
-
-\paragraph{2. What pain points did you experience during this deliverable, and how did you resolve them?}
-
-The primary challenge was distinguishing between functional errors and genuine 
-hazards with user-impact implications. It was also difficult to quantify how 
-certain risks (like UI confusion) could degrade educational outcomes. The team 
-resolved these by referencing real examples from other projects in the capstone 
-repository, holding internal review meetings, and restructuring the FMEA table 
-to better align with user-centric risks rather than only technical failures.
-
 \newpage{}
 
 \section*{Appendix --- Reflection}
 
-\wss{Not required for CAS 741}
-
 \input{../Reflection.tex}
 
-\begin{enumerate}
-    \item What went well while writing this deliverable? 
-    \item What pain points did you experience during this deliverable, and how
-    did you resolve them?
-    \item Which of your listed risks had your team thought of before this
-    deliverable, and which did you think of while doing this deliverable? For
-    the latter ones (ones you thought of while doing the Hazard Analysis), how
-    did they come about?
-    \paragraph{Answer:}
+\paragraph{1. What went well while writing this deliverable?}
+
+The team effectively applied a structured hazard analysis approach based on 
+the FMEA framework presented in the lecture. Delegation of parts in this deliverable 
+enabled sequential identification of software-specific hazards.
+Since each member did everything by order, writing this Hazard Analysis 
+was efficient and straightforward.
+
+\paragraph{2. What pain points did you experience during this deliverable, and how did you resolve them?}
+
+The primary challenge was time, as our SRS document was so demanding, 
+and took the majority of our time and focus in this deliverable.
+Another pain-point/challenge was lack of preparation for building the Hazard Analysis.
+Unfortunately, no team members went to the HA lecture, and we also did not review 
+it together as a team before delegating.\\
+As far as the Hazard Analysis itself, the most difficult part was
+distinguishing between functional errors/hazards and genuine 
+hazards which actually impact the players of our game. It was also difficult to quantify how 
+certain risks (like UI confusion) could degrade educational outcomes. The team 
+resolved these by referencing real examples from other projects in the capstone 
+repository, communicating internally, and restructuring the FMEA table 
+to better align with user-centric risks rather than only functional risks.
+
+\paragraph{3. Which of your listed risks had your team thought of before this deliverable, and which did you think of while doing this deliverable? For the latter ones (ones you thought of while doing the Hazard Analysis), how did they come about?}
+    
     Before this deliverable, our team had already considered general risks such as scheduling conflicts, Git merge issues, and limited testing time near deadlines.
     During the Hazard Analysis, we identified new, more specific risks, including Dozenal validation logic errors, data corruption during saving, and inaccurate educational feedback. These emerged as we analyzed each system component in the FMEA table, which led us to think more deeply about technical failures and their impact on users.
-    \item Other than the risk of physical harm (some projects may not have any
-    appreciable risks of this form), list at least 2 other types of risk in
-    software products. Why are they important to consider? 
-	\begin{itemize}
+
+\paragraph{4. Other than the risk of physical harm (some projects may not have any appreciable risks of this form), list at least 2 other types of risk in software products. Why are they important to consider?}
+\begin{itemize}
 	\item Usability and human-error risks: Poorly designed user interfaces, low-quality GUI animation, unclear instructions can cause user to make mistake or misunderstand the system, these risks are important because they directly affect user satisfaction, learning outcomes and overall quality of the software.
-	\item Data integrity and privacy risks: These occur when user data is lost, corrupted or exposed due to software defects, inappropriate authentication. Such risks are critical because they can lead to permanent loss of user information and legal issues, breaches can severely damage credibility and violate data protection regulations.
-	
-	\end{itemize}
-\end{enumerate}
+	\item Data integrity and privacy risks: These occur when user data is lost, corrupted or exposed due to software defects, inappropriate authentication. Such risks are critical because they can lead to permanent loss of user information and legal issues, breaches can severely damage credibility and violate data protection regulations.	
+\end{itemize}
 
 \end{document}
