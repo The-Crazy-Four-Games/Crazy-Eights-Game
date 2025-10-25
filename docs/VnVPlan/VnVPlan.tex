@@ -30,8 +30,7 @@
 \begin{tabularx}{\textwidth}{p{3cm}p{2cm}X}
 \toprule {\bf Date} & {\bf Version} & {\bf Notes}\\
 \midrule
-Date 1 & 1.0 & Notes\\
-Date 2 & 1.1 & Notes\\
+Oct 24 & Alvin & System test functional requirements\\
 \bottomrule
 \end{tabularx}
 
@@ -234,62 +233,200 @@ as a Rev 0 demo for the supervisor.}
 
 \section{System Tests}
 
-\wss{There should be text between all headings, even if it is just a roadmap of
-the contents of the subsections.}
+This section defines end to end system tests that validate the software against the SRS Functional Requirements (FR-1..FR-9) for the MVP implementation state. Tests are grouped by related functionality to improve traceability and reuse of fixtures. Unless stated otherwise, tests assume a deterministic deck seed, two authenticated test users, and a clean database. All expected results are observable via the UI and server state exposed to the test harness.
 
 \subsection{Tests for Functional Requirements}
 
-\wss{Subsets of the tests may be in related, so this section is divided into
-  different areas.  If there are no identifiable subsets for the tests, this
-  level of document structure can be removed.}
+The subsections below cover: (1) game flow, rule validation, special cards, and end conditions (SRS Game Manager: FR-1..FR-5) and (2) scoring and education features including dual-base display, hints, and valid move highlighting (SRS Score Manager and Education Support: FR-6..FR-9). Where tests rely on input constraints, they use the card value and move legality definitions in the SRS.
 
-\wss{Include a blurb here to explain why the subsections below
-  cover the requirements.  References to the SRS would be good here.}
+\subsubsection{Game Manager: Start, Turn, Rules, Specials, End (FR-1..FR-5)}
 
-\subsubsection{Area of Testing1}
+This area verifies new game initialization, turn sequencing, rule validation for same suit or same value or sum equals 12 (base-12), handling of wild eights, and detecting the end of a game. It directly traces to FR-1 Start new game, FR-2 Turn management, FR-3 Rule validation, FR-4 Special cards, FR-5 End of game.
 
-\wss{It would be nice to have a blurb here to explain why the subsections below
-  cover the requirements.  References to the SRS would be good here.  If a section
-  covers tests for input constraints, you should reference the data constraints
-  table in the SRS.}
-		
-\paragraph{Title for Test}
+\paragraph{Start new game initializes state (ST-GM-01)}
 
 \begin{enumerate}
+\item{ST-GM-01\\}
 
-\item{test-id1\\}
+Control: Automatic
+					
+Initial State: No active sessions. Two users are authenticated and in the lobby. Deterministic deck seed S is configured.
+					
+Input: User A clicks New Game and invites User B. User B accepts.					
+					
+Output: A new session is created with a shuffled deck using seed S, a discard starter card is placed, each player receives the configured hand size H, and the UI shows turn = User A.
 
-Control: Manual versus Automatic
-					
-Initial State: 
-					
-Input: 
-					
-Output: \wss{The expected result for the given inputs.  Output is not how you
-are going to return the results of the test.  The output is the expected
-result.}
+Test Case Derivation: From FR-1 and SRS deck initialization semantics. With a fixed seed S, the initial state is uniquely determined.
 
-Test Case Derivation: \wss{Justify the expected value given in the Output field}
-					
-How test will be performed: 
-					
-\item{test-id2\\}
-
-Control: Manual versus Automatic
-					
-Initial State: 
-					
-Input: 
-					
-Output: \wss{The expected result for the given inputs}
-
-Test Case Derivation: \wss{Justify the expected value given in the Output field}
-
-How test will be performed: 
-
+How test will be performed: Run a Node console harness that calls initGame('S'), then logs and checks via simple equality that hands have size H, discard.length == 1, and turn == UserA. No browser, no sockets.
 \end{enumerate}
 
-\subsubsection{Area of Testing2}
+\paragraph{Legal move: same suit (ST-GM-02)}
+
+\begin{enumerate}
+\item{ST-GM-02\\}
+
+Control: Automatic
+					
+Initial State: Active session. Discard top = 5$\heartsuit$. User A hand contains K$\heartsuit$ and others. Turn = User A.
+					
+Input: User A plays K$\heartsuit$.
+					
+Output: Move is accepted. Discard top becomes K$\heartsuit$. Turn advances to User B.
+
+Test Case Derivation: FR-3 allows a move when suits match.
+
+How test will be performed: In the console harness set discard = [{suit:'H',v:5}] and handA contains K$\heartsuit$. Call canPlay() then playCard(). Log PASS if top becomes K$\heartsuit$ and turn flips to UserB.
+\end{enumerate}
+
+\paragraph{Legal move: sum equals 12 (base-12) (ST-GM-03)}
+
+\begin{enumerate}
+\item{ST-GM-03\\}
+
+Control: Automatic
+					
+Initial State: Discard top = 5$\diamondsuit$ (value 5). User A hand contains 7$\spadesuit$ (value 7). Turn = User A.
+					
+Input: User A plays 7$\spadesuit$.
+					
+Output: Move is accepted. Discard top becomes 7$\spadesuit$. Turn advances to User B.
+
+Test Case Derivation: In base-12, 5 + 7 = 10$_{12}$ which equals 12 in decimal. FR-3 permits play when values sum to 12 base-12.
+
+How test will be performed: Set top to value 5 then attempt to play value 7. Use canPlay() to assert true and log PASS.
+\end{enumerate}
+
+\paragraph{Special card: wild eight suit selection (ST-GM-04)}
+
+\begin{enumerate}
+\item{ST-GM-04\\}
+
+Control: Automatic
+					
+Initial State: Discard top = K$\clubsuit$. User A hand contains 8$\heartsuit$. Turn = User A.
+					
+Input: User A plays 8$\heartsuit$ and selects Spades as the new suit.
+					
+Output: Move is accepted. Discard shows 8 with chosen suit indicator = Spades. Only Spades or otherwise legal responses are allowed for the next player.
+
+Test Case Derivation: FR-4 specifies 8s are wild and allow the player to declare a suit.
+
+How test will be performed: Give A an 8, play with playCard(state,'A',eight,{chooseSuit:'S'}), then check chosenSuit == 'S' and turn == 'B' via console logs.
+\end{enumerate}
+
+\paragraph{Illegal move is rejected with guidance (ST-GM-05)}
+
+\begin{enumerate}
+\item{ST-GM-05\\}
+
+Control: Automatic
+					
+Initial State: Discard top = 9$\diamondsuit$. User A hand contains Q$\clubsuit$ and no other legal card.
+					
+Input: User A attempts to play Q$\clubsuit$.
+					
+Output: Move is rejected. UI shows polite message explaining why the move is invalid and highlights available actions: draw or play a legal card if any.
+
+Test Case Derivation: FR-3 rejects moves that are not same suit, not same value, and do not sum to 12 base-12.
+
+How test will be performed: Call canPlay() on an invalid card and expect false. For now we just assert the engine rejects the move; UI message will be verified later in UI tests.
+\end{enumerate}
+
+\paragraph{End of game detection (ST-GM-06)}
+
+\begin{enumerate}
+\item{ST-GM-06\\}
+
+Control: Automatic
+					
+Initial State: User A has 1 card, which is legal to play. User B has multiple cards.
+					
+Input: User A plays the last card.
+					
+Output: Game ends. Winner = User A. System transitions to score calculation and displays results.
+
+Test Case Derivation: FR-5 requires ending the game when a player has no cards left.
+
+How test will be performed: Have a script a state where A has one legal card, call playCard(), then log PASS if state.status == 'Completed' and winner == 'A'.
+\end{enumerate}
+
+\subsubsection{Score and Education Features: Dual-base, Hints, Highlights (FR-6..FR-9)}
+
+This area validates round scoring in decimal and Dozenal, correct conversion and display, context explanations for Dozenal arithmetic, and visual highlighting of valid moves. It traces to FR-6 Calculate score, FR-7 Display score, FR-8 Hints, FR-9 Highlight valid moves.
+
+\paragraph{Score calculated and shown in decimal and Dozenal (ST-SC-01)}
+
+\begin{enumerate}
+\item{ST-SC-01\\}
+
+Control: Automatic
+					
+Initial State: Game just ended. Opponent remaining cards have numeric values 2, 4, 6 (per SRS value function).
+					
+Input: Trigger score calculation screen.
+					
+Output: Decimal total = 12. Dozenal total = 10$_{12}$. Both are displayed side by side.
+
+Test Case Derivation: 2 + 4 + 6 = 12 decimal which equals 10 in base-12.
+
+How test will be performed: Call calculateScore({B:[2,4,6]}) and expect { decimal:12, dozenal:'10' }. Log PASS/FAIL.
+\end{enumerate}
+
+\paragraph{Dozenal explanation for sum equals 12 move (ST-SC-02)}
+
+\begin{enumerate}
+\item{ST-SC-02\\}
+
+Control: Automatic
+					
+Initial State: Discard top = 5. Hover help is enabled.					
+Input: Player hovers a 7 in hand and then selects it.
+					
+Output: Hint appears: explanation that 5 + 7 = 10$_{12}$ which equals 12 decimal, therefore the move is valid.
+
+Test Case Derivation: FR-8 requires on demand guidance for Dozenal arithmetic.
+
+How test will be performed: For MVP engine tests, only assert the explanation function returns a string containing 5 + 7 = $10_{12}$. UI tooltip will be covered later.
+\end{enumerate}
+
+\paragraph{Valid moves highlighted exactly (ST-SC-03)}
+
+\begin{enumerate}
+\item{ST-SC-03\\}
+
+Control: Automatic
+					
+Initial State: Discard top = 4$\spadesuit$. Hand contains 4$\clubsuit$, 8$\diamondsuit$, 7$\heartsuit$, Q$\spadesuit$, 6$\clubsuit$.
+					
+Input: None beyond rendering the hand.
+					
+Output: Highlighted cards are exactly \{4$\clubsuit$, Q$\spadesuit$, 8$\diamondsuit$\}. 7$\heartsuit$ and 6$\clubsuit$ are not highlighted.
+
+Test Case Derivation: Same value (4), same suit (Spades), and wild eight are valid. Others are invalid because 7 + 4 = 11 decimal which is not 10$_{12}$ and 6 + 4 = 10 decimal which is not 10$_{12}$.
+
+How test will be performed: Call an exported listValidMoves(state, hand) and assert it returns exactly the IDs for same value, same suit, and wild eight. Log PASS/FAIL.
+\end{enumerate}
+
+\paragraph{Primary base toggle affects labeling only (ST-SC-04)}
+
+\begin{enumerate}
+\item{ST-SC-04\\}
+
+Control: Automatic
+					
+Initial State: Score view shows decimal on the left and Dozenal on the right with decimal as primary.
+					
+Input: Toggle primary base to Dozenal.
+					
+Output: Labels and prominence swap, but numeric values remain identical pair \{12, 10$_{12}$\}. No recomputation changes total values.
+
+Test Case Derivation: FR-7 specifies dual display; the toggle is a presentation choice.
+
+How test will be performed: For MVP engine tests, verify the conversion outputs are stable. The UI toggle is deferred; assert that conversion of 12 dec remains $10_{12}$ before and after calling a setPrimaryBase() no-op stub.
+\end{enumerate}
+
+
 
 ...
 
