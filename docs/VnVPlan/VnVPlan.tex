@@ -41,6 +41,7 @@
 \midrule
 Oct 24 & Alvin & System test functional requirements\\
 Oct 26 & Ruida & Plan\\
+Oct 27 & Jiaming & System test Non-functional requirements\\
 \bottomrule
 \end{tabularx}
 
@@ -583,62 +584,65 @@ How test will be performed: For MVP engine tests, verify the conversion outputs 
 
 \subsection{Tests for Nonfunctional Requirements}
 
-\wss{The nonfunctional requirements for accuracy will likely just reference the
-  appropriate functional tests from above.  The test cases should mention
-  reporting the relative error for these tests.  Not all projects will
-  necessarily have nonfunctional requirements related to accuracy.}
+    \subsubsection{Performance and Responsiveness (NFR-1)}
+    \textbf{Objective:} Verify that all user interactions, such as playing a card or updating the score, occur with a latency below 200\,ms under normal network conditions. \\
 
-\wss{For some nonfunctional tests, you won't be setting a target threshold for
-passing the test, but rather describing the experiment you will do to measure
-the quality for different inputs.  For instance, you could measure speed versus
-the problem size.  The output of the test isn't pass/fail, but rather a summary
-table or graph.}
+    \textbf{Type:} Dynamic, Automatic \\
 
-\wss{Tests related to usability could include conducting a usability test and
-  survey.  The survey will be in the Appendix.}
+    \textbf{Initial State:} Running MVP build on localhost with two authenticated test users and a seeded deck. \\
 
-\wss{Static tests, review, inspections, and walkthroughs, will not follow the
-format for the tests given below.}
+    \textbf{Input / Condition:} Simulated play sessions of 100 rounds using Playwright scripts. \\
 
-\wss{If you introduce static tests in your plan, you need to provide details.
-How will they be done?  In cases like code (or document) walkthroughs, who will
-be involved? Be specific.}
+    \textbf{Expected Output / Metric:} Average response time $\leq 200$\,ms, 95th-percentile $\leq 350$\,ms; no dropped WebSocket messages. \\
 
-\subsubsection{Area of Testing1}
-		
-\paragraph{Title for Test}
+    \textbf{How test will be performed:}
+    Use Playwright performance APIs to measure latency between client events and UI updates. Aggregate results into a summary table through CI (GitHub Actions).
+    If thresholds are exceeded, flag the run as a warning and create an issue.
 
-\begin{enumerate}
+    \subsubsection{Usability and User Satisfaction (NFR-2)}
+    \textbf{Objective:} Assess how easily new users can understand and play the Dozenal Crazy Eights game. \\
 
-\item{test-id1\\}
+    \textbf{Type:} Dynamic, Manual \\
 
-Type: Functional, Dynamic, Manual, Static etc.
-					
-Initial State: 
-					
-Input/Condition: 
-					
-Output/Result: 
-					
-How test will be performed: 
-					
-\item{test-id2\\}
+    \textbf{Initial State:} Usable prototype deployed on a test server. Five participants who have never played the Dozenal version will take part in a guided session. \\
 
-Type: Functional, Dynamic, Manual, Static etc.
-					
-Initial State: 
-					
-Input: 
-					
-Output: 
-					
-How test will be performed: 
+    \textbf{Input / Condition:} Each participant completes a 15-minute task sequence (start a game, play 3 rounds, view score explanation). \\
 
-\end{enumerate}
+    \textbf{Expected Output / Metric:} At least 80\% of participants successfully finish the task without assistance; post-test survey average rating $\geq 4$ (out of 5) on clarity and enjoyment. \\
 
-\subsubsection{Area of Testing2}
+    \textbf{How test will be performed:}
+    Observation and screen recording during gameplay, followed by a 5-question Likert survey (see Appendix 6.2).
+    Feedback will be compiled into a usability report.
 
-...
+    \subsubsection{Stability and Robustness (NFR-3)}
+    \textbf{Objective:} Confirm that the application handles unexpected network events and invalid inputs gracefully. \\
+
+    \textbf{Type:} Dynamic, Automatic + Manual Fault Injection \\
+
+    \textbf{Initial State:} Running multi-client session connected via WebSocket. \\
+
+    \textbf{Input / Condition:} Simulate network interruptions and send malformed game actions through a test harness. \\
+
+    \textbf{Expected Output / Metric:} Application recovers without crash or data loss; users receive an error message ``Connection lost – reconnecting…'' and game state resyncs within 5 seconds. \\
+
+    \textbf{How test will be performed:}
+    Inject disconnects using Playwright’s network emulation tools. Review browser console and server logs for exceptions. Report mean recovery time and failure rate.
+
+    \subsubsection{Maintainability and Code Quality (NFR-4)}
+    \textbf{Objective:} Evaluate source-code consistency and test coverage as indicators of maintainability. \\
+
+    \textbf{Type:} Static Analysis / Automated \\
+
+    \textbf{Initial State:} Repository after successful build on GitHub Actions. \\
+
+    \textbf{Input / Condition:} Run ESLint, Prettier, and CodeQL scans; collect coverage data via Codecov. \\
+
+    \textbf{Expected Output / Metric:} No ESLint errors or critical CodeQL alerts; line coverage $\geq 80$\%. \\
+
+    \textbf{How test will be performed:}
+    Continuous Integration pipeline executes static analysis and unit testing jobs on each commit. Results are stored as badges in the repository README for transparency.
+
+
 
 \subsection{Traceability Between Test Cases and Requirements}
 
