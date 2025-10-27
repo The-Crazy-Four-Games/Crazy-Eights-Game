@@ -3,6 +3,9 @@
 \usepackage{booktabs}
 \usepackage{tabularx}
 \usepackage{hyperref}
+\usepackage{tabularx}
+\usepackage{float}
+
 \hypersetup{
     colorlinks,
     citecolor=blue,
@@ -140,96 +143,237 @@ Repos.csv) if your plan changes as a result of the VnV planning exercise.}
 how they relate to your VnV efforts.}
 
 \section{Plan}
+This section details the comprehensive, multi-phase plan for the verification and validation (V\&V) of the " The Crazy Eights" educational card game, an application designed to teach the Dozenal (base-12) number system through a variant of the Crazy Eights card game. It establishes the V\&V-related responsibilities of the development team, the processes for verifying all key project artifacts (Software Requirements Specification, System Design, Implementation), the specific tools to be leveraged for automation, and the validation strategy to ensure the final product meets its core educational and functional objectives.   
 
-\wss{Introduce this section.  You can provide a roadmap of the sections to
-  come.}
+
 
 \subsection{Verification and Validation Team}
 
-\wss{Your teammates.  Maybe your supervisor.
-  You should do more than list names.  You should say what each person's role is
-  for the project's verification.  A table is a good way to summarize this information.}
+\begin{table}[H]
+\centering
+\caption{Verification and Validation Team Roles and Responsibilities}
+\label{tab:vvteam}
+\begin{tabularx}{\textwidth}{lX}
+\toprule
+\textbf{Name} & \textbf{Responsibilities} \\
+\midrule
+Ruida Chen & Owns SRS checklist and requirement traceability; leads ambiguity inspections; opens and triages SRS issues on GitHub. \\
+Ammar Sharbat & Conducts MG/MIS walkthroughs; checks FR/NFR coverage; verifies pre/post-conditions in design. \\
+Alvin Qian & Develops unit and integration tests; maintains CI coverage metrics; triages static analysis warnings. \\
+Jiaming Li & Organizes stakeholder playtests and usability sessions; aligns validation with personas and client expectations. \\
+\bottomrule
+\end{tabularx}
+\end{table}
 
 \subsection{SRS Verification}
+\textbf{Objective:}  
+To ensure the Software Requirements Specification (SRS) is complete, consistent, verifiable, and aligns with the project goals and constraints defined by the client and supervisor.
 
-\wss{List any approaches you intend to use for SRS verification.  This may
-  include ad hoc feedback from reviewers, like your classmates (like your
-  primary reviewer), or you may plan for something more rigorous/systematic.}
+\noindent \textbf{Scope:}  
+This verification applies to all functional and non-functional requirements described in the SRS. It covers requirement clarity, consistency, completeness, and testability.  
 
-\wss{If you have a supervisor for the project, you shouldn't just say they will
-read over the SRS.  You should explain your structured approach to the review.
-Will you have a meeting?  What will you present?  What questions will you ask?
-Will you give them instructions for a task-based inspection?  Will you use your
-issue tracker?}
+\noindent \textbf{Supervisor Involvement:}  
+The SRS verification process will be conducted under the supervision of \textbf{Dr.\ Paul Rapoport}.  
+Dr.\ Rapoport will act as the primary reviewer and domain expert, ensuring that the documented requirements correctly reflect the intended educational goals and gameplay design.  
+He will provide written and verbal feedback during the SRS review meeting and confirm whether the requirements meet the course expectations.  
+Any clarifications or corrections raised by Dr.\ Rapoport will be recorded in the SRS issue tracker and addressed.
 
-\wss{Maybe create an SRS checklist?}
+\noindent \textbf{Verification Techniques:}
+\begin{itemize}
+    \item \textbf{Checklist-based inspection:} Each requirement will be reviewed using a formal checklist to ensure it is unambiguous, measurable, and testable.  
+    \item \textbf{Cross-traceability review:} Every functional requirement (FR) will be linked to at least one design component and one planned test case.  
+    \item \textbf{Peer review:} Team members who did not author the section will perform independent reviews to prevent bias.  
+    \item \textbf{Supervisor review:} Dr.\ Rapoport will conduct a targeted review session to evaluate correctness, completeness, and educational intent.
+\end{itemize}
+
+\noindent\textbf{Supervisor Involvement:}  
+The SRS verification process will be formally reviewed under the supervision of \textbf{Dr.\ Paul Rapoport}.  
+The review will take the form of a scheduled meeting lasting approximately 30--45 minutes during the week following the internal peer review.  
+
+\begin{itemize}
+    \item \textbf{Meeting preparation:}  
+    Before the meeting, the team will prepare and send Dr.\ Rapoport a concise review package containing:
+    \begin{enumerate}
+        \item The finalized SRS document (PDF);  
+        \item A one-page summary of critical or ambiguous requirements;  
+        \item The SRS verification checklist used in internal inspection;  
+        \item The traceability matrix linking requirements to design/test artifacts.
+    \end{enumerate}
+
+    \item \textbf{Structured discussion topics:}  
+    During the meeting, the team will:
+    \begin{enumerate}
+        \item Present how each major functional area (Game, Scoring, Educational Support, User Management) meets the educational and usability goals;
+        \item Ask Dr.\ Rapoport to identify unclear, incomplete, or pedagogically inconsistent requirements;
+        \item Confirm mutual understanding of success criteria and measurable outcomes (e.g., gameplay flow, scoring accuracy, base conversion learning intent).
+    \end{enumerate}
+
+    \item \textbf{Feedback capture and follow-up:}  
+    Comments and action items from the meeting will be recorded in the GitHub Issue Tracker under the tag \texttt{SRS-Review}, each with an assigned owner and deadline.  
+    The SRS Lead (Ruida Chen) will ensure all feedback is incorporated into the updated SRS before sign-off.
+
+    \item \textbf{Supervisor:}  
+    After corrections, Dr.\ Rapoport will be provided with a change summary.
+\end{itemize}
+\noindent \textbf{Checklist}
+
+\begin{table}[H]
+\centering
+\caption{SRS Verification Checklist}
+\label{tab:srs-checklist}
+\begin{tabular}{|l|l|p{0.4\textwidth}|l|l|}
+\hline
+\textbf{Checklist Item ID} & \textbf{Category} & \textbf{Verification Question} \\ \hline
+SRS-C-01 & Completeness & Have all Open Issues been resolved and their resolutions integrated?  \\ \hline
+SRS-C-02 & Completeness & Has all placeholder content been replaced with substantive text? \\ \hline
+SRS-C-03 & Testability & Does every functional requirement have a unique identifier? \\ \hline
+SRS-C-04 & Testability & Does every requirement now have a specific, measurable, and unambiguous Fit Criterion? \\ \hline
+SRS-C-05 & Consistency & Are the game rules consistent? (e.g., Is FR-3 consistent with PUC-5?)  \\ \hline
+SRS-C-06 & Consistency & Is the technology stack (React, Node.js, Postgres) consistent across Sec 3.1, 13.2, and 26.1? \\ \hline
+SRS-C-07 & Correctness & Do all requirements trace back to a stated Project Goal or Stakeholder? \\ \hline
+SRS-C-08 & Traceability & Is the scope unambiguous? \\ \hline
+SRS-C-09 & Feasibility & Can all requirements be realistically implemented within the project constraints? \\ \hline
+\end{tabular}
+\end{table}
+
 
 \subsection{Design Verification}
+\noindent \textbf{Objective}: To verify that the system design is a correct, complete, and feasible implementation of the verified SRS
 
-\wss{Plans for design verification}
+\noindent \textbf{Process:} Design Walkthroughs \& Peer Review
+\begin{itemize}
+	\item The team will create design artifacts such as UML diagram, database Enitity-Relationship-Diagram (ERD), etc.
+	\item Schedule formal review meetings
+	\item In these meetings, the team will "walk through" the design, explaining how it fullfills specific requirements from the SRS.
+	\item The team will use the checklist below to challenge the design and ensure full traceability from requirements to design.
+	\item All identified defects will be logged as GitHub Issues.
+\end{itemize}
 
-\wss{The review will include reviews by your classmates}
-
-\wss{Create a checklists?}
+\noindent \textbf{Checklist}
+\begin{table}[H]
+\centering
+\caption{Design Verification Checklist}
+\label{tab:design-checklist}
+\begin{tabular}{|l|l|p{0.4\textwidth}|l|l|}
+\hline
+\textbf{Checklist Item ID} & \textbf{Category} & \textbf{Verification Question}  \\ \hline
+DS-C-01 & Traceability & Does every component in the architecture map to one or more Functional Requirements? \\ \hline
+DS-C-02 & Completeness & Does the design for the "Game Manager" (Sec 9.1) component explicitly implement all rules)? \\ \hline
+DS-C-03 & NFR-Performance & Does the architecture (Sec 26.1) support the 200 concurrent user requirement? \\ \hline
+DS-C-04 & NFR-Security & Does the design explicitly address all security requirements, including "server-authoritative game state" ?  \\ \hline
+DS-C-05 & NFR-Maintain. & Does the design adhere to the mandated stack (React, Node.js)?[1] Is it modular and extensible ?  \\ \hline
+DS-C-06 & NFR-Usability & Does the UI/UX design explicitly address Accessibility and Learning?  \\ \hline
+DS-C-07 & Interface & Are all API endpoints clearly defined?  \\ \hline
+DS-C-08 & Data & Does the database schema (ERD) correctly model the Business Data Model (Sec 7.1) and Data Dictionary (Sec 7.2)? \\ \hline
+\end{tabular}
+\end{table}
 
 \subsection{Verification and Validation Plan Verification}
 
-\wss{The verification and validation plan is an artifact that should also be
-verified.  Techniques for this include review and mutation testing.}
+\noindent \textbf{Objective}: To verify this VnVPlan for completeness, feasibility, internal consistency, and adherence to all course rubrics.
 
-\wss{The review will include reviews by your classmates}
+\noindent \textbf{Process:} Formal Peer Review
+\begin{itemize}
+	\item The entire teamshall conduct one full read-through of this document before submitting it.
+	\item The team will use the checklist below, which is directly derived from the course grading rubric, to ensure all requirements have been met.
+	\item After the team review, the plan shall be informally presented to the course supervisor to get a "feasibility check" before implementation begins, mitigating project risk.
+\end{itemize}
 
-\wss{Create a checklists?}
+\noindent \textbf:{Checklist}
+\begin{table}[H]
+\centering
+\caption{V\&V Plan Verification Checklist}
+\label{tab:vvp-checklist}
+\begin{tabular}{|l|p{0.5\textwidth}|l|l|}
+\hline
+\textbf{Checklist Item ID} & \textbf{Verification Question} \\ \hline
+VVP-C-01 & Are team roles for V\&V clear, specific, and feasible? \\ \hline
+VVP-C-02 & Is the SRS verification plan clear, specific, and feasible? \\ \hline
+VVP-C-03 & Is the Design verification plan clear, specific, and feasible? \\ \hline
+VVP-C-04 & Is the Implementation verification plan clear, specific, and feasible? \\ \hline
+VVP-C-05 & Are the automated testing and verification tools specific?  \\ \hline
+VVP-C-06 & Is the software validation plan clear, specific, and feasible?  \\ \hline
+VVP-C-08 & Is the plan feasible given the team size and academic term timeline?  \\ \hline
+\end{tabular}
+\end{table}
 
 \subsection{Implementation Verification}
 
-\wss{You should at least point to the tests listed in this document and the unit
-  testing plan.}
+\noindent \textbf{Objective}: To verify that the source code artifacts correctly implement the verified design, adhere to all coding standards, are free of common defects, and meet all non-functional requirements.
 
-\wss{In this section you would also give any details of any plans for static
-  verification of the implementation.  Potential techniques include code
-  walkthroughs, code inspection, static analyzers, etc.}
+\noindent \textbf{Unit testing}
+\begin{itemize}
+	\item \textbf{Frontend}:All UI components, verifying correct rendering and user-interaction behavior.
+	\item \textbf{Backend}: All API endpoints, authentication logic, and data models.
+	\item \textbf{Game Logic}: This is the most critical module to unit test. Tests will cover every game rule, include happy path + all edge cases.
 
-\wss{The final class presentation in CAS 741 could be used as a code
-walkthrough.  There is also a possibility of using the final presentation (in
-CAS741) for a partial usability survey.}
+\end{itemize}
+\noindent \textbf{Integration testing}
+\begin{itemize}
+	\item \textbf{Frontend}:API + DB (login/session/history), engine + UI interaction (play card → rule check → UI update).
+\end{itemize}
+
+\noindent \textbf{Static Verification:}  
+    In addition to dynamic testing, static verification activities will include:
+    \begin{itemize}
+        \item \textbf{Code walk-throughs:} Weekly peer reviews where presents newly developed code to the team, explaining logic and verifying alignment with design contracts.  
+        \item \textbf{Code inspection:} Checklist-based inspections for coding-standard compliance (naming, commenting, error handling).  
+        \item \textbf{Static analyzers:}  
+        Use of TypeScript’s --strict mode, ESLint rules, and CodeQL analysis for detecting unused variables, type mismatches, and security issues.  
+        \item \textbf{Continuous Integration enforcement:}  
+        The CI pipeline will fail automatically if linting, type checking, or static analysis errors occur.
+    \end{itemize}
+
 
 \subsection{Automated Testing and Verification Tools}
 
-\wss{What tools are you using for automated testing.  Likely a unit testing
-  framework and maybe a profiling tool, like ValGrind.  Other possible tools
-  include a static analyzer, make, continuous integration tools, test coverage
-  tools, etc.  Explain your plans for summarizing code coverage metrics.
-  Linters are another important class of tools.  For the programming language
-  you select, you should look at the available linters.  There may also be tools
-  that verify that coding standards have been respected, like flake9 for
-  Python.}
+\noindent\textbf{Objective:}  
+To ensure that software verification activities are repeatable, efficient, and integrated with the development workflow.
 
-\wss{If you have already done this in the development plan, you can point to
-that document.}
+\noindent\textbf{Tools and Automation:}
+\begin{itemize}
+    \item \textbf{Jest} --- used for unit and integration testing of both frontend and backend components.
+    \item \textbf{Playwright} --- performs automated end-to-end testing of the user interface.
+    \item \textbf{ESLint \& Prettier} --- automatically enforce coding style and detect syntax or logical issues.
+    \item \textbf{GitHub Actions CI/CD} --- runs all tests automatically on each push or pull request; generates coverage and linting reports.
+    \item \textbf{Codecov} --- collects and visualizes code coverage results from CI.
+\end{itemize}
 
-\wss{The details of this section will likely evolve as you get closer to the
-  implementation.}
+\noindent\textbf{Automation Outcome:}  
+Automated testing ensures that every commit is verified for correctness, code quality, and integration stability before merging into the main branch.
 
 \subsection{Software Validation}
 
-\wss{If there is any external data that can be used for validation, you should
-  point to it here.  If there are no plans for validation, you should state that
-  here.}
+\noindent\textbf{Objective:}  
+To confirm that the final system meets user needs, project goals, and the expectations of the client and supervisor.
 
-\wss{You might want to use review sessions with the stakeholder to check that
-the requirements document captures the right requirements.  Maybe task based
-inspection?}
+\noindent\textbf{Scope:}  
+Validation focuses on ensuring that the software behaves as intended by users and stakeholders, not only that it was built correctly.
 
-\wss{For those capstone teams with an external supervisor, the Rev 0 demo should 
-be used as an opportunity to validate the requirements.  You should plan on 
-demonstrating your project to your supervisor shortly after the scheduled Rev 0 demo.  
-The feedback from your supervisor will be very useful for improving your project.}
+\noindent\textbf{Validation Methods:}
+\begin{itemize}
+    \item \textbf{Stakeholder Review:}  
+    Conduct a demonstration of the working prototype for Dr.\ Paul Rapoport.  
+    Feedback will be collected and documented for any changes before final submission.
+    
+    \item \textbf{Task-based User Testing:}  
+    Team members and sample users will perform core gameplay tasks (e.g., joining a lobby, playing a round, viewing results).  
+    Observations will be recorded to identify usability or clarity issues.
 
-\wss{For teams without an external supervisor, user testing can serve the same purpose 
-as a Rev 0 demo for the supervisor.}
+    \item \textbf{Survey and Feedback:}  
+    A short questionnaire will be used to gather feedback on ease of use, performance, and enjoyment.
+\end{itemize}
 
-\wss{This section might reference back to the SRS verification section.}
+\noindent\textbf{Success Criteria:}
+\begin{itemize}
+    \item All core gameplay and scoring functions work as described in the SRS.  
+    \item Supervisor and users confirm that the software meets educational and functional goals.  
+    \item No critical usability or stability issues remain unresolved.
+\end{itemize}
+
+\noindent\textbf{Deliverables:}  
+Validation summary report including stakeholder feedback, test logs, and any final fixes implemented before release.
+
 
 \section{System Tests}
 
