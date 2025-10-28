@@ -646,8 +646,31 @@ How test will be performed: For MVP engine tests, verify the conversion outputs 
 
 \subsection{Traceability Between Test Cases and Requirements}
 
-\wss{Provide a table that shows which test cases are supporting which
-  requirements.}
+\begin{table}[H]
+    \centering
+    \caption{Traceability Between Test Cases and Requirements}
+    \label{TblTraceability}
+    \begin{tabular}{|p{0.2\textwidth}|p{0.45\textwidth}|p{0.35\textwidth}|}
+        \hline
+        \textbf{Requirement ID} & \textbf{Description (from SRS)} & \textbf{Associated Test Case(s)} \\ \hline
+
+        FR-1 & Start a new game session with two players. & ST-GM-01 \\ \hline
+        FR-2 & Manage player turns and enforce alternating actions. & ST-GM-02, ST-GM-04 \\ \hline
+        FR-3 & Validate move legality (same suit, same value, or sum equals 12 in base-12). & ST-GM-02, ST-GM-03, ST-GM-05 \\ \hline
+        FR-4 & Handle special cards (wild eight suit declaration). & ST-GM-04 \\ \hline
+        FR-5 & Detect end-of-game condition and declare winner. & ST-GM-06 \\ \hline
+        FR-6 & Compute total score in both decimal and dozenal formats. & ST-SC-01 \\ \hline
+        FR-7 & Display score in dual-base format with toggling support. & ST-SC-04 \\ \hline
+        FR-8 & Provide Dozenal arithmetic explanations and hints. & ST-SC-02 \\ \hline
+        FR-9 & Highlight valid playable cards in the UI. & ST-SC-03 \\ \hline
+
+        NFR-1 & Performance: all user interactions respond in under 200\,ms. & NFR-1 Performance and Responsiveness test \\ \hline
+        NFR-2 & Usability: at least 80\% of users complete tasks successfully; survey rating $\geq$ 4/5. & NFR-2 Usability and User Satisfaction test \\ \hline
+        NFR-3 & Stability: recovery from disconnects without data loss within 5\,s. & NFR-3 Stability and Robustness test \\ \hline
+        NFR-4 & Maintainability: code quality verified via ESLint, CodeQL, and $\geq$80\% test coverage. & NFR-4 Maintainability and Code Quality test \\ \hline
+
+    \end{tabular}
+\end{table}
 
 \section{Unit Test Description}
 
