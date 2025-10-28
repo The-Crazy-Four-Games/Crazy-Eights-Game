@@ -915,18 +915,26 @@ graduate attribute of Lifelong Learning.
 
 \begin{enumerate}
   \item What went well while writing this deliverable? 
+
 During the writing of this deliverable, our team improved our understanding of how verification and validation activities fit into a software lifecycle.  We learned to trace requirements back to specific tests, and maintain consistency across project documents(SRS and Supervisor feedbacks). Overall, this deliverable helped us formalize our testing strategy and clarify the expectations for the Crazy Tens project.
   \item What pain points did you experience during this deliverable, and how
     did you resolve them?
+
+
+Scope drift around base rules and wild card, cross-doc sync issues between SRS and VnV, and clarifying auth/data flows; we resolved these by parameterizing rules via config and FR ids, adding a small CSV trace matrix and change logs, and specifying salted hashing, session behavior, and delete flows mirrored by tests.
   \item What knowledge and skills will the team collectively need to acquire to
   successfully complete the verification and validation of your project?
   Examples of possible knowledge and skills include dynamic testing knowledge,
   static testing knowledge, specific tool usage, Valgrind etc.  You should look to
   identify at least one item for each team member.
+
+Collectively we need stronger dynamic and static testing and specific tool skills; Alvin: CI and property-based testing coverage, Ruida: requirements-to-tests traceability and mutation testing, Ammar: authentication and data lifecycle verification, Jiaming: UI highlighting and scoring verification with basic accessibility.
   \item For each of the knowledge areas and skills identified in the previous
   question, what are at least two approaches to acquiring the knowledge or
   mastering the skill?  Of the identified approaches, which will each team
   member pursue, and why did they make this choice?
+
+Alvin will set up GitHub Actions and add fast-check property tests for edge cases because it raises coverage with low overhead; Ruida will build a CSV trace matrix; Ammar will implement salted-hash, session, and CRUD delete tests because auth and data are MVP-critical; Jiaming will create a small Playwright suite and add axe checks in one target browser because it keeps scope focused while covering UI correctness and accessibility.
 \end{enumerate}
 
 \end{document}
