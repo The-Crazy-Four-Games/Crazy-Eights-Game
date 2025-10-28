@@ -152,7 +152,7 @@ Repos.csv) if your plan changes as a result of the VnV planning exercise.}
 how they relate to your VnV efforts.}
 
 \section{Plan}
-This section details the comprehensive, multi-phase plan for the verification and validation (V\&V) of the " The Crazy Eights" educational card game, an application designed to teach the Dozenal (base-12) number system through a variant of the Crazy Eights card game. It establishes the V\&V-related responsibilities of the development team, the processes for verifying all key project artifacts (Software Requirements Specification, System Design, Implementation), the specific tools to be leveraged for automation, and the validation strategy to ensure the final product meets its core educational and functional objectives.   
+This section details the comprehensive, multi-phase plan for the verification and validation (V\&V) of the " The Crazy Tens" educational card game, an application designed to teach different number bases through a variant of the Crazy Tens card game. It establishes the V\&V-related responsibilities of the development team, the processes for verifying all key project artifacts (Software Requirements Specification, System Design, Implementation), the specific tools to be leveraged for automation, and the validation strategy to ensure the final product meets its core educational and functional objectives.   
 
 
 
@@ -268,7 +268,7 @@ SRS-C-09 & Feasibility & Can all requirements be realistically implemented withi
 \textbf{Checklist Item ID} & \textbf{Category} & \textbf{Verification Question}  \\ \hline
 DS-C-01 & Traceability & Does every component in the architecture map to one or more Functional Requirements? \\ \hline
 DS-C-02 & Completeness & Does the design for the "Game Manager" (Sec 9.1) component explicitly implement all rules)? \\ \hline
-DS-C-03 & NFR-Performance & Does the architecture (Sec 26.1) support the 200 concurrent user requirement? \\ \hline
+DS-C-03 & NFR-Performance & Does the architecture support the 50 concurrent user requirement? \\ \hline
 DS-C-04 & NFR-Security & Does the design explicitly address all security requirements, including "server-authoritative game state" ?  \\ \hline
 DS-C-05 & NFR-Maintain. & Does the design adhere to the mandated stack (React, Node.js)?[1] Is it modular and extensible ?  \\ \hline
 DS-C-06 & NFR-Usability & Does the UI/UX design explicitly address Accessibility and Learning?  \\ \hline
@@ -394,7 +394,7 @@ The subsections below cover: (1) game flow, rule validation, special cards, and 
 
 \subsubsection{Game Manager: Start, Turn, Rules, Specials, End (FR-1..FR-5)}
 
-This area verifies new game initialization, turn sequencing, rule validation for same suit or same value or sum equals 12 (base-12), handling of wild eights, and detecting the end of a game. It directly traces to FR-1 Start new game, FR-2 Turn management, FR-3 Rule validation, FR-4 Special cards, FR-5 End of game.
+This area verifies new game initialization, turn sequencing, rule validation for same suit or same value or sum equals 12 (base-12), handling of wild tens, and detecting the end of a game. It directly traces to FR-1 Start new game, FR-2 Turn management, FR-3 Rule validation, FR-4 Special cards, FR-5 End of game.
 
 \paragraph{Start new game initializes state (ST-GM-01)}
 \begin{enumerate}
@@ -1046,7 +1046,7 @@ This area verifies secure storage of usernames, game history, and dozenal scores
     If thresholds are exceeded, flag the run as a warning and create an issue.
 
     \subsubsection{Usability and User Satisfaction (NFR-2)}
-    \textbf{Objective:} Assess how easily new users can understand and play the Dozenal Crazy Eights game. \\
+    \textbf{Objective:} Assess how easily new users can understand and play the Dozenal Crazy Tens game. \\
 
     \textbf{Type:} Dynamic, Manual \\
 
