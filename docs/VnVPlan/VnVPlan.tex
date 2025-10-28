@@ -42,8 +42,11 @@
 Oct 24 & Alvin & System test functional requirements\\
 Oct 26 & Ruida & Plan\\
 Oct 27 & Jiaming & System test Non-functional requirements\\
+Oct 27 & Ammar & Reviewed VnV Plan and created Issues \\
 Oct 27 & Alvin & Fixed errors in FR tests\\
 Oct 27 & Ruida & Fixed errors in Plan \\
+Oct 27 & Alvin & VnV Plan Reflection \\
+Oct 27 & Ammar & Acronyms and General Information \\
 \bottomrule
 \end{tabularx}
 
@@ -52,91 +55,181 @@ Oct 27 & Ruida & Fixed errors in Plan \\
 
 \tableofcontents
 
-\listoftables
-\wss{Remove this section if it isn't needed}
+\pagenumbering{arabic}
 
-\listoffigures
-\wss{Remove this section if it isn't needed}
-
-\newpage
-
+%=============================
+% Section 1: Symbols, Abbreviations, and Acronyms
+%=============================
 \section{Symbols, Abbreviations, and Acronyms}
 
 \renewcommand{\arraystretch}{1.2}
-\begin{tabular}{l l} 
-  \toprule		
-  \textbf{symbol} & \textbf{description}\\
-  \midrule 
-  T & Test\\
-  \bottomrule
-\end{tabular}\\
+\begin{tabularx}{\textwidth}{l X}
+\toprule
+\textbf{Symbol / Acronym} & \textbf{Description} \\
+\midrule
+API & Application Programming Interface \\
+CI & Continuous Integration \\
+CD & Continuous Deployment \\
+DB & Database \\
+ERD & Entity Relationship Diagram \\
+FR & Functional Requirement \\
+NFR & Non-functional Requirement \\
+SRS & Software Requirements Specification \\
+V\&V & Verification and Validation \\
+UI & User Interface \\
+UX & User Experience \\
+DBMS & Database Management System \\
+Dozenal & Base-12 numerical system used in gameplay \\
+Dec & Decimal numerical system (Base-10) \\
+Dek & Dozenal digit equivalent to decimal 10 \\
+El & Dozenal digit equivalent to decimal 11 \\
+HTTP & Hypertext Transfer Protocol \\
+TLS & Transport Layer Security \\
+JSON & JavaScript Object Notation \\
+CRUD & Create, Read, Update, Delete operations \\
+MVP & Minimum Viable Product \\
+IDE & Integrated Development Environment \\
+GUI & Graphical User Interface \\
+AI & Artificial Intelligence (for potential educational hints) \\
+MG & Module Guide \\
+MIS & Module Interface Specification \\
+HA & Hazard Analysis \\
+SR & Safety Requirement (from Hazard Analysis) \\
+QA & Quality Assurance \\
+LTI & Learning Tool Interoperability (future extension) \\
+CI/CD & Combined Continuous Integration and Continuous Deployment workflow \\
+\bottomrule
+\end{tabularx}
 
-\wss{symbols, abbreviations, or acronyms --- you can simply reference the SRS
-  \citep{SRS} tables, if appropriate}
-
-\wss{Remove this section if it isn't needed}
+\noindent
+This table summarizes the major symbols, abbreviations, and acronyms used throughout this Verification and Validation Plan. The terms originate from both the SRS and internal documentation, reflecting the technical, architectural, and educational contexts of the Crazy 10s project.
 
 \newpage
 
-\pagenumbering{arabic}
-
-This document ... \wss{provide an introductory blurb and roadmap of the
-  Verification and Validation plan}
-
+%=============================
+% Section 2: General Information
+%=============================
 \section{General Information}
 
+%-----------------------------
 \subsection{Summary}
+The software being verified and validated is called \textbf{Crazy 10s – A Counting Game}. It is an educational web-based card game designed to help users learn and practice arithmetic operations in different number bases, primarily Dozenal (Base 12) and Decimal (Base 10). The game provides interactive gameplay, Dozenal arithmetic challenges, score tracking, and base-conversion explanations to promote understanding of number systems.  
 
-\wss{Say what software is being tested.  Give its name and a brief overview of
-  its general functions.}
+Key functionalities (adapted from the SRS Section 9) include:
+\begin{itemize}
+    \item Initiating and joining game sessions with other users in real time.
+    \item Enforcing turn-based gameplay and validating moves under Dozenal rules.
+    \item Calculating and displaying scores in both Decimal and Dozenal forms.
+    \item Managing user profiles, accounts, and persistent game data.
+    \item Providing Dozenal hints and explanations to reinforce learning objectives.
+\end{itemize}
+Educational support functions (FR 8–9) are considered out of scope for testing at this stage.
 
+%-----------------------------
 \subsection{Objectives}
 
-\wss{State what is intended to be accomplished.  The objective will be around
-  the qualities that are most important for your project.  You might have
-  something like: ``build confidence in the software correctness,''
-  ``demonstrate adequate usability.'' etc.  You won't list all of the qualities,
-  just those that are most important.}
+The primary objective of this Verification and Validation Plan is to ensure that the Crazy 10s application satisfies all functional and non-functional requirements specified in the SRS and that the software is reliable, usable, and pedagogically effective.  
+Specifically, the V\&V process aims to:
+\begin{itemize}
+    \item Verify the correctness, consistency, and completeness of the system design and implementation.  
+    \item Validate that gameplay, scoring, and user experience meet the intended educational objectives.  
+    \item Establish measurable quality standards for performance, usability, maintainability, and reliability.  
+\end{itemize}
 
-\wss{You should also list the objectives that are out of scope.  You don't have 
-the resources to do everything, so what will you be leaving out.  For instance, 
-if you are not going to verify the quality of usability, state this.  It is also 
-worthwhile to justify why the objectives are left out.}
+\subsubsection{Qualities to Prioritize}
+\begin{table}[H]
+\centering
+\caption{Qualities to Prioritize}
+\begin{tabularx}{\textwidth}{p{3cm}p{4.5cm}X}
+\toprule
+\textbf{Quality} & \textbf{Fit Criteria} & \textbf{Reasoning} \\
+\midrule
+Reliability & System uptime $\geq$ 99\%; no unhandled exceptions during gameplay & Reliability ensures stable multiplayer sessions and accurate scoring across sessions. \\
+Scalability / Flexibility & Support up to 50 concurrent users; modular game engine for new base decks & Essential for future feature expansion such as new number bases and additional game modes. \\
+Performance & Average UI latency $<$ 200\,ms; 95th percentile $<$ 350\,ms & A responsive interface ensures enjoyable gameplay and maintains learning engagement. \\
+Usability & $\geq$ 80\% user task success rate in usability tests; average survey rating $\geq$ 4/5 & A user-friendly GUI encourages participation and reinforces educational motivation. \\
+Understandability & New players learn rules within 4 minutes; tutorial completion $>$ 90\% & Ensures ease of learning and accessibility for first-time players. \\
+Enjoyability & Post-play survey rating $\geq$ 4/5 on ``fun'' metric & Engagement sustains the educational value of the game. \\
+Availability & Game accessible 24/7; server downtime $<$ 1 hour/month & Availability supports consistent access and data integrity. \\
+Maintainability & $\geq$ 80\% code coverage; zero critical ESLint errors & Facilitates long-term sustainability and efficient issue resolution. \\
+Testability & All modules link to test cases; full CI coverage $\geq$ 80\% & Enables systematic verification and smooth CI/CD workflows. \\
+\bottomrule
+\end{tabularx}
+\end{table}
 
-\wss{The objectives are important because they highlight that you are aware of 
-limitations in your resources for verification and validation.  You can't do everything, 
-so what are you going to prioritize?  As an example, if your system depends on an 
-external library, you can explicitly state that you will assume that external library 
-has already been verified by its implementation team.}
+\subsubsection{Trivial Qualities}
+\begin{table}[H]
+\centering
+\caption{Trivial Qualities}
+\begin{tabularx}{\textwidth}{p{3cm}p{4.5cm}X}
+\toprule
+\textbf{Quality} & \textbf{Fit Criteria} & \textbf{Reasoning} \\
+\midrule
+Correctness & 100\% requirement-to-implementation traceability & Simple deterministic game logic ensures correctness with minimal complexity. \\
+Security & TLS 1.2 enforced; password hashing verified via test suite & Login security is necessary but treated as routine for the educational MVP. \\
+\bottomrule
+\end{tabularx}
+\end{table}
 
+\subsubsection{Qualities to Deprioritize}
+\begin{table}[H]
+\centering
+\caption{Qualities Not Prioritized}
+\begin{tabularx}{\textwidth}{p{3cm}p{4.5cm}X}
+\toprule
+\textbf{Quality} & \textbf{Fit Criteria} & \textbf{Reasoning} \\
+\midrule
+Interoperability & Single-platform (web) deployment; no mobile or cross-platform support & Out of scope for the current capstone; may be revisited in future iterations. \\
+Reusability & Modular components documented but not abstracted for reuse & The project’s goal is educational demonstration, not software reuse. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+%-----------------------------
 \subsection{Challenge Level and Extras}
 
-\wss{State the challenge level (advanced, general, basic) for your project.
-Your challenge level should exactly match what is included in your problem
-statement.  This should be the challenge level agreed on between you and the
-course instructor.  You can use a pull request to update your challenge level
-(in TeamComposition.csv or Repos.csv) if your plan changes as a result of the
-VnV planning exercise.}
+\subsubsection{Challenge Level}
+In the beginning of the course, Professor Smith classified our challenge level as \textbf{basic}, as we were initially building a simple web-based card game. However, with additional features—multiple number-base decks, player authentication and matching, database persistence, and a reduced team of four—the project scope now fits an \textbf{intermediate} challenge level.
 
-\wss{Summarize the extras (if any) that were tackled by this project.  Extras
-can include usability testing, code walkthroughs, user documentation, formal
-proof, GenderMag personas, Design Thinking, etc.  Extras should have already
-been approved by the course instructor as included in your problem statement.
-You can use a pull request to update your extras (in TeamComposition.csv or
-Repos.csv) if your plan changes as a result of the VnV planning exercise.}
+\subsubsection{Extras}
+\paragraph{Norman’s Principles Report}
+This extra is practical for our project because the graphical user interface and interaction design are central to player engagement and learning. Applying Norman’s principles helps refine visual cues and user feedback, both essential for usability and educational clarity.  
+\begin{itemize}
+    \item \textbf{Visibility} – Ensures players can easily identify playable cards and actions.  
+    \item \textbf{Feedback} – Provides immediate visual and auditory responses to user moves.  
+    \item \textbf{Affordance} – GUI elements (buttons, cards) clearly suggest their use.  
+    \item \textbf{Mapping} – Card and control layouts intuitively match player expectations.  
+    \item \textbf{Constraints} – Prevents illegal moves or inputs via interface restrictions.  
+    \item \textbf{Consistency} – Uniform design promotes comfort and predictability across sessions.  
+\end{itemize}
+Evaluating the design through these principles promotes balanced usability and pedagogical effectiveness.
 
+\paragraph{Usability Report}
+For this extra, we will conduct structured usability testing following HCI best practices. The testing will include:
+\begin{itemize}
+    \item Clearly defined testing goals and quantifiable success criteria.  
+    \item Predefined gameplay tasks (e.g., start match, make valid move, view results).  
+    \item Post-session surveys assessing clarity, engagement, and satisfaction.  
+\end{itemize}
+This extra will help quantify user experience metrics and identify friction points prior to final rollout, ensuring the game is both intuitive and enjoyable for its educational audience.
+
+%-----------------------------
 \subsection{Relevant Documentation}
+\begin{itemize}
+    \item \textbf{SRS} – \href{https://github.com/The-Crazy-Four-Games/Crazy-Eights-Game/blob/main/docs/SRS-Volere/SRS.pdf}{Software Requirements Specification (SRS)}  
+    \item \textbf{MG} – \href{https://github.com/The-Crazy-Four-Games/Crazy-Eights-Game/blob/main/docs/Design/SoftArchitecture/MG.pdf}{Module Guide (MG)}  
+    \item \textbf{MIS} – \href{https://github.com/The-Crazy-Four-Games/Crazy-Eights-Game/blob/main/docs/Design/SoftDetailedDes/MIS.pdf}{Module Interface Specification (MIS)}  
+\end{itemize}
 
-\wss{Reference relevant documentation.  This will definitely include your SRS
-  and your other project documents (design documents, like MG, MIS, etc).  You
-  can include these even before they are written, since by the time the project
-  is done, they will be written.  You can create BibTeX entries for your
-  documents and within those entries include a hyperlink to the documents.}
+Each of these documents contributes essential context for this plan:
+\begin{itemize}
+    \item The \textbf{SRS} defines all functional and non-functional requirements forming the foundation for test design.  
+    \item The \textbf{MG} describes the software architecture and module interactions that are verified through design and integration testing.  
+    \item The \textbf{MIS} specifies detailed module interfaces and data flows necessary for unit-level verification and static analysis.  
+\end{itemize}
+Together, they ensure complete traceability from requirements to design and testing.
+%=============================
 
-\citet{SRS}
-
-\wss{Don't just list the other documents.  You should explain why they are relevant and 
-how they relate to your VnV efforts.}
 
 \section{Plan}
 This section details the comprehensive, multi-phase plan for the verification and validation (V\&V) of the " The Crazy Tens" educational card game, an application designed to teach different number bases through a variant of the Crazy Tens card game. It establishes the V\&V-related responsibilities of the development team, the processes for verifying all key project artifacts (Software Requirements Specification, System Design, Implementation), the specific tools to be leveraged for automation, and the validation strategy to ensure the final product meets its core educational and functional objectives.   
