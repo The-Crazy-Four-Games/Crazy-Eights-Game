@@ -3,6 +3,11 @@
 \usepackage{booktabs}
 \usepackage{tabularx}
 \usepackage{hyperref}
+\usepackage{booktabs,longtable,tabularx,ragged2e}
+\usepackage{changepage}
+\usepackage{tabularx}  % for flexible-width tables
+\usepackage{booktabs}  % for \toprule, \midrule, \bottomrule
+\usepackage{float}     % for [H] placement specifier
 
 \hypersetup{
     colorlinks=true,       % false: boxed links; true: colored links
@@ -14,7 +19,13 @@
 
 \title{Hazard Analysis\\\progname}
 
-\author{\authname}
+\author{
+    Team \#25, The Crazy Four \\[1ex]
+    Ruida Chen \\
+    Ammar Sharbat \\
+    Alvin Qian \\
+    Jiaming Li
+}
 
 \date{}
 
@@ -36,9 +47,10 @@
 \toprule
 \textbf{Date} & \textbf{Developer(s)} & \textbf{Change}\\
 \midrule
-Date1 & Name(s) & Description of changes\\
-Date2 & Name(s) & Description of changes\\
-... & ... & ...\\
+10.9 & Jiaming Li & FMEA\\
+10.9 & Ruida Chen & Introduction, Scope and Purpose, Components, Reflection Q4\\
+10.9 & Alvin Qian & Assumptions\\
+10.14 & Ammar Sharbat & Safety and Security Requirements, Roadmap, Reflection Q1 and Q2\\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -51,72 +63,279 @@ Date2 & Name(s) & Description of changes\\
 
 \pagenumbering{arabic}
 
-\wss{You are free to modify this template.}
 
 \section{Introduction}
 
-\wss{You can include your definition of what a hazard is here.}
+For a card game that entertains users by applying different game rules in different numerical systems to teach various number bases, reliability of the software and the user safety are neccessary attributes. In this context, a hazard is defined as any situation within the system or in the surrounding environment that may cause harm, such as confusion, data loss or resulting in incorrect learning outcomes. In this project, hazards are not limited to physical concerns; they mainly focus on software-related risks. These issues may cause users to become frustrated or reduce the educational value of the game. The Failure Modes and Effects Analysis (FMEA) method is used to identify and evaluate these possible failure modes within key components, guiding the team to improve system fairness, learning accuracy, and overall robustness.
 
 \section{Scope and Purpose of Hazard Analysis}
 
-\wss{You should say what \textbf{loss} could be incurred because of the
-hazards.}
+The purpose of this hazard analysis is to identify components of the card game system that may lead to undesirable outcomes and to understand the potential losses that could occur if such hazards are realized. These losses may include:
+\begin{itemize}
+	\item Loss of learning effectiveness, where players receive incorrect results or misleading explanations about numeral bases.
+	\item Loss of user trust or engagement, caused by unfair scoring, interface errors, or game desynchronization.
+	\item Loss of data integrity, resulting in corrupted game records or incorrect user progress tracking.
+	\item Loss of system availability, due to server failure or communication breakdowns during active sessions.
+\end{itemize}
+The analysis considers both situations when the system functions incorrectly and when it behaves as designed but under unexpected conditions (e.g., network lag or user misuse). By identifying potential hazards early, this document supports the design of a more stable, accurate, and user-centered learning experience.
 
 \section{System Boundaries and Components}
-
-\wss{Dividing the system into components will help you brainstorm the hazards.
-You shouldn't do a full design of the components, just get a feel for the major
-ones.  For projects that involve hardware, the components will typically include
-each individual piece of hardware.  If your software will have a database, or an
-important library, these are also potential components.}
+\subsection{Frontend}
+This component provides the main interface for players to interact with the system, it captures user inputs such as playing, drawing, or skipping cards and provides visual feedback and animations during gameplay.
+\subsection{Backend Server}
+This component manages the overall system logic, coordinating user sessions, handle requests, and enforcing gameplay.
+\subsection{Database}
+This component stores persistent data such as player account information, game history, and user configuration settings.
+\subsection{Real-Time Communication Layer}
+This component maintains live connections between clients and the server to synchronize player actions in real time.
+\subsection{Game Rule Module}
+This component enforces the game's core rules, such as base conversion calculations, card validation, and scoring.
+\subsection{Auth \& User Management System}
+This component handles user registration, login, and session verification.
+\subsection{External Libraries and APIs}
+This component relies on several open-source frameworks and libraries.
 
 \section{Critical Assumptions}
 
-\wss{These assumptions that are made about the software or system.  You should
-minimize the number of assumptions that remove potential hazards.  For instance,
-you could assume a part will never fail, but it is generally better to include
-this potential failure mode.}
+The assumptions below focus on a realistic deployment and user population. 
+\subsection*{Assumptions deliberately not made}
+\begin{itemize}
+  \item We do not assume client input is trusted. All moves are validated on the server.
+  \item We do not assume stable connectivity for the entire session. Rejoin and reconciliation are required features.
+  \item We do not assume prior knowledge of base 12. In app explanations and hints are mandatory.
+\end{itemize}
+
+\begin{table}[H]
+\caption{Critical Assumptions and Implications}\label{tab:assumptions}
+\begin{tabularx}{\textwidth}{lX X X}
+\toprule
+\textbf{ID} & \textbf{Assumption} & \textbf{Rationale} & \textbf{If violated} \\
+\midrule
+A1 & Users access the game on a supported desktop or laptop browser (Chrome, Firefox, Edge) with JavaScript, cookies, and local storage enabled. & Limits test matrix and aligns with target environment. & UI features malfunction, loss of state persistence, inaccessible components. \\
+A2 & Average network latency under 300 ms and packet loss under 1\% during play. & Real time turns and fairness depend on timely messages. & Turn desync, duplicate actions, stale state decisions. \\
+A3 & Server and database share a synchronized time source via NTP and timeouts use a monotonic clock. & Consistent session expiry and replay ordering. & Expired tokens accepted, rejoin windows miscalculated, audit confusion. \\
+A4 & WebSocket over TLS 1.2 or higher is available from client networks. & Required for live play and low latency. & Falls back to polling or blocks play which raises latency and server load. \\
+A5 & Database durability is at least write ahead logging with fsync on commit. & Protects match history and user settings. & Corrupted or missing results after crashes or restarts. \\
+A6 & No personally sensitive data beyond username and optional email is stored and there are no financial transactions. & Reduces compliance and breach impact. & If sensitive data is later added, privacy risk and legal exposure increase. \\
+A7 & Client devices provide basic accessibility aids such as keyboard, focus navigation, and screen reader support. & Meets usability and accessibility requirements. & Some users cannot operate the game which creates rule misunderstanding hazards. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\newpage{}
 
 \section{Failure Mode and Effect Analysis}
+\setlength{\LTleft}{-3cm}
+\setlength{\LTright}{0pt}
+    \begin{small}
+        \begin{longtable}{@{}p{2.6cm} p{3.2cm} p{3.0cm} p{3.0cm} p{6.0cm} p{1.2cm} p{1.2cm}@{}}
+            \caption{Failure Mode and Effect Analysis (FMEA)}\label{tab:fmea}\\
+            \toprule
+            \textbf{Component} & \textbf{Failure Modes} & \textbf{Effects of Failure} &
+            \textbf{Causes of Failure} & \textbf{Recommended Action} & \textbf{SR} & \textbf{Ref.}\\
+            \midrule
+            \endfirsthead
+            \toprule
+            \textbf{Component} & \textbf{Failure Modes} & \textbf{Effects of Failure} &
+            \textbf{Causes of Failure} & \textbf{Recommended Action} & \textbf{SR} & \textbf{Ref.}\\
+            \midrule
+            \endhead
+            \bottomrule
+            \endfoot
 
-\wss{Include your FMEA table here. This is the most important part of this document.}
-\wss{The safety requirements in the table do not have to have the prefix SR.
-The most important thing is to show traceability to your SRS. You might trace to
-requirements you have already written, or you might need to add new
-requirements.}
-\wss{If no safety requirement can be devised, other mitigation strategies can be
-entered in the table, including strategies involving providing additional
-documentation, and/or test cases.}
 
+            Game Engine &
+            Incorrect Dozenal validation (e.g., misinterpreting sum = 12). &
+            Invalid moves; breaks gameplay logic and educational purpose. &
+            Logic bug; base–10/12 conversion error. &
+            (a) Add unit tests for all Dozenal comparisons; (b) property-based tests for edge cases. &
+            SR-1 & H1-1 \\ \midrule
+
+            UI Layer &
+            Hints/feedback not displayed during gameplay. &
+            Player confusion; reduced educational value. &
+            Rendering delay; missing event callback. &
+            (a) Async UI event queue with logging; (b) fallback text-only hint when animation fails. &
+            SR-2 & H1-2 \\ \midrule
+
+            Login Manager &
+            Player unable to log in or session lost. &
+            Loss of access to saved data or multiplayer mode. &
+            Session timeout; invalid credential cache. &
+            (a) Guest-mode fallback; (b) local session cache; retry with exponential backoff. &
+            SR-3 & H1-3 \\ \midrule
+
+            Data Manager &
+            Save corruption during file write. &
+            Loss of player profile or progress. &
+            Non-atomic save; unexpected shutdown. &
+            (a) Atomic writes + checksum on load; (b) periodic backups and restore flow. &
+            SR-4 & H1-4 \\ \midrule
+
+            Score Calculator &
+            Wrong Dozenal–decimal conversion or totals. &
+            Inconsistent scores; undermines trust. &
+            Arithmetic bug; type overflow. &
+            (a) Secondary calculator cross-check; (b) property-based tests on random inputs. &
+            SR-5 & H1-5 \\ \midrule
+
+            Network (future) &
+            Desynchronized multiplayer state. &
+            Different states across clients. &
+            Packet loss; high latency. &
+            (a) State-hash verification; (b) timeout-based resync; authoritative host. &
+            SR-6 & H1-6 \\ \midrule
+
+            Educational Feedback &
+            Incorrect/misleading Dozenal explanation. &
+            Players learn wrong concepts. &
+            Faulty rule mapping; stale content. &
+            (a) Peer-reviewed hint knowledge base; (b) versioning and CI checks. &
+            SR-7 & H1-7 \\ \midrule
+
+            Security Layer &
+            Unencrypted data at rest/in transit. &
+            Privacy breach; data leak. &
+            Missing encryption; insecure local storage. &
+            (a) AES-256 at rest; (b) HTTPS/TLS in transit; (c) secrets in OS keystore. &
+            SR-8 & H1-8 \\
+        \end{longtable}
+    \end{small}
+    
 \section{Safety and Security Requirements}
 
-\wss{Newly discovered requirements.  These should also be added to the SRS.  (A
-rationale design process how and why to fake it.)}
+This section defines the safety and security requirements derived from the 
+identified hazards in the FMEA. These requirements are intended to prevent or 
+mitigate the effects of hazards related to gameplay integrity, data protection, 
+and user learning outcomes.
 
+\subsection{Safety Requirements}
+
+\begin{itemize}
+  \item \textbf{SR-1: Dozenal Arithmetic Validation}
+  \\The system shall correctly validate card combinations and arithmetic 
+  operations in base-12 to prevent incorrect gameplay outcomes or user 
+  confusion.
+
+  \item \textbf{SR-2: User Interface Feedback Consistency}
+  \\The system shall provide real-time and clear visual or textual feedback 
+  after every action to prevent user uncertainty and ensure the learning goal 
+  of base comprehension is maintained.
+
+  \item \textbf{SR-3: Reliable Data Persistence}
+  \\All player progress and results shall be stored atomically to prevent data 
+  corruption, including crash recovery and session reconnection mechanisms.
+
+  \item \textbf{SR-4: Accurate Scoring and Conversion Algorithms}
+  \\The system shall verify numeric conversions between bases through redundant 
+  validation logic or automated testing to avoid incorrect scoring or 
+  educational misinformation.
+
+  \item \textbf{SR-5: Controlled Session Timeout and Recovery}
+  \\If a session disconnect occurs, the server shall maintain game state and 
+  allow the player to resume without desynchronization.
+
+  \item \textbf{SR-6: Accessibility Safeguards}
+  \\The interface shall meet WCAG accessibility requirements (keyboard 
+  navigation, readable colors, screen reader compatibility) to prevent user 
+  exclusion and reduce operational hazards.
+\end{itemize}
+
+\subsection{Security Requirements}
+
+\begin{itemize}
+  \item \textbf{SR-7: Encrypted Data Transmission}
+  \\All client-server communication shall use TLS 1.2 or higher to protect 
+  against eavesdropping and session hijacking.
+
+  \item \textbf{SR-8: Secure Data Storage}
+  \\All user-related data stored on the server shall be encrypted using 
+  AES-256 and stored without plaintext credentials.
+
+  \item \textbf{SR-9: Authentication and Session Protection}
+  \\Session tokens shall expire after a defined idle period, and invalid 
+  sessions shall not be reused to avoid unauthorized access.
+
+  \item \textbf{SR-10: Input Validation and Sanitization}
+  \\The system shall validate all client input at the server level to prevent 
+  malicious commands or injection attacks.
+
+  \item \textbf{SR-11: Versioned Educational Content}
+  \\All explanatory Dozenal rules and hints shall be version-controlled and 
+  verified for correctness before deployment to prevent misinformation hazards.
+\end{itemize}
+
+\newpage
 \section{Roadmap}
 
-\wss{Which safety requirements will be implemented as part of the capstone timeline?
-Which requirements will be implemented in the future?}
+The following roadmap identifies which safety and security requirements will be 
+implemented within the capstone timeline and which will be deferred for future 
+development.
+
+\subsection{Implemented in Capstone (Crazy10s v1.0)}
+
+\begin{itemize}
+  \item \textbf{SR-1} — Dozenal Arithmetic Validation  
+  \item \textbf{SR-2} — User Interface Feedback Consistency  
+  \item \textbf{SR-3} — Reliable Data Persistence  
+  \item \textbf{SR-4} — Accurate Scoring and Conversion Algorithms  
+  \item \textbf{SR-7} — Encrypted Data Transmission  
+  \item \textbf{SR-10} — Input Validation and Sanitization  
+\end{itemize}
+
+\subsection{Deferred for Future Release (Crazy10s v1.1 and beyond)}
+
+\begin{itemize}
+  \item \textbf{SR-5} — Controlled Session Timeout and Recovery (v1.1)  
+  \item \textbf{SR-6} — Accessibility Safeguards (v1.1)  
+  \item \textbf{SR-8} — Secure Data Storage (v1.1)  
+  \item \textbf{SR-9} — Authentication and Session Protection (v1.2)  
+  \item \textbf{SR-11} — Versioned Educational Content (v1.2)
+\end{itemize}
+
+\noindent
+These later milestones will focus on improved reliability, broader user 
+inclusion, and content safety, building on the foundation of a functioning, 
+secure educational game platform.
 
 \newpage{}
 
 \section*{Appendix --- Reflection}
 
-\wss{Not required for CAS 741}
-
 \input{../Reflection.tex}
 
-\begin{enumerate}
-    \item What went well while writing this deliverable? 
-    \item What pain points did you experience during this deliverable, and how
-    did you resolve them?
-    \item Which of your listed risks had your team thought of before this
-    deliverable, and which did you think of while doing this deliverable? For
-    the latter ones (ones you thought of while doing the Hazard Analysis), how
-    did they come about?
-    \item Other than the risk of physical harm (some projects may not have any
-    appreciable risks of this form), list at least 2 other types of risk in
-    software products. Why are they important to consider?
-\end{enumerate}
+\paragraph{1. What went well while writing this deliverable?}
+
+The team effectively applied a structured hazard analysis approach based on 
+the FMEA framework presented in the lecture. Delegation of parts in this deliverable 
+enabled sequential identification of software-specific hazards.
+Since each member did everything by order, writing this Hazard Analysis 
+was efficient and straightforward.
+
+\paragraph{2. What pain points did you experience during this deliverable, and how did you resolve them?}
+
+The primary challenge was time, as our SRS document was so demanding, 
+and took the majority of our time and focus in this deliverable.
+Another pain-point/challenge was lack of preparation for building the Hazard Analysis.
+Unfortunately, no team members went to the HA lecture, and we also did not review 
+it together as a team before delegating.\\
+As far as the Hazard Analysis itself, the most difficult part was
+distinguishing between functional errors/hazards and genuine 
+hazards which actually impact the players of our game. It was also difficult to quantify how 
+certain risks (like UI confusion) could degrade educational outcomes. The team 
+resolved these by referencing real examples from other projects in the capstone 
+repository, communicating internally, and restructuring the FMEA table 
+to better align with user-centric risks rather than only functional risks.
+
+\paragraph{3. Which of your listed risks had your team thought of before this deliverable, and which did you think of while doing this deliverable? For the latter ones (ones you thought of while doing the Hazard Analysis), how did they come about?}
+    
+    Before this deliverable, our team had already considered general risks such as scheduling conflicts, Git merge issues, and limited testing time near deadlines.
+    During the Hazard Analysis, we identified new, more specific risks, including Dozenal validation logic errors, data corruption during saving, and inaccurate educational feedback. These emerged as we analyzed each system component in the FMEA table, which led us to think more deeply about technical failures and their impact on users.
+
+\paragraph{4. Other than the risk of physical harm (some projects may not have any appreciable risks of this form), list at least 2 other types of risk in software products. Why are they important to consider?}
+\begin{itemize}
+	\item Usability and human-error risks: Poorly designed user interfaces, low-quality GUI animation, unclear instructions can cause user to make mistake or misunderstand the system, these risks are important because they directly affect user satisfaction, learning outcomes and overall quality of the software.
+	\item Data integrity and privacy risks: These occur when user data is lost, corrupted or exposed due to software defects, inappropriate authentication. Such risks are critical because they can lead to permanent loss of user information and legal issues, breaches can severely damage credibility and violate data protection regulations.	
+\end{itemize}
 
 \end{document}
