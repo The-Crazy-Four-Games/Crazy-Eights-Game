@@ -24,7 +24,37 @@ and the POC demo.
 
 \section{Demo Plans}
 
-\wss{What will you be demonstrating}
+\subsection*{Overview}
+The POC demo will be performed in-person and run locally from a group member's laptop. The goal is to demonstrate the core gameplay mechanics and an end-to-end 1v1 game flow.
+
+\subsection*{Setup}
+\begin{itemize}
+	\item Start the local server (\texttt{Node.js} terminal server) on the presenter's machine.
+	\item Use the hard-coded two-player configuration (no authentication for the POC).
+	\item Open the game in a browser on the presenter machine.
+\end{itemize}
+
+\subsection*{Demo flow (approx. 5--7 minutes)}
+\begin{enumerate}
+	\item Brief introduction of demo objective (30s).
+	\item Show initial game state: deck creation and hands dealt to both players.
+	\item Two team members will control each player and demonstrate gameplay:
+		\begin{itemize}
+			\item Playing cards from a hand.
+			\item Demonstrating matching logic (suit, rank, and add-to-10 rule).
+			\item Demonstrating wildcard logic (changing the suit).
+			\item Demonstrating drawing a card when no valid plays are available.
+		\end{itemize}
+	\item Drive the game to an endgame state and show the end condition.
+	\item Conclude with limitations and next steps, then take questions.
+\end{enumerate}
+
+\subsection*{Notes}
+\begin{itemize}
+	\item No login/authentication is required for this POC demo.
+	\item Will mention current limitations (hard-coded users, basic UI) and planned next steps.
+\end{itemize}
+
 
 \section{Team Meeting Attendance}
 
