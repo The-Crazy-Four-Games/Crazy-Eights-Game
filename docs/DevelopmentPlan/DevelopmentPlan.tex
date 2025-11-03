@@ -2,6 +2,8 @@
 
 \usepackage{booktabs}
 \usepackage{tabularx}
+\usepackage{float}
+
 
 \title{Development Plan\\The Crazy Eights}
 
@@ -214,13 +216,24 @@ PoC Demonstration Goals \\In our PoC demonstration, we will address these risks 
 \section{Expected Technology}
 
 
-\begin{itemize}
-\item JavaScript, TypeScript
-\item PostgreSQL
-\item Github, git, Github projects
-\item Node.js,  React
-\item Jest
-\end{itemize}
+\begin{table}[H]
+\centering
+\caption{Expected Technologies and Their Roles}
+\begin{tabular}{|p{3cm}|p{8cm}|p{3cm}|}
+\hline
+\textbf{Technology} & \textbf{Purpose / Usage} & \textbf{Category} \\ \hline
+React & Builds the user interface for the game, including card rendering, score display, and animations. Provides strong typing and maintainability. & Frontend \\ \hline
+Node.js & Handles backend logic, API endpoints, and rule validation. Responsible for communication between frontend and database. & Backend \\ \hline
+PostgreSQL & Stores user accounts, scores, and game history in a relational database for persistent data management. & Database \\ \hline
+WebSocket / Socket.io & Enables real-time synchronization of turns and game state between players. & Networking \\ \hline
+GitHub + GitHub Actions & Provides version control, issue tracking, and CI/CD automation for testing and deployment. & Version Control / CI-CD \\ \hline
+Jest / React Testing Library & Frameworks for automated unit and integration testing of frontend and backend components. & Testing \\ \hline
+ESLint / Prettier & Ensures consistent coding style and detects syntax or logic errors early in development. & Code Quality \\ \hline
+Discord & Used for real-time team communication, coordination, and meeting discussions. & Collaboration \\ \hline
+LaTeX & Used for professional documentation, including SRS, VnV Plan, and Development Plan deliverables. & Documentation \\ \hline
+\end{tabular}
+\end{table}
+
 
 
 \section{Coding Standard}
