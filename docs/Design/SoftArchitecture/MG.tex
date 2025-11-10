@@ -302,6 +302,11 @@ actually be implemented.
         \item Utility to convert numbers between decimal and Dozenal.
     \end{itemize}
 
+\item [\refstepcounter{mnum} \mthemnum \label{mGameActions}:] Game Actions Module
+    \begin{itemize}
+        \item Defines types and structure for player actions (play card, draw, declare suit, submit score tally).
+    \end{itemize}
+
 % --- Hardware Hiding ---
 \item [\refstepcounter{mnum} \mthemnum \label{mOS}:] Operating System Module
     \begin{itemize}
@@ -331,10 +336,11 @@ actually be implemented.
 & ~ & \mref{mDB} (PostgreSQL) \\
 \midrule
 
-\multirow{4}{0.3\textwidth}{Behaviour-Hiding Module} & (Core Domain Logic) & \mref{mGameEngine} \\
+\multirow{5}{0.3\textwidth}{Behaviour-Hiding Module} & (Core Domain Logic) & \mref{mGameEngine} \\
 & & \mref{mRules} \\
 & & \mref{mScoring} \\
 & & \mref{mBaseConversion} \\
+& & \mref{mGameActions} \\
 \midrule
 
 \multirow{15}{0.3\textwidth}{Software Decision Module} & \multirow{6}{0.3\textwidth}{Backend (Server)} & \mref{mAPI} \\
@@ -421,7 +427,7 @@ Only the leaf modules in the hierarchy have to be implemented.
   \item[Services:] Initializes a new game, applies a validated move to the game state, manages turn progression, detects end-of-game conditions.
   \item[Implemented By:] The Crazy Four (TypeScript)
   \item[State Variables:] `gameState`: \{ `players`: [ ], `deck`: Card[ ], `discardPile`: Card[ ], `currentTurn`: PlayerID, `status`: string \}
-  \item[Access Programs:] `createGame(players, options)` $\to$ `GameState`; `applyMove(gameState, move)` $\to$ `GameState`; `checkWinCondition(gameState)` $\to$ `PlayerID | null`
+  \item[Access Programs:] `dealOpeningHands(players, options)` $\to$ `GameState`; `playCard(gameState, playerID, cardID)` $\to$ `GameState`; `drawCard(gameState, playerID)` $\to$ `GameState`; `applyDeclaredSuit(gameState, playerID, suit)` $\to$ `GameState`; `finalizeRound(gameState)` $\to$ `ScoreSummary`
   \item[Exceptions:] `InvalidGameStateError`
 \end{description}
 \end{quote}
@@ -462,6 +468,27 @@ Only the leaf modules in the hierarchy have to be implemented.
 \end{description}
 \end{quote}
 
+\subsubsection{Game Actions Module (\mref{mGameActions})}
+\begin{quote}
+\begin{description}
+  \item[Secrets:] The data structure and serialization format for all player actions sent between client and server.
+  \item[Services:] Provides type-safe action constructors, validation, and JSON serialization/deserialization for network transmission.
+  \item[Implemented By:] The Crazy Four (TypeScript - shared code between frontend and backend)
+  \item[State Variables:] None (stateless utility module).
+  \item[Access Programs:] 
+    \begin{itemize}
+      \item \texttt{createPlayCardAction(playerID, cardID)} $\to$ \texttt{PlayCardAction}
+      \item \texttt{createDrawCardAction(playerID)} $\to$ \texttt{DrawCardAction}
+      \item \texttt{createDeclareSuitAction(playerID, suit)} $\to$ \texttt{DeclareSuitAction}
+      \item \texttt{createScoreTallyAction(playerID, remainingCards)} $\to$ \texttt{ScoreTallyAction}
+      \item \texttt{validateAction(action)} $\to$ \texttt{boolean}
+      \item \texttt{serializeAction(action)} $\to$ \texttt{JSON}
+      \item \texttt{deserializeAction(json)} $\to$ \texttt{GameAction}
+    \end{itemize}
+  \item[Exceptions:] \texttt{InvalidCard}, \texttt{InvalidSuit}, \texttt{SerializationError}, \texttt{DeserializationError}
+\end{description}
+\end{quote}
+
 \subsection{Software Decision Module - Backend}
 
 \subsubsection{API Module (\mref{mAPI})}
@@ -483,7 +510,7 @@ Only the leaf modules in the hierarchy have to be implemented.
   \item[Services:] Manages active game sessions, broadcasts game state updates to clients, receives and validates moves from clients in real-time.
   \item[Implemented By:] The Crazy Four (Node.js, Socket.io)
   \item[State Variables:] `activeGames`: Map<`GameID`, `GameSession`>
-  \item[Access Programs:] `on('connection', socket)`, `on('joinGame', data)`, `on('submitMove', data)`, `emit('gameStateUpdate', state)`
+  \item[Access Programs:] `on('connection', socket)`; `on('playCard', action)`; `on('drawCard', action)`; `on('declareSuit', action)`; `on('submitScoreTally', action)`; `emit('gameStateUpdate', state)`; `emit('scoreTallyConfirmed', summary)`
   \item[Exceptions:] `InvalidMove`, `NotYourTurn`, `SessionError`
 \end{description}
 \end{quote}
@@ -545,7 +572,7 @@ Only the leaf modules in the hierarchy have to be implemented.
   \item[Services:] Connects to the \mref{mRealtimeGateway}, sends user moves, and receives game state updates, applying them to the client-side state.
   \item[Implemented By:] The Crazy Four (TypeScript, Socket.io-client)
   \item[State Variables:] `socket`: Socket, `isConnected`: bool
-  \item[Access Programs:] `connect()`, `disconnect()`, `on('gameStateUpdate', callback)`, `emit('submitMove', move)`
+  \item[Access Programs:] `connect()`; `disconnect()`; `emit('playCard', action)`; `emit('drawCard')`; `emit('declareSuit', action)`; `emit('submitScoreTally', action)`; `on('gameStateUpdate', callback)`; `on('scoreTallyConfirmed', callback)`
   \item[Exceptions:] `ConnectionFailed`
 \end{description}
 \end{quote}
@@ -605,7 +632,7 @@ Only the leaf modules in the hierarchy have to be implemented.
   \item[Services:] Captures user input (e.g., clicking a card), performs client-side pre-validation, and submits the move to the \mref{mRealtimeClient}.
   \item[Implemented By:] The Crazy Four (React hooks/event handlers)
   \item[State Variables:] `selectedCard`
-  \item[Access Programs:] `onCardClick(card)`, `onDrawClick()`
+  \item[Access Programs:] `requestPlayCard(cardID)`; `requestDrawCard()`; `requestSuitChange(suit)`; `requestScoreTally(remainingCards)`
   \item[Exceptions:] `InvalidMoveUI` (provides polite feedback)
 \end{description}
 \end{quote}
@@ -650,11 +677,11 @@ requirements and between the modules and the anticipated changes.
 \textbf{Requirement (FR/NFR/SR)} & \textbf{Primary Modules}\\
 \midrule
 FR-1 Start new game & \mref{mAPI}, \mref{mMatchmaking}, \mref{mGameEngine}, \mref{mRepository}\\
-FR-2 Turn management & \mref{mGameEngine}, \mref{mRules}, \mref{mRealtimeGateway}, \mref{mRealtimeClient}, \mref{mGameBoardView}\\
-FR-3 Rule validation & \mref{mRules}, \mref{mGameEngine}, \mref{mMoveController}, \mref{mGameBoardView}\\
-FR-4 Special cards & \mref{mRules}, \mref{mGameEngine}, \mref{mGameBoardView}\\
+FR-2 Turn management & \mref{mGameEngine}, \mref{mRules}, \mref{mGameActions}, \mref{mRealtimeGateway}, \mref{mRealtimeClient}, \mref{mMoveController}, \mref{mGameBoardView}\\
+FR-3 Rule validation & \mref{mRules}, \mref{mGameEngine}, \mref{mGameActions}, \mref{mMoveController}, \mref{mGameBoardView}\\
+FR-4 Special cards & \mref{mRules}, \mref{mGameEngine}, \mref{mGameActions}, \mref{mMoveController}, \mref{mGameBoardView}\\
 FR-5 End of game & \mref{mGameEngine}, \mref{mScoring}, \mref{mScoreboardView}, \mref{mRepository}\\
-FR-6 Calculate score & \mref{mScoring}, \mref{mBaseConversion}, \mref{mScoreboardView}\\
+FR-6 Calculate score & \mref{mScoring}, \mref{mBaseConversion}, \mref{mGameActions}, \mref{mScoreboardView}\\
 FR-7 Display score & \mref{mScoreboardView}, \mref{mBaseConversion}\\
 FR-9 Highlight valid moves & \mref{mMoveController}, \mref{mGameBoardView}, \mref{mRules}\\
 FR-10 Account creation & \mref{mAPI}, \mref{mAuth}, \mref{mRepository}, \mref{mAuthClient}\\
