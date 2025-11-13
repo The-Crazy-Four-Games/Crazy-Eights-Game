@@ -60,6 +60,7 @@ urlcolor=cyan          % color of external links
 \toprule {\bf Date} & {\bf Version} & {\bf Notes}\\
 \midrule
 Nov 12th & Rev-1 & Module M1-M11\\
+Nov 12th & Rev-2 & Module M12-M22\\
 
 \bottomrule
 \end{tabularx}
@@ -1113,271 +1114,557 @@ None.
 \section{MIS of Move Controller Module (M12)}\label{sec:move-controller-module}
 
 \subsection{Module}
+The Move Controller Module is responsible for managing player actions such as playing a card, drawing a card, or declaring a suit. It validates each move against the current game state and communicates with the Game Engine Module to update results.
 
 \subsection{Uses}
+M9 Game State Manager Module, M15 Game Engine Module, M16 Rules Module, M17 Scoring Module.
 
 \subsection{Syntax}
 
 \subsubsection{Exported Constants}
+None.
 
 \subsubsection{Exported Access Programs}
+\begin{tabular}{|l|l|l|l|}
+    \hline
+    \textbf{Routine Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\ \hline
+    validateMove & Card, PlayerID & Boolean & InvalidMoveException \\ \hline
+    executeMove & Card, PlayerID & GameState & GameStateError \\ \hline
+    drawCard & PlayerID & Card & EmptyDeckException \\ \hline
+    declareSuit & Suit & None & InvalidDeclarationException \\ \hline
+\end{tabular}
 
 \subsection{Semantics}
 
 \subsubsection{State Variables}
+\begin{itemize}
+    \item currentPlayer: the player whose turn is active.
+    \item currentState: snapshot of the latest game state.
+\end{itemize}
 
 \subsubsection{Environment Variables}
+Game state data received from the server and Rules Module; user input events from UI.
 
 \subsubsection{Assumptions}
+Game state remains synchronized between client and server. Player actions are sequential and unique per turn.
 
 \subsubsection{Access Routine Semantics}
+\begin{itemize}
+    \item validateMove: checks if the card follows Crazy Eights rules (suit/rank match or valid wild).
+    \item executeMove: applies move results and notifies dependent modules of updates.
+    \item drawCard: requests one card from the draw pile and adds it to the player’s hand.
+    \item declareSuit: processes suit declaration after an “8” is played.
+\end{itemize}
 
 \subsubsection{Local Functions}
+computeNextTurn(): determines which player should act next.
 
 \subsubsection{Considerations}
+This module must ensure that all moves are deterministic and reversible for testing and replay.
 
 \newpage
 \section{MIS of Scoreboard View Module (M13)}\label{sec:scoreboard-view-module}
 
 \subsection{Module}
+The Scoreboard View Module handles the graphical display of player scores, game progress, and ranking updates. It receives score data from the Scoring Module and displays it in real time.
 
 \subsection{Uses}
+M9 Game State Manager Module, M17 Scoring Module, M18 Base Conversion Module.
 
 \subsection{Syntax}
 
 \subsubsection{Exported Constants}
+None.
 
 \subsubsection{Exported Access Programs}
+\begin{tabular}{|l|l|l|l|}
+    \hline
+    \textbf{Routine Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\ \hline
+    renderScores & ScoreList & None & None \\ \hline
+    updateScore & PlayerID, Integer & None & None \\ \hline
+    toggleBaseDisplay & None & None & None \\ \hline
+\end{tabular}
 
 \subsection{Semantics}
 
 \subsubsection{State Variables}
+\begin{itemize}
+    \item playerScores: mapping of PlayerID to score values.
+    \item currentBase: numeric base currently used for display (decimal or dozenal).
+\end{itemize}
 
 \subsubsection{Environment Variables}
+UI rendering environment; display panel for real-time updates.
 
 \subsubsection{Assumptions}
+The Scoring Module provides consistent and valid score data.
 
 \subsubsection{Access Routine Semantics}
+\begin{itemize}
+    \item renderScores: draws the scoreboard table using the latest score values.
+    \item updateScore: refreshes the score of a single player and triggers a UI redraw.
+    \item toggleBaseDisplay: switches between base-10 and base-12 visual formats.
+\end{itemize}
 
 \subsubsection{Local Functions}
+convertBase(value, base): converts a score integer into the appropriate base representation.
 
 \subsubsection{Considerations}
+The scoreboard must remain visually synchronized and readable regardless of player count or base selection.
+
 
 \newpage
 \section{MIS of Profile View Module (M14)}\label{sec:profile-view-module}
 
 \subsection{Module}
+The Profile View Module displays basic user information such as username, win/loss statistics, and recent match summaries. It supports both local profiles and online account data.
 
 \subsection{Uses}
+M9 Game State Manager Module, M17 Scoring Module, M22 Database Module.
 
 \subsection{Syntax}
 
 \subsubsection{Exported Constants}
+None.
 
 \subsubsection{Exported Access Programs}
+\begin{tabular}{|l|l|l|l|}
+    \hline
+    \textbf{Routine Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\ \hline
+    loadProfile & PlayerID & ProfileData & DatabaseReadError \\ \hline
+    updateProfile & PlayerID, ProfileData & None & DatabaseWriteError \\ \hline
+    renderProfile & ProfileData & None & None \\ \hline
+\end{tabular}
 
 \subsection{Semantics}
 
 \subsubsection{State Variables}
+\begin{itemize}
+    \item currentProfile: cached profile data of the active player.
+    \item sessionStats: recent gameplay summary for quick access.
+\end{itemize}
 
 \subsubsection{Environment Variables}
+Backend database connection or local storage; user interface display frame.
 
 \subsubsection{Assumptions}
+Each player has a unique identifier. Profile data is fetched before rendering.
 
 \subsubsection{Access Routine Semantics}
+\begin{itemize}
+    \item loadProfile: retrieves stored profile data from database or cache.
+    \item updateProfile: commits new statistics or preferences to persistent storage.
+    \item renderProfile: displays the user’s avatar, username, and score summary.
+\end{itemize}
 
 \subsubsection{Local Functions}
+formatStats(): formats match statistics for display.
 
 \subsubsection{Considerations}
+This module must protect user data integrity and minimize latency when loading or updating profile information.
+
 
 \newpage
 \section{MIS of Game Engine Module (M15)}\label{sec:game-engine-module}
 
 \subsection{Module}
+The Game Engine Module is the core logic component that manages the overall flow of the game. It coordinates moves, turn order, reshuffling, and victory conditions. This module ensures deterministic state updates for all players.
 
 \subsection{Uses}
+M12 Move Controller Module, M16 Rules Module, M17 Scoring Module, M9 Game State Manager Module.
 
 \subsection{Syntax}
 
 \subsubsection{Exported Constants}
+None.
 
 \subsubsection{Exported Access Programs}
+\begin{tabular}{|l|l|l|l|}
+    \hline
+    \textbf{Routine Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\ \hline
+    initializeGame & PlayerList & GameState & InvalidSetupException \\ \hline
+    processTurn & Action & GameState & InvalidActionException \\ \hline
+    checkWinCondition & GameState & Boolean & None \\ \hline
+    reshuffleDeck & None & None & EmptyDeckException \\ \hline
+\end{tabular}
 
 \subsection{Semantics}
 
 \subsubsection{State Variables}
+\begin{itemize}
+    \item currentState: current configuration of the game.
+    \item activePlayer: player ID whose turn is in progress.
+    \item drawPile, discardPile: sets of remaining and played cards.
+\end{itemize}
 
 \subsubsection{Environment Variables}
+Game state repository, player actions, and random seed generator.
 
 \subsubsection{Assumptions}
+Each player performs one valid action per turn. Randomness is seeded for reproducibility.
 
 \subsubsection{Access Routine Semantics}
+\begin{itemize}
+    \item initializeGame: distributes cards, sets starting player, and creates the discard pile.
+    \item processTurn: validates and executes one action, then triggers scoring update.
+    \item checkWinCondition: evaluates if any player has no cards remaining.
+    \item reshuffleDeck: moves discard cards back into draw pile and randomizes order.
+\end{itemize}
 
 \subsubsection{Local Functions}
+advanceTurn(): calculates next player index.
 
 \subsubsection{Considerations}
+The module must maintain consistency across all players and prevent race conditions during state transitions.
 
 \newpage
 \section{MIS of Rules Module (M16)}\label{sec:rules-module}
 
 \subsection{Module}
+The Rules Module defines and validates the logical rules for gameplay. It abstracts rule checking from the game engine to allow variant configurations, such as classic or dozenal rule sets.
 
 \subsection{Uses}
+M15 Game Engine Module, M17 Scoring Module.
 
 \subsection{Syntax}
 
 \subsubsection{Exported Constants}
+\begin{itemize}
+    \item MAX\_HAND\_SIZE = 10
+    \item BASE\_DOZENAL = 12
+\end{itemize}
 
 \subsubsection{Exported Access Programs}
+\begin{tabular}{|l|l|l|l|}
+    \hline
+    \textbf{Routine Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\ \hline
+    isValidMove & Card, Card & Boolean & None \\ \hline
+    isWildCard & Card & Boolean & None \\ \hline
+    getAllowedSuits & Card & SuitList & None \\ \hline
+    applyRuleVariant & GameState, VariantID & GameState & InvalidVariantException \\ \hline
+\end{tabular}
 
 \subsection{Semantics}
 
 \subsubsection{State Variables}
+Current rule set identifier (classic or dozenal).
 
 \subsubsection{Environment Variables}
+Access to game state and current discard card.
 
 \subsubsection{Assumptions}
+Game state is valid when rules are applied.
 
 \subsubsection{Access Routine Semantics}
+\begin{itemize}
+    \item isValidMove: returns true if the new card matches suit or rank or follows wild rules.
+    \item isWildCard: determines if a card can change the active suit.
+    \item getAllowedSuits: returns all valid suits for a wild card declaration.
+    \item applyRuleVariant: modifies the rule behavior based on selected configuration.
+\end{itemize}
 
 \subsubsection{Local Functions}
+compareRanks(a,b): helper for rank matching.
 
 \subsubsection{Considerations}
+Rules must remain modular and easy to extend for new variants without changing engine code.
 
 \newpage
 \section{MIS of Scoring Module (M17)}\label{sec:scoring-module}
 
 \subsection{Module}
+The Scoring Module computes and updates player scores based on remaining cards and special rules. It supports both decimal and dozenal scoring systems.
 
 \subsection{Uses}
+M15 Game Engine Module, M18 Base Conversion Module, M13 Scoreboard View Module.
 
 \subsection{Syntax}
 
 \subsubsection{Exported Constants}
+\begin{itemize}
+    \item WIN\_BONUS = 100
+    \item CARD\_PENALTY = 10
+\end{itemize}
 
 \subsubsection{Exported Access Programs}
+\begin{tabular}{|l|l|l|l|}
+    \hline
+    \textbf{Routine Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\ \hline
+    calculateScore & PlayerState & Integer & None \\ \hline
+    updateScores & GameState & ScoreList & None \\ \hline
+    getWinner & GameState & PlayerID & None \\ \hline
+\end{tabular}
 
 \subsection{Semantics}
 
 \subsubsection{State Variables}
+Mapping of PlayerID to total scores.
 
 \subsubsection{Environment Variables}
+Game state from Game Engine; base system from Base Conversion Module.
 
 \subsubsection{Assumptions}
+Game Engine correctly identifies the end of a round.
 
 \subsubsection{Access Routine Semantics}
+\begin{itemize}
+    \item calculateScore: computes total score for a player after round ends.
+    \item updateScores: recalculates and persists the current scoreboard.
+    \item getWinner: returns the player ID with the highest score.
+\end{itemize}
 
 \subsubsection{Local Functions}
+convertScoreToBase(score, base): converts numeric score into base-12 if required.
 
 \subsubsection{Considerations}
+The scoring algorithm must remain deterministic and verifiable for test reproducibility.
 
 \newpage
 \section{MIS of Base Conversion Module (M18)}\label{sec:base-conversion-module}
 
 \subsection{Module}
+The Base Conversion Module handles numerical conversions between decimal and dozenal bases. It ensures consistent representation across UI and backend.
 
 \subsection{Uses}
+M17 Scoring Module, M13 Scoreboard View Module.
 
 \subsection{Syntax}
 
 \subsubsection{Exported Constants}
+\begin{itemize}
+    \item DIGITS = [0–9, A, B]
+\end{itemize}
 
 \subsubsection{Exported Access Programs}
+\begin{tabular}{|l|l|l|l|}
+    \hline
+    \textbf{Routine Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\ \hline
+    decimalToDozenal & Integer & String & None \\ \hline
+    dozenalToDecimal & String & Integer & InvalidFormatException \\ \hline
+\end{tabular}
 
 \subsection{Semantics}
 
 \subsubsection{State Variables}
+None; stateless conversion utility.
 
 \subsubsection{Environment Variables}
+None.
 
 \subsubsection{Assumptions}
+Input values are within valid numerical range.
 
 \subsubsection{Access Routine Semantics}
+\begin{itemize}
+    \item decimalToDozenal: converts base-10 integer to base-12 string representation.
+    \item dozenalToDecimal: parses base-12 string into a base-10 integer.
+\end{itemize}
 
 \subsubsection{Local Functions}
+mapDigit(symbol): converts symbol to corresponding numeric value.
 
 \subsubsection{Considerations}
+Module must handle both positive and zero values accurately; negative numbers optional.
 
 \newpage
-\section{MIS of Operating System Module (M19)}\label{sec:os-module}
+\section{MIS of Game Actions Module (M19)}\label{sec:game-actions-module}
 
 \subsection{Module}
+The Game Actions Module encapsulates all discrete player actions in the game, such as playing, drawing, skipping, or declaring a suit. Each action is represented as a structured command object that can be validated, executed, or undone.
 
 \subsection{Uses}
+M12 Move Controller Module, M15 Game Engine Module, M16 Rules Module.
 
 \subsection{Syntax}
 
 \subsubsection{Exported Constants}
+None.
 
 \subsubsection{Exported Access Programs}
+\begin{tabular}{|l|l|l|l|}
+    \hline
+    \textbf{Routine Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\ \hline
+    createAction & ActionType, Parameters & Action & InvalidActionType \\ \hline
+    validateAction & Action, GameState & Boolean & InvalidMoveException \\ \hline
+    executeAction & Action, GameState & GameState & ActionExecutionError \\ \hline
+    undoAction & Action, GameState & GameState & None \\ \hline
+\end{tabular}
 
 \subsection{Semantics}
 
 \subsubsection{State Variables}
+\begin{itemize}
+    \item pendingActions: a queue of unexecuted player actions.
+    \item lastAction: most recent action for rollback or replay.
+\end{itemize}
 
 \subsubsection{Environment Variables}
+Player input (from Move Controller), and Game State object.
 
 \subsubsection{Assumptions}
+Each action follows the command pattern and can be validated independently.
+The game engine ensures single-threaded execution for action safety.
 
 \subsubsection{Access Routine Semantics}
+\begin{itemize}
+    \item createAction: constructs an action object from parameters (e.g., “play card 8♠”).
+    \item validateAction: checks if the action is allowed under current rules.
+    \item executeAction: applies changes to game state and notifies observers.
+    \item undoAction: reverses the last applied change for testing or debugging.
+\end{itemize}
 
 \subsubsection{Local Functions}
+serializeAction(): converts an action into a string or JSON for replay logging.
 
 \subsubsection{Considerations}
+This module improves maintainability by isolating gameplay logic into self-contained actions, enabling undo/redo and deterministic testing.
 
 \newpage
-\section{MIS of Browser Runtime Module (M20)}\label{sec:browser-runtime-module}
+\section{MIS of Operating System Module (M20)}\label{sec:os-module}
 
 \subsection{Module}
+The Operating System Module abstracts platform-specific operations such as file handling, threading, and event scheduling.
 
 \subsection{Uses}
+M21 Browser Runtime Module, M22 Database Module.
 
 \subsection{Syntax}
 
 \subsubsection{Exported Constants}
+None.
 
 \subsubsection{Exported Access Programs}
+\begin{tabular}{|l|l|l|l|}
+    \hline
+    \textbf{Routine Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\ \hline
+    scheduleTask & Function, Delay & None & None \\ \hline
+    readFile & Path & String & IOError \\ \hline
+    writeFile & Path, String & None & IOError \\ \hline
+\end{tabular}
 
 \subsection{Semantics}
 
 \subsubsection{State Variables}
+System scheduler queue.
 
 \subsubsection{Environment Variables}
+Host OS file system and process manager.
 
 \subsubsection{Assumptions}
+OS provides basic thread safety and asynchronous task execution.
 
 \subsubsection{Access Routine Semantics}
+\begin{itemize}
+    \item scheduleTask: executes a callback after a specified delay.
+    \item readFile: retrieves content from a local file path.
+    \item writeFile: writes content to a file.
+\end{itemize}
 
 \subsubsection{Local Functions}
+validatePath(path): checks file system accessibility.
 
 \subsubsection{Considerations}
+This module ensures portability across Windows, macOS, and Linux.
 
 \newpage
-\section{MIS of Database Module (M21)}\label{sec:database-module}
+\section{MIS of Browser Runtime Module (M21)}\label{sec:browser-runtime-module}
 
 \subsection{Module}
+The Browser Runtime Module provides the runtime environment for client execution, managing DOM operations, storage APIs, and event propagation.
 
 \subsection{Uses}
+M20 Operating System Module, M22 Database Module.
 
 \subsection{Syntax}
 
 \subsubsection{Exported Constants}
+None.
 
 \subsubsection{Exported Access Programs}
+\begin{tabular}{|l|l|l|l|}
+    \hline
+    \textbf{Routine Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\ \hline
+    registerEvent & String, Callback & None & None \\ \hline
+    renderElement & HTMLElement & None & None \\ \hline
+    storeLocalData & Key, Value & None & StorageException \\ \hline
+\end{tabular}
 
 \subsection{Semantics}
 
 \subsubsection{State Variables}
+Local storage cache, active event listeners.
 
 \subsubsection{Environment Variables}
+Browser environment (HTML5, Web APIs).
 
 \subsubsection{Assumptions}
+All browser APIs are available in the execution environment.
 
 \subsubsection{Access Routine Semantics}
+\begin{itemize}
+    \item registerEvent: binds a function to a specified DOM event.
+    \item renderElement: draws a UI element on the screen.
+    \item storeLocalData: writes data into browser storage for persistence.
+\end{itemize}
 
 \subsubsection{Local Functions}
+serialize(obj): converts objects into storable string format.
 
 \subsubsection{Considerations}
+Must be compatible with modern browsers and responsive frameworks.
+
+\newpage
+\section{MIS of Database Module (M22)}\label{sec:database-module}
+
+\subsection{Module}
+The Database Module manages persistent data including user profiles, scores, and match history. It abstracts database access to ensure portability and maintainability.
+
+\subsection{Uses}
+M20 Operating System Module.
+
+\subsection{Syntax}
+
+\subsubsection{Exported Constants}
+None.
+
+\subsubsection{Exported Access Programs}
+\begin{tabular}{|l|l|l|l|}
+    \hline
+    \textbf{Routine Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\ \hline
+    connect & ConnectionString & Boolean & DatabaseConnectionError \\ \hline
+    query & SQLStatement & ResultSet & QueryError \\ \hline
+    insertRecord & Table, Data & Boolean & InsertError \\ \hline
+    updateRecord & Table, Data & Boolean & UpdateError \\ \hline
+\end{tabular}
+
+\subsection{Semantics}
+
+\subsubsection{State Variables}
+\begin{itemize}
+    \item dbConnection: current active database session.
+    \item cache: optional in-memory data cache.
+\end{itemize}
+
+\subsubsection{Environment Variables}
+Database server or local SQLite environment.
+
+\subsubsection{Assumptions}
+Database connection string is valid and accessible.
+
+\subsubsection{Access Routine Semantics}
+\begin{itemize}
+    \item connect: establishes a session with the database server.
+    \item query: executes read operations and returns result sets.
+    \item insertRecord: inserts a new entry into the specified table.
+    \item updateRecord: modifies existing records based on key values.
+\end{itemize}
+
+\subsubsection{Local Functions}
+sanitizeInput(): prevents SQL injection attacks.
+
+\subsubsection{Considerations}
+Database operations must remain atomic and logged to ensure integrity and traceability.
+
 ~\newpage
 
 \section{MIS of \wss{Module Name}} \label{Module} \wss{Use labels for
