@@ -57,6 +57,7 @@ Nov 12th & Rev-1 & Module M1-M11\\
 Nov 12th & Rev-1 & Module M12-M22\\
 Nov 13th & Rev-1 & Fix consistency\\
 Nov 13th & Rev-1 & Fix correlation\\
+Nov 13th & Rev-1 & Fix consistency\\
 
 \bottomrule
 \end{tabularx}
@@ -173,9 +174,9 @@ API (Service Layer)
 
 \subsection{Uses}
 \begin{itemize}
-    \item Matchmaking Module (M3) \hyperref[sec:matchmaking-module]{M3}
-    \item Authentication Module (M4) \hyperref[sec:authentication-module]{M4}
-    \item Repository Module (M5) \hyperref[sec:repository-module]{M5}
+    \item \hyperref[sec:matchmaking-module]{M3 Matchmaking Module}
+    \item \hyperref[sec:authentication-module]{M4 Authentication Module}
+    \item \hyperref[sec:repository-module]{M5 Repository Module}
 \end{itemize}
 
 \subsection{Syntax}
@@ -278,20 +279,16 @@ Real-time Gateway
 
 \subsection{Uses}
 \begin{itemize}
-    \item Authentication Module (M4) \hyperref[sec:authentication-module]{M4}
-    \item Game Actions Module (M19) \hyperref[sec:game-actions-module]{M19}
-    \item Matchmaking Module (M3) \hyperref[sec:matchmaking-module]{M3}
+    \item \hyperref[sec:authentication-module]{M4 Authentication Module}
+    \item \hyperref[sec:game-actions-module]{M15 Game Action Module}
 \end{itemize}
 
 \subsection{Syntax}
-
 \subsubsection{Exported Constants}
 None.
-
 \subsubsection{Exported Access Programs}
-
 \begin{center}
-\begin{tabular}{p{4.5cm} p{4cm} p{3.5cm} p{3.5cm}}
+\begin{tabular}{p{4.5cm} p{4cm} p{3.5cm} >{\raggedright\arraybackslash}p{3.5cm}}
 \toprule
 \textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
 \midrule
@@ -306,25 +303,21 @@ broadcastGameState & roomID: GameID, state: GameState & void & \\
 \end{center}
 
 \subsection{Semantics}
-
 \subsubsection{State Variables}
 \begin{itemize}
-    \item \textbf{activeGames}: Map<GameID, GameSession> --- A map holding the live \texttt{GameSession} objects for all currently active games.
+    \item \textbf{activeGames}: Map$<GameID, GameSession>$ --- A map holding the live \texttt{GameSession} objects for all currently active games.
 \end{itemize}
-
 \subsubsection{Environment Variables}
 \begin{itemize}
     \item \textbf{RealtimeAdapter}: The environment (e.g., a WebSocket server) that manages client connections.
     \item \textbf{ClientSocket}: An opaque handle representing a single client connection.
 \end{itemize}
-
 \subsubsection{Assumptions}
 \begin{itemize}
     \item The \textbf{RealtimeAdapter} is running and forwards events to these handlers.
     \item \texttt{AuthToken} (inside \texttt{JoinGameData}) is verifiable by M4.
     \item M19 is available to process game logic.
 \end{itemize}
-
 \subsubsection{Access Routine Semantics}
 \noindent\textbf{handleConnection}(\textit{socket})
 \begin{itemize}
@@ -332,40 +325,34 @@ broadcastGameState & roomID: GameID, state: GameState & void & \\
     \item output: \texttt{void}.
     \item exception: \texttt{SessionError} if the connection handshake fails.
 \end{itemize}
-
 \noindent\textbf{handleJoinGame}(\textit{socket, data})
 \begin{itemize}
     \item transition:
-        1. Calls \texttt{M4.verifyToken(data.authToken)} to get a \texttt{UserID}.
+        1. Calls \texttt{M4.verifyToken}(\textit{data.authToken}) to get a \texttt{UserID}.
         2. Retrieves the \texttt{GameSession} from \textbf{activeGames} using \texttt{data.gameID}.
         3. Associates the \textit{socket} with the \texttt{GameSession} and \texttt{UserID}.
-    \item output: Calls \texttt{emitGameState(socket, currentState)} to send the current state to the joining player.
+    \item output: Calls \texttt{emitGameState}(\textit{socket, currentState}) to send the current state to the joining player.
     \item exception: \texttt{SessionError} if \texttt{authToken} is invalid. \texttt{NotFound} if the \texttt{GameSession} does not exist in \textbf{activeGames}.
 \end{itemize}
-
 \noindent\textbf{handleSubmitMove}(\textit{socket, data})
 \begin{itemize}
-	\item transition: Identifies \texttt{UserID} and \texttt{GameSession} from the \textit{socket}. Calls \texttt{M19.validateAction}(\textit{data, gameState}) to check legality. If valid, calls \texttt{M19.executeAction}(\textit{data, gameState}) to get the \texttt{newGameState}. Updates the \texttt{GameSession} in \textbf{activeGames} with \texttt{newGameState}.
+    \item transition: Identifies \texttt{UserID} and \texttt{GameSession} from the \textit{socket}. Calls \texttt{M19.validateAction}(\textit{data, gameState}) to check legality. If valid, calls \texttt{M19.executeAction}(\textit{data, gameState}) to get the \texttt{newGameState}. Updates the \texttt{GameSession} in \textbf{activeGames} with \texttt{newGameState}.
     \item output: Calls \texttt{broadcastGameState}(\textit{gameID, newGameState}) to send the new state to all players in that session.
     \item exception: InvalidMove. NotYourTurn. SessionError.
 \end{itemize}
-
 \noindent\textbf{registerGameSession}(\textit{gameID, session})
 \begin{itemize}
     \item transition: Called by M3. Adds the new \textit{session} to the \textbf{activeGames} map.
     \item output: \texttt{void}.
     \item exception: \texttt{LobbyError} if the \textit{gameID} is already active.
 \end{itemize}
-
 \subsubsection{Local Functions}
 None.
-
 \subsubsection{Considerations}
 \begin{itemize}
     \item The secret of this module is the management of stateful connections and the mapping of \texttt{ClientSocket} handles to active \texttt{GameSession}s.
     \item This module acts as the server-authoritative state synchronizer, delegating all game logic to M19.
 \end{itemize}
-
 \newpage
 \section{MIS of Matchmaking Module (M3)}\label{sec:matchmaking-module}
 
@@ -374,79 +361,70 @@ Matchmaking
 
 \subsection{Uses}
 \begin{itemize}
-    \item Game Engine Module \hyperref[sec:game-engine-module]{M15}
-    \item Real-time Gateway Module \hyperref[sec:realtime-gateway-module]{M2}
+    \item \hyperref[sec:authentication-module]{M4 Authentication Module}
+    \item \hyperref[sec:game-engine-module]{M15 Game Engine Module}
+    \item \hyperref[sec:realtime-gateway-module]{M2 Real-time Gateway Module}
 \end{itemize}
 
 \subsection{Syntax}
-
 \subsubsection{Exported Constants}
 None.
-
 \subsubsection{Exported Access Programs}
-
 \begin{center}
-\begin{tabular}{p{4cm} p{5cm} p{3.5cm} p{3.5cm}}
+\begin{tabular}{p{4cm} p{4.5cm} p{3cm} >{\raggedright\arraybackslash}p{4cm}}
 \toprule
 \textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
 \midrule
-createLobby & userID: UserID & LobbyID & LobbyError \\
-joinLobby & lobbyID: LobbyID, userID: UserID & void & LobbyFull, LobbyNotFound \\
-startMatch & lobbyID: LobbyID, hostID: UserID & GameID & LobbyNotFound, NotLobbyHost, GameCreationError \\
+createLobby & token: AuthToken, options: GameOptions & lobby: Lobby & LobbyError \\
+joinLobby & token: AuthToken, lobbyID: LobbyID & void & LobbyFull, LobbyNotFound, AuthError \\
+startMatch & token: AuthToken, lobbyID: LobbyID & gameID: GameID & LobbyNotFound, NotLobbyHost, AuthError, GameCreationError \\
 \bottomrule
 \end{tabular}
 \end{center}
 
 \subsection{Semantics}
-
 \subsubsection{State Variables}
 \begin{itemize}
-    \item \textbf{lobbies}: Map<LobbyID, Lobby> --- Holds all active, waiting-for-players \texttt{Lobby} objects. A \texttt{Lobby} object contains at least \texttt{\{ hostID: UserID, players: UserID[], status: string \}}.
+    \item \textbf{lobbies}: Map<LobbyID, Lobby> --- Holds all active, waiting-for-players \texttt{Lobby} objects [cite: 639-640].
 \end{itemize}
-
 \subsubsection{Environment Variables}
 None.
-
 \subsubsection{Assumptions}
 \begin{itemize}
-    \item Any \texttt{UserID} or \texttt{hostID} passed to this module has been authenticated by an upstream module (e.g., M1 or M4).
-    \item Modules M15 and M2 are available and ready when \texttt{startMatch} is invoked.
+    \item Any \texttt{AuthToken} is verifiable by M4.
+    \item Modules M15 and M2 are available when \texttt{startMatch} is invoked.
 \end{itemize}
-
 \subsubsection{Access Routine Semantics}
-\noindent\textbf{createLobby}(\textit{userID})
+\noindent\textbf{createLobby}(\textit{token, options})
 \begin{itemize}
-    \item transition: Generates a unique \texttt{LobbyID}. Creates a new \texttt{Lobby} object (e.g., \texttt{\{ hostID: userID, players: [userID], status: 'waiting' \}}). Adds this new object to the \textbf{lobbies} map.
-    \item output: Returns the newly created \texttt{LobbyID}.
-    \item exception: \texttt{LobbyError} if a new lobby cannot be created (e.g., system limits reached).
+    \item transition: Calls \texttt{M4.verifyToken}(\textit{token}) to get \texttt{UserID}. Generates a unique \texttt{LobbyID}. Creates a new \texttt{Lobby} object (setting \texttt{hostID = UserID}). Adds this new object to the \textbf{lobbies} map[cite: 636].
+    \item output: Returns the newly created \texttt{Lobby}.
+    \item exception: \texttt{AuthError}. \texttt{LobbyError}.
 \end{itemize}
-
-\noindent\textbf{joinLobby}(\textit{lobbyID, userID})
+\noindent\textbf{joinLobby}(\textit{token, lobbyID})
 \begin{itemize}
-    \item transition: Looks up the \texttt{Lobby} in \textbf{lobbies} using \textit{lobbyID}. Verifies \texttt{Lobby.status == 'waiting'} and \texttt{Lobby.players.length < MAX\_PLAYERS}. If valid, appends \textit{userID} to the \texttt{Lobby.players} array.
+    \item transition: Calls \texttt{M4.verifyToken}(\textit{token}) to get \texttt{UserID}. Looks up the \texttt{Lobby} in \textbf{lobbies}. Verifies \texttt{Lobby.status == 'waiting'} and \texttt{Lobby.players.length < MAX\_PLAYERS}. If valid, appends \texttt{UserID} to the \texttt{Lobby.players} array[cite: 636].
     \item output: \texttt{void}.
-    \item exception: \texttt{LobbyFull} if the lobby is at capacity. \texttt{LobbyNotFound} if \textit{lobbyID} does not exist in \textbf{lobbies} or its status is not 'waiting'.
+    \item exception: \texttt{LobbyFull}. \texttt{LobbyNotFound}. \texttt{AuthError}.
 \end{itemize}
-
-\noindent\textbf{startMatch}(\textit{lobbyID, hostID})
+\noindent\textbf{startMatch}(\textit{token, lobbyID})
 \begin{itemize}
     \item transition:
-        1. Looks up the \texttt{Lobby} in \textbf{lobbies} using \textit{lobbyID}.
-        2. Verifies that \textit{hostID} matches \texttt{Lobby.hostID}.
-        3. Calls \texttt{M15.createGame(lobby.players, gameOptions)} to receive a new \texttt{GameState}.
-        4. Calls \texttt{M2.registerGameSession(lobbyID, newGameState)} (or a similar access program) to make the game live.
-        5. Removes the \texttt{Lobby} from the \textbf{lobbies} map (or updates \texttt{Lobby.status} to 'ingame').
-    \item output: Returns the \texttt{GameID} for the newly created match (which may be the \texttt{LobbyID}).
-    \item exception: \texttt{LobbyNotFound}. \texttt{NotLobbyHost} if \textit{hostID} is not the host. \texttt{GameCreationError} if M15 or M2 report an error during game creation.
+        1. Calls \texttt{M4.verifyToken}(\textit{token}) to get \texttt{UserID}.
+        2. Looks up the \texttt{Lobby} in \textbf{lobbies} and verifies \texttt{UserID} is the host.
+        3. Calls \texttt{M15.createGame}(\textit{lobby.players, options}) to get a new \texttt{GameState}[cite: 669].
+        4. Creates a new \texttt{GameSession} object.
+        5. Calls \texttt{M2.registerGameSession}(\textit{lobbyID, newGameSession}) to hand off the session to the real-time server [cite: 630-631].
+        6. Removes the \texttt{Lobby} from the \textbf{lobbies} map[cite: 636].
+    \item output: Returns the \texttt{GameID} (which may be the \texttt{LobbyID}).
+    \item exception: \texttt{LobbyNotFound}. \texttt{NotLobbyHost}. \texttt{AuthError}. \texttt{GameCreationError}.
 \end{itemize}
-
 \subsubsection{Local Functions}
 None.
-
 \subsubsection{Considerations}
 \begin{itemize}
-    \item The secret of this module is the data structure of a \texttt{Lobby} and the logic for managing the \textbf{lobbies} map.
-    \item This module bridges the stateless API (M1) and the stateful game session (M2) by handling the pre-game lobby state.
+    \item The secret of this module is the \texttt{Lobby} data structure and the management of the \textbf{lobbies} map.
+    \item This module bridges the stateless API (M1) and the stateful game session (M2) by handling the pre-game lobby state [cite: 636-637].
 \end{itemize}
 \newpage
 \section{MIS of Authentication Module (M4)}\label{sec:authentication-module}
@@ -456,7 +434,7 @@ Authentication
 
 \subsection{Uses}
 \begin{itemize}
-    \item Repository Module \hyperref[sec:repository-module]{M5}
+    \item \hyperref[sec:repository-module]{M5 Repository Module}
 \end{itemize}
 
 \subsection{Syntax}
@@ -543,7 +521,7 @@ Repository
 
 \subsection{Uses}
 \begin{itemize}
-    \item Database Module \hyperref[sec:database-module]{M22 (PostgreSQL)}
+    \item \hyperref[sec:database-module]{M22 Database Module}
 \end{itemize}
 
 \subsection{Syntax}
@@ -647,7 +625,7 @@ Audit
 
 \subsection{Uses}
 \begin{itemize}
-    \item Operating System Module \hyperref[sec:os-module]{M20 (Server OS)}
+    \item \hyperref[sec:os-module]{M20 Operating System Module}
 \end{itemize}
 
 \subsection{Syntax}
@@ -725,7 +703,7 @@ Real-time Client
 
 \subsection{Uses}
 \begin{itemize}
-    \item Real-time Gateway Module \hyperref[sec:realtime-gateway-module]{M2}
+    \item \hyperref[sec:realtime-gateway-module]{M2  Real-time Gateway Module}
 \end{itemize}
 
 \subsection{Syntax}
@@ -811,11 +789,11 @@ Application Shell
 
 \subsection{Uses}
 \begin{itemize}
-    \item Browser Runtime Module \hyperref[sec:browser-runtime-module]{M21 (Client Runtime)}
-    \item Authentication Client Module \hyperref[sec:auth-client-module]{M9}
-    \item Lobby View Module \hyperref[sec:lobby-view-module]{M10}
-    \item Game Board View Module \hyperref[sec:game-board-view-module]{M11}
-    \item Profile View Module \hyperref[sec:profile-view-module]{M14}
+    \item \hyperref[sec:browser-runtime-module]{M21 Browser Runtime Module}
+    \item \hyperref[sec:auth-client-module]{M9 Authentication Client Module}
+    \item \hyperref[sec:lobby-view-module]{M10 Lobby View Module}
+    \item \hyperref[sec:game-board-view-module]{M11 Game Board View Module}
+    \item \hyperref[sec:profile-view-module]{M14 Profile View Module}
 \end{itemize}
 
 \subsection{Syntax}
@@ -969,9 +947,9 @@ Lobby View
 
 \subsection{Uses}
 \begin{itemize}
-    \item API Module \hyperref[sec:api-module]{M1}
-    \item Real-time Client Module \hyperref[sec:realtime-client-module]{M7}
-    \item Browser Runtime Module \hyperref[sec:browser-runtime-module]{M21 (Client Runtime)}
+    \item \hyperref[sec:api-module]{M1 API Module}
+    \item \hyperref[sec:realtime-client-module]{M7 Real-time Client Module}
+    \item \hyperref[sec:browser-runtime-module]{M21 Browser Runtime Module}
 \end{itemize}
 
 \subsection{Syntax}
@@ -1051,8 +1029,8 @@ Game Board View
 
 \subsection{Uses}
 \begin{itemize}
-    \item Browser Runtime Module \hyperref[sec:browser-runtime-module]{M21 (Client Runtime)}
-    \item Move Controller Module \hyperref[sec:move-controller-module]{M12}
+    \item \hyperref[sec:browser-runtime-module]{M21 Browser Runtime Module}
+    \item \hyperref[sec:move-controller-module]{M12 Move Controller Module}
 \end{itemize}
 
 \subsection{Syntax}
@@ -1108,15 +1086,15 @@ None.
     \item This is primarily a "dumb" rendering component; it displays state and delegates user input handling to M12.
 \end{itemize}
 \newpage
-\newpage
 \section{MIS of Move Controller Module (M12)}\label{sec:move-controller-module}
 
 \subsection{Module}
+Move Controller
 
 \subsection{Uses}
 \begin{itemize}
-    \item \hyperref[sec:realtime-client-module]{M7 Real-time Client Module}
-    \item \hyperref[sec:game-actions-module]{M19 Game Actions Module}
+    \item Real-time Client Module (M7)
+    \item Browser Runtime Module (M21)
 \end{itemize}
 
 \subsection{Syntax}
@@ -1127,68 +1105,59 @@ None.
 \subsubsection{Exported Access Programs}
 
 \begin{center}
-    \begin{tabular}{p{3.5cm} p{3.5cm} p{3cm} p{4cm}}
-        \toprule
-        \textbf{Routine Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
-        \midrule
-        validateMove & Card, PlayerID & Boolean & InvalidMoveException \\
-        executeMove & Card, PlayerID & GameState & GameStateError \\
-        drawCard & PlayerID & Card & EmptyDeckException \\
-        declareSuit & Suit & None & InvalidDeclarationException \\
-        \bottomrule
-    \end{tabular}
+\begin{tabular}{p{4cm} p{3.5cm} p{3cm} >{\raggedright\arraybackslash}p{4cm}}
+    \toprule
+    \textbf{Routine Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
+    \midrule
+    handlePlayCard & card: Card & void & InvalidMoveUI \\
+    handleDrawCard & - & void & InvalidMoveUI \\
+    \bottomrule
+\end{tabular}
 \end{center}
 
 \subsection{Semantics}
 
 \subsubsection{State Variables}
 \begin{itemize}
-    \item \textbf{currentPlayer}: the player whose turn is active.
-    \item \textbf{currentState}: snapshot of the latest game state.
+    \item \textbf{selectedCard}: Card
+    \item \textbf{uiFeedback}: string
 \end{itemize}
 
 \subsubsection{Environment Variables}
 \begin{itemize}
-    \item Game state data received from the server and Rules Module; user input events from UI.
+    \item \textbf{BrowserRuntime (M21)}: Provides user input events from the UI.
 \end{itemize}
 
 \subsubsection{Assumptions}
 \begin{itemize}
-    \item Game state remains synchronized between client and server.
-    \item Player actions are sequential and unique per turn.
+    \item Module M7 is connected.
+    \item These access programs are bound to UI elements rendered by M11.
 \end{itemize}
 
 \subsubsection{Access Routine Semantics}
-\noindent\textbf{validateMove}(\textit{Card, PlayerID})
+\noindent\textbf{handlePlayCard}(\textit{card})
 \begin{itemize}
-    \item output: checks if the card follows Crazy Eights rules (suit/rank match or valid wild).
+    \item transition: Performs client-side pre-validation. If invalid, sets \textbf{uiFeedback}. If valid, calls \texttt{M7.emit('submitMove', \{ action: 'play', payload: card \})}.
+    \item output: \texttt{void}.
+    \item exception: \texttt{InvalidMoveUI} (captured in \textbf{uiFeedback} state).
 \end{itemize}
 
-\noindent\textbf{executeMove}(\textit{Card, PlayerID})
+\noindent\textbf{handleDrawCard}(\,)
 \begin{itemize}
-    \item transition: applies move results and notifies dependent modules of updates.
-    \item output: \texttt{GameState}.
-\end{itemize}
-
-\noindent\textbf{drawCard}(\textit{PlayerID})
-\begin{itemize}
-    \item transition: requests one card from the draw pile and adds it to the player’s hand.
-    \item output: \texttt{Card}.
-\end{itemize}
-
-\noindent\textbf{declareSuit}(\textit{Suit})
-\begin{itemize}
-    \item transition: processes suit declaration after an “8” is played.
+    \item transition: Performs client-side pre-validation. If invalid, sets \textbf{uiFeedback}. If valid, calls \texttt{M7.emit('submitMove', \{ action: 'draw' \})}.
+    \item output: \texttt{void}.
+    \item exception: \texttt{InvalidMoveUI} (captured in \textbf{uiFeedback} state).
 \end{itemize}
 
 \subsubsection{Local Functions}
 \begin{itemize}
-    \item \texttt{computeNextTurn()}: determines which player should act next.
+    \item \texttt{clientSidePreValidation(...)}: Local logic to pre-check moves.
 \end{itemize}
 
 \subsubsection{Considerations}
 \begin{itemize}
-    \item This module must ensure that all moves are deterministic and reversible for testing and replay.
+    \item The secret of this module is the client-side input handling logic and pre-validation rules.
+    \item It decouples the M11 view from the M7 client service.
 \end{itemize}
 
 \newpage
@@ -1679,7 +1648,6 @@ Game Actions Module
 
 \subsection{Uses}
 \begin{itemize}
-    \item \hyperref[sec:move-controller-module]{M12 Move Controller Module}
     \item \hyperref[sec:game-engine-module]{M15 Game Engine Module}
     \item \hyperref[sec:rules-module]{M16 Rules Module}
 \end{itemize}
@@ -1691,7 +1659,10 @@ None.
 
 \subsubsection{Exported Access Programs}
 \begin{center}
-    \begin{tabular}{p{3.5cm} p{3.5cm} p{3cm} p{4cm}}
+    %
+    % 我保留了你组员的 booktabs (\toprule) 样式，它很好
+    %
+    \begin{tabular}{p{3.5cm} p{3.5cm} p{3cm} >{\raggedright\arraybackslash}p{4cm}}
         \toprule
         \textbf{Routine Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
         \midrule
@@ -1713,13 +1684,13 @@ None.
 
 \subsubsection{Environment Variables}
 \begin{itemize}
-    \item Player input (from Move Controller), and Game State object.
+    \item Backend execution environment.
 \end{itemize}
 
 \subsubsection{Assumptions}
 \begin{itemize}
     \item Each action follows the command pattern and can be validated independently.
-    \item The game engine ensures single-threaded execution for action safety.
+    \item The game engine (M15) ensures single-threaded execution for action safety.
 \end{itemize}
 
 \subsubsection{Access Routine Semantics}
@@ -1730,12 +1701,12 @@ None.
 
 \noindent\textbf{validateAction}(\textit{Action, GameState})
 \begin{itemize}
-    \item output: checks if the action is allowed under current rules.
+    \item output: checks if the action is allowed under current rules (by calling M16).
 \end{itemize}
 
 \noindent\textbf{executeAction}(\textit{Action, GameState})
 \begin{itemize}
-    \item transition: applies changes to game state and notifies observers.
+    \item transition: applies changes to game state (by calling M15) and notifies observers.
     \item output: \texttt{GameState}.
 \end{itemize}
 
@@ -1981,78 +1952,78 @@ None.
 \end{itemize}
 
 
-~\newpage
-
-\section{MIS of \wss{Module Name}} \label{Module} \wss{Use labels for
-  cross-referencing}
-
-\wss{You can reference SRS labels, such as R\ref{R_Inputs}.}
-
-\wss{It is also possible to use \LaTeX for hypperlinks to external documents.}
-
-\subsection{Module}
-
-\wss{Short name for the module}
-
-\subsection{Uses}
-
-
-\subsection{Syntax}
-
-\subsubsection{Exported Constants}
-
-\subsubsection{Exported Access Programs}
-
-\begin{center}
-\begin{tabular}{p{2cm} p{4cm} p{4cm} p{2cm}}
-\hline
-\textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
-\hline
-\wss{accessProg} & - & - & - \\
-\hline
-\end{tabular}
-\end{center}
-
-\subsection{Semantics}
-
-\subsubsection{State Variables}
-
-\wss{Not all modules will have state variables.  State variables give the module
-  a memory.}
-
-\subsubsection{Environment Variables}
-
-\wss{This section is not necessary for all modules.  Its purpose is to capture
-  when the module has external interaction with the environment, such as for a
-  device driver, screen interface, keyboard, file, etc.}
-
-\subsubsection{Assumptions}
-
-\wss{Try to minimize assumptions and anticipate programmer errors via
-  exceptions, but for practical purposes assumptions are sometimes appropriate.}
-
-\subsubsection{Access Routine Semantics}
-
-\noindent \wss{accessProg}():
-\begin{itemize}
-\item transition: \wss{if appropriate} 
-\item output: \wss{if appropriate} 
-\item exception: \wss{if appropriate} 
-\end{itemize}
-
-\wss{A module without environment variables or state variables is unlikely to
-  have a state transition.  In this case a state transition can only occur if
-  the module is changing the state of another module.}
-
-\wss{Modules rarely have both a transition and an output.  In most cases you
-  will have one or the other.}
-
-\subsubsection{Local Functions}
-
-\wss{As appropriate} \wss{These functions are for the purpose of specification.
-  They are not necessarily something that is going to be implemented
-  explicitly.  Even if they are implemented, they are not exported; they only
-  have local scope.}
+%~\newpage
+%
+%\section{MIS of \wss{Module Name}} \label{Module} \wss{Use labels for
+%  cross-referencing}
+%
+%\wss{You can reference SRS labels, such as R\ref{R_Inputs}.}
+%
+%\wss{It is also possible to use \LaTeX for hypperlinks to external documents.}
+%
+%\subsection{Module}
+%
+%\wss{Short name for the module}
+%
+%\subsection{Uses}
+%
+%
+%\subsection{Syntax}
+%
+%\subsubsection{Exported Constants}
+%
+%\subsubsection{Exported Access Programs}
+%
+%\begin{center}
+%\begin{tabular}{p{2cm} p{4cm} p{4cm} p{2cm}}
+%\hline
+%\textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
+%\hline
+%\wss{accessProg} & - & - & - \\
+%\hline
+%\end{tabular}
+%\end{center}
+%
+%\subsection{Semantics}
+%
+%\subsubsection{State Variables}
+%
+%\wss{Not all modules will have state variables.  State variables give the module
+%  a memory.}
+%
+%\subsubsection{Environment Variables}
+%
+%\wss{This section is not necessary for all modules.  Its purpose is to capture
+%  when the module has external interaction with the environment, such as for a
+%  device driver, screen interface, keyboard, file, etc.}
+%
+%\subsubsection{Assumptions}
+%
+%\wss{Try to minimize assumptions and anticipate programmer errors via
+%  exceptions, but for practical purposes assumptions are sometimes appropriate.}
+%
+%\subsubsection{Access Routine Semantics}
+%
+%\noindent \wss{accessProg}():
+%\begin{itemize}
+%\item transition: \wss{if appropriate} 
+%\item output: \wss{if appropriate} 
+%\item exception: \wss{if appropriate} 
+%\end{itemize}
+%
+%\wss{A module without environment variables or state variables is unlikely to
+%  have a state transition.  In this case a state transition can only occur if
+%  the module is changing the state of another module.}
+%
+%\wss{Modules rarely have both a transition and an output.  In most cases you
+%  will have one or the other.}
+%
+%\subsubsection{Local Functions}
+%
+%\wss{As appropriate} \wss{These functions are for the purpose of specification.
+%  They are not necessarily something that is going to be implemented
+%  explicitly.  Even if they are implemented, they are not exported; they only
+%  have local scope.}
 
 \newpage
 
