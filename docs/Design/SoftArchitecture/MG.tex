@@ -54,7 +54,7 @@
 \midrule
 Nov 8 & Alvin & Module Hierarchy and decomposition\\
 Nov 9 & Alvin & Updated API's for game action modules\\
-
+Nov 13 & Alvin & modified module decomposition to remove incorrect content\\
 \bottomrule
 \end{tabularx}
 
@@ -424,69 +424,45 @@ Only the leaf modules in the hierarchy have to be implemented.
 \subsubsection{Game Engine Module (\mref{mGameEngine})}
 \begin{quote}
 \begin{description}
-  \item[Secrets:] The data structure representing the game state (players, deck, discard pile, turn). The state machine for turn management.
-  \item[Services:] Initializes a new game, applies a validated move to the game state, manages turn progression, detects end-of-game conditions.
+  \item[Secrets:] Internal representations of the cards, deck, discard pile, players, and the turn-management state machine.
+  \item[Services:] Creates new matches, enforces turn order, applies validated moves, and determines when a round or match is finished.
   \item[Implemented By:] The Crazy Four (TypeScript)
-  \item[State Variables:] `gameState`: \{ `players`: [ ], `deck`: Card[ ], `discardPile`: Card[ ], `currentTurn`: PlayerID, `status`: string \}
-  \item[Access Programs:] `dealOpeningHands(players, options)` $\to$ `GameState`; `playCard(gameState, playerID, cardID)` $\to$ `GameState`; `drawCard(gameState, playerID)` $\to$ `GameState`; `applyDeclaredSuit(gameState, playerID, suit)` $\to$ `GameState`; `finalizeRound(gameState)` $\to$ `ScoreSummary`
-  \item[Exceptions:] `InvalidGameStateError`
 \end{description}
 \end{quote}
 
 \subsubsection{Rules Module (\mref{mRules})}
 \begin{quote}
 \begin{description}
-  \item[Secrets:] The specific logic for move validation: same suit, same rank, or sum equals 12 (base-12). The logic for special cards (e.g., '10' is wild).
-  \item[Services:] Validates if a move is legal given the current game state. Lists all legal moves for a player.
+  \item[Secrets:] Exact move-validation criteria, including how matching ranks, suits, dozenal sums, and special cards are handled.
+  \item[Services:] Confirms whether a proposed move is legal and enumerates valid moves for a player based on the current game situation.
   \item[Implemented By:] The Crazy Four (TypeScript)
-  \item[State Variables:] None (pure functions).
-  \item[Access Programs:] `isLegalMove(move, gameState)` $\to$ `bool`; `getValidMoves(playerHand, gameState)` $\to$ `Card[]`
-  \item[Exceptions:] `InvalidRuleConfig`
 \end{description}
 \end{quote}
 
 \subsubsection{Scoring Module (\mref{mScoring})}
 \begin{quote}
 \begin{description}
-  \item[Secrets:] The algorithm for calculating round scores based on opponents' remaining cards.
-  \item[Services:] Calculates the score for a completed round.
+  \item[Secrets:] The scoring equation that converts remaining cards into round points and aggregates them over a match.
+  \item[Services:] Produces the score summary for each player whenever a round ends.
   \item[Implemented By:] The Crazy Four (TypeScript)
-  \item[State Variables:] None (pure functions).
-  \item[Access Programs:] `calculateRoundScore(winningPlayerID, gameState)` $\to$ `ScoreObject`
-  \item[Exceptions:] None
 \end{description}
 \end{quote}
 
 \subsubsection{Base Conversion Module (\mref{mBaseConversion})}
 \begin{quote}
 \begin{description}
-  \item[Secrets:] The algorithm and symbols (e.g., \reflectbox{2}, \reflectbox{3}) for converting between base-10 (Decimal) and base-12 (Dozenal).
-  \item[Services:] Converts a decimal number to a Dozenal string. Converts a Dozenal string to a decimal number. Used for scoring and UI display.
+  \item[Secrets:] The mapping of digits and symbols used to move between decimal and dozenal numbers.
+  \item[Services:] Translates numeric values to and from dozenal form for scoring logic and UI presentation.
   \item[Implemented By:] The Crazy Four (TypeScript)
-  \item[State Variables:] None (pure functions).
-  \item[Access Programs:] `toDozenal(decimalValue)` $\to$ `string`; `toDecimal(dozenalString)` $\to$ `number`
-  \item[Exceptions:] `InvalidBaseString`
 \end{description}
 \end{quote}
 
 \subsubsection{Game Actions Module (\mref{mGameActions})}
 \begin{quote}
 \begin{description}
-  \item[Secrets:] The data structure and serialization format for all player actions sent between client and server.
-  \item[Services:] Provides type-safe action constructors, validation, and JSON serialization/deserialization for network transmission.
-  \item[Implemented By:] The Crazy Four (TypeScript - shared code between frontend and backend)
-  \item[State Variables:] None (stateless utility module).
-  \item[Access Programs:] 
-    \begin{itemize}
-      \item \texttt{createPlayCardAction(playerID, cardID)} $\to$ \texttt{PlayCardAction}
-      \item \texttt{createDrawCardAction(playerID)} $\to$ \texttt{DrawCardAction}
-      \item \texttt{createDeclareSuitAction(playerID, suit)} $\to$ \texttt{DeclareSuitAction}
-      \item \texttt{createScoreTallyAction(playerID, remainingCards)} $\to$ \texttt{ScoreTallyAction}
-      \item \texttt{validateAction(action)} $\to$ \texttt{boolean}
-      \item \texttt{serializeAction(action)} $\to$ \texttt{JSON}
-      \item \texttt{deserializeAction(json)} $\to$ \texttt{GameAction}
-    \end{itemize}
-  \item[Exceptions:] \texttt{InvalidCard}, \texttt{InvalidSuit}, \texttt{SerializationError}, \texttt{DeserializationError}
+  \item[Secrets:] The canonical data structures and serialization format that represent every move a player can make.
+  \item[Services:] Defines and validates the action payloads that flow between client and server, keeping both sides in sync on network contracts.
+  \item[Implemented By:] The Crazy Four (TypeScript shared library)
 \end{description}
 \end{quote}
 
@@ -495,72 +471,54 @@ Only the leaf modules in the hierarchy have to be implemented.
 \subsubsection{API Module (\mref{mAPI})}
 \begin{quote}
 \begin{description}
-  \item[Secrets:] REST API route definitions, request/response formats (JSON), HTTP status codes.
-  \item[Services:] Provides stateless HTTP endpoints for user authentication (FR-10..13), profile management (FR-15..17), and game creation.
+  \item[Secrets:] REST endpoint structure, payload schemas, and HTTP conventions for every backend capability.
+  \item[Services:] Exposes stateless HTTP routes for authentication, profile management, and bootstrapping new games as defined in the SRS.
   \item[Implemented By:] The Crazy Four (Node.js, Express)
-  \item[State Variables:] None (stateless).
-  \item[Access Programs:] `POST /api/auth/signup`, `POST /api/auth/login`, `GET /api/profile`, `PUT /api/profile`, `DELETE /api/profile`
-  \item[Exceptions:] `AuthError` (401/403), `ValidationError` (400), `NotFound` (404)
 \end{description}
 \end{quote}
 
 \subsubsection{Real-time Gateway Module (\mref{mRealtimeGateway})}
 \begin{quote}
 \begin{description}
-  \item[Secrets:] WebSocket protocol, message serialization, room/session management. Server-authoritative state synchronization logic.
-  \item[Services:] Manages active game sessions, broadcasts game state updates to clients, receives and validates moves from clients in real-time.
+  \item[Secrets:] Real-time messaging strategy, room management, and conflict-resolution logic for server-authoritative play.
+  \item[Services:] Hosts WebSocket connections, validates incoming moves, and pushes synchronized game state updates to every participant.
   \item[Implemented By:] The Crazy Four (Node.js, Socket.io)
-  \item[State Variables:] `activeGames`: Map<`GameID`, `GameSession`>
-  \item[Access Programs:] `on('connection', socket)`; `on('playCard', action)`; `on('drawCard', action)`; `on('declareSuit', action)`; `on('submitScoreTally', action)`; `emit('gameStateUpdate', state)`; `emit('scoreTallyConfirmed', summary)`
-  \item[Exceptions:] `InvalidMove`, `NotYourTurn`, `SessionError`
 \end{description}
 \end{quote}
 
 \subsubsection{Matchmaking Module (\mref{mMatchmaking})}
 \begin{quote}
 \begin{description}
-  \item[Secrets:] Logic for pairing players, managing game lobbies, and handling invites.
-  \item[Services:] Allows users to create, join, or be matched into a game session.
+  \item[Secrets:] The pairing heuristics, lobby data structures, and invitation policies for assembling tables.
+  \item[Services:] Creates, lists, and manages lobbies so players can host private games or enter matchmaking queues.
   \item[Implemented By:] The Crazy Four (Node.js)
-  \item[State Variables:] `lobbies`: Map<`LobbyID`, `Lobby`>
-  \item[Access Programs:] `createLobby(userID)` $\to$ `LobbyID`; `joinLobby(lobbyID, userID)` $\to$ `void`
-  \item[Exceptions:] `LobbyFull`, `LobbyNotFound`
 \end{description}
 \end{quote}
 
 \subsubsection{Authentication Module (\mref{mAuth})}
 \begin{quote}
 \begin{description}
-  \item[Secrets:] Password hashing algorithm (e.g., bcrypt), salt generation, JWT/session token structure and secret key.
-  \item[Services:] Handles user account creation, validates credentials, manages guest sessions, issues and verifies session tokens.
+  \item[Secrets:] Password hashing configuration, credential storage details, and token-signing keys.
+  \item[Services:] Creates accounts, validates logins, manages guest sessions, and issues/verifies tokens used by the rest of the backend.
   \item[Implemented By:] The Crazy Four (Node.js)
-  \item[State Variables:] None.
-  \item[Access Programs:] `registerUser(username, password)` $\to$ `User`; `loginUser(username, password)` $\to$ `Token`; `verifyToken(token)` $\to$ `UserID`
-  \item[Exceptions:] `InvalidCredentials`, `UserExists`, `TokenExpired`
 \end{description}
 \end{quote}
 
 \subsubsection{Repository Module (\mref{mRepository})}
 \begin{quote}
 \begin{description}
-  \item[Secrets:] Database schema (tables, columns, relations), SQL queries, connection pooling.
-  \item[Services:] Provides an interface for all data persistence. Stores and retrieves user data (FR-14, FR-15), game history, and scores. Handles updates (FR-16) and deletions (FR-17).
+  \item[Secrets:] Schema design, optimized SQL queries, and database access strategies.
+  \item[Services:] Offers a clean persistence interface for storing players, credentials, match history, and statistics while shielding callers from database details.
   \item[Implemented By:] The Crazy Four (Node.js, node-postgres)
-  \item[State Variables:] Database connection pool.
-  \item[Access Programs:] `findUserByUsername(username)`, `createUser(data)`, `saveGameResult(result)`, `getUserProfile(userID)`, `updateUserProfile(userID, data)`, `deleteUser(userID)`
-  \item[Exceptions:] `DatabaseConnectionError`, `RecordNotFound`, `UniqueConstraintViolation`
 \end{description}
 \end{quote}
 
 \subsubsection{Audit Module (\mref{mAudit})}
 \begin{quote}
 \begin{description}
-  \item[Secrets:] Log format, log storage location, retention policy.
-  \item[Services:] Logs important system events (e.g., login, game end, errors) for debugging and security auditing.
+  \item[Secrets:] The exact event schema, retention policy, and storage targets for operational logs.
+  \item[Services:] Captures authentication, gameplay, and system events to support debugging, compliance, and user inquiries.
   \item[Implemented By:] The Crazy Four (Node.js, Winston)
-  \item[State Variables:] Logger instance.
-  \item[Access Programs:] `log.info(message)`, `log.warn(message)`, `log.error(message)`
-  \item[Exceptions:] `LogWriteError`
 \end{description}
 \end{quote}
 
@@ -569,96 +527,72 @@ Only the leaf modules in the hierarchy have to be implemented.
 \subsubsection{Real-time Client Module (\mref{mRealtimeClient})}
 \begin{quote}
 \begin{description}
-  \item[Secrets:] WebSocket connection state, reconnection logic.
-  \item[Services:] Connects to the \mref{mRealtimeGateway}, sends user moves, and receives game state updates, applying them to the client-side state.
+  \item[Secrets:] Connection lifecycle logic, buffering strategy, and reconnection heuristics for the browser client.
+  \item[Services:] Establishes WebSocket links to the \mref{mRealtimeGateway}, relays user actions, and applies server updates to the local UI state.
   \item[Implemented By:] The Crazy Four (TypeScript, Socket.io-client)
-  \item[State Variables:] `socket`: Socket, `isConnected`: bool
-  \item[Access Programs:] `connect()`; `disconnect()`; `emit('playCard', action)`; `emit('drawCard')`; `emit('declareSuit', action)`; `emit('submitScoreTally', action)`; `on('gameStateUpdate', callback)`; `on('scoreTallyConfirmed', callback)`
-  \item[Exceptions:] `ConnectionFailed`
 \end{description}
 \end{quote}
 
 \subsubsection{Application Shell Module (\mref{mAppShell})}
 \begin{quote}
 \begin{description}
-  \item[Secrets:] Application routing table, global layout structure (header, footer), global state management (e.g., auth status).
-  \item[Services:] Renders the main application layout, controls page navigation, and manages global UI state.
+  \item[Secrets:] App-wide navigation plan, shared layout primitives, and global state wiring (theme, auth awareness).
+  \item[Services:] Hosts the consistent chrome of the site and orchestrates routing between major views.
   \item[Implemented By:] The Crazy Four (React)
-  \item[State Variables:] `currentUser`, `currentRoute`
-  \item[Access Programs:] (Rendered React component)
-  \item[Exceptions:] `RouteNotFound`
 \end{description}
 \end{quote}
 
 \subsubsection{Authentication Client Module (\mref{mAuthClient})}
 \begin{quote}
 \begin{description}
-  \item[Secrets:] How auth tokens are stored (e.g., localStorage, httpOnly cookie).
-  \item[Services:] Provides UI components (login/signup forms) and client-side logic for authentication. Communicates with \mref{mAPI}.
+  \item[Secrets:] Decisions about secure token storage and the flows for refreshing or clearing credentials in the browser.
+  \item[Services:] Presents login, signup, and logout experiences while coordinating with the \mref{mAPI} for authentication calls.
   \item[Implemented By:] The Crazy Four (React)
-  \item[State Variables:] `username`, `password`, `isLoading`: bool, `error`: string
-  \item[Access Programs:] `handleLogin()`, `handleSignup()`, `handleLogout()`
-  \item[Exceptions:] `AuthUIError`
 \end{description}
 \end{quote}
 
 \subsubsection{Lobby View Module (\mref{mLobbyView})}
 \begin{quote}
 \begin{description}
-  \item[Secrets:] UI for listing, creating, and joining games.
-  \item[Services:] Renders the game lobby, interacts with \mref{mAPI} and \mref{mRealtimeClient} to manage matchmaking.
+  \item[Secrets:] Layout, styling, and interaction patterns for discovering or hosting lobbies.
+  \item[Services:] Shows available rooms, lets players create or join sessions, and triggers matchmaking calls via \mref{mAPI} and \mref{mRealtimeClient}.
   \item[Implemented By:] The Crazy Four (React)
-  \item[State Variables:] `lobbiesList`: [ ], `selectedLobby`
-  \item[Access Programs:] `handleCreateGame()`, `handleJoinGame(lobbyID)`
-  \item[Exceptions:] None
 \end{description}
 \end{quote}
 
 \subsubsection{Game Board View Module (\mref{mGameBoardView})}
 \begin{quote}
 \begin{description}
-  \item[Secrets:] The DOM/CSS for rendering cards, hands, and the board. Animation logic.
-  \item[Services:] Renders the main game interface (player hand, discard pile, deck). Visually highlights valid moves (FR-9).
+  \item[Secrets:] Visual composition of the board, card animations, and responsive behavior across devices.
+  \item[Services:] Draws the playable surface, displays player hands and discard piles, and highlights valid actions per the rule engine.
   \item[Implemented By:] The Crazy Four (React)
-  \item[State Variables:] `clientGameState`, `validMoves`: [ ]
-  \item[Access Programs:] (Rendered React component based on props)
-  \item[Exceptions:] None
 \end{description}
 \end{quote}
 
 \subsubsection{Move Controller Module (\mref{mMoveController})}
 \begin{quote}
 \begin{description}
-  \item[Secrets:] Client-side input handling logic (click, drag-and-drop).
-  \item[Services:] Captures user input (e.g., clicking a card), performs client-side pre-validation, and submits the move to the \mref{mRealtimeClient}.
-  \item[Implemented By:] The Crazy Four (React hooks/event handlers)
-  \item[State Variables:] `selectedCard`
-  \item[Access Programs:] `requestPlayCard(cardID)`; `requestDrawCard()`; `requestSuitChange(suit)`; `requestScoreTally(remainingCards)`
-  \item[Exceptions:] `InvalidMoveUI` (provides polite feedback)
+  \item[Secrets:] Gesture-handling patterns and UX rules for how players select cards or declare suits.
+  \item[Services:] Interprets user intent on the board, performs light validation, and forwards structured actions through the \mref{mRealtimeClient}.
+  \item[Implemented By:] The Crazy Four (React hooks and event handlers)
 \end{description}
 \end{quote}
 
 \subsubsection{Scoreboard View Module (\mref{mScoreboardView})}
 \begin{quote}
 \begin{description}
-  \item[Secrets:] UI layout for displaying end-of-game or end-of-round scores.
-  \item[Services:] Renders the score, clearly displaying both Decimal and Dozenal values (FR-7).
+  \item[Secrets:] Presentation choices for multi-base score displays and animations for round summaries.
+  \item[Services:] Shows standings after each round, presenting both decimal and dozenal scores in a clear, accessible format.
   \item[Implemented By:] The Crazy Four (React)
-  \item[State Variables:] `scoreData`
-  \item[Access Programs:] (Rendered React component based on props)
-  \item[Exceptions:] None
 \end{description}
 \end{quote}
 
 \subsubsection{Profile View Module (\mref{mProfileView})}
 \begin{quote}
 \begin{description}
-  \item[Secrets:] UI layout for displaying game history and user statistics.
-  \item[Services:] Renders the user's profile and game history (FR-15). Allows user to request data deletion (FR-17).
+  \item[Secrets:] Layout decisions for profile cards, statistics summaries, and sensitive account actions.
+  \item[Services:] Displays player history, stats, and account-management controls, including export or deletion requests tied to FR-15..17.
   \item[Implemented By:] The Crazy Four (React)
-  \item[State Variables:] `profileData`, `gameHistory`: [ ]
-  \item[Access Programs:] `handleDeleteAccount()`
-  \item[Exceptions:] None
 \end{description}
 \end{quote}
 
