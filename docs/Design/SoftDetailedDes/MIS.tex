@@ -56,6 +56,7 @@ urlcolor=cyan          % color of external links
 Nov 12th & Rev-1 & Module M1-M11\\
 Nov 12th & Rev-1 & Module M12-M22\\
 Nov 13th & Rev-1 & Fix consistency\\
+Nov 13th & Rev-1 & Fix correlation\\
 
 \bottomrule
 \end{tabularx}
@@ -1107,17 +1108,15 @@ None.
     \item This is primarily a "dumb" rendering component; it displays state and delegates user input handling to M12.
 \end{itemize}
 \newpage
+\newpage
 \section{MIS of Move Controller Module (M12)}\label{sec:move-controller-module}
 
 \subsection{Module}
-Move Controller
 
 \subsection{Uses}
 \begin{itemize}
-    \item M9 Game State Manager Module
-    \item M15 Game Engine Module
-    \item M16 Rules Module
-    \item M17 Scoring Module
+    \item \hyperref[sec:realtime-client-module]{M7 Real-time Client Module}
+    \item \hyperref[sec:game-actions-module]{M19 Game Actions Module}
 \end{itemize}
 
 \subsection{Syntax}
@@ -1128,16 +1127,16 @@ None.
 \subsubsection{Exported Access Programs}
 
 \begin{center}
-\begin{tabular}{p{3.5cm} p{3.5cm} p{3cm} p{4cm}}
-\toprule
-\textbf{Routine Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
-\midrule
-validateMove & Card, PlayerID & Boolean & InvalidMoveException \\
-executeMove & Card, PlayerID & GameState & GameStateError \\
-drawCard & PlayerID & Card & EmptyDeckException \\
-declareSuit & Suit & None & InvalidDeclarationException \\
-\bottomrule
-\end{tabular}
+    \begin{tabular}{p{3.5cm} p{3.5cm} p{3cm} p{4cm}}
+        \toprule
+        \textbf{Routine Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
+        \midrule
+        validateMove & Card, PlayerID & Boolean & InvalidMoveException \\
+        executeMove & Card, PlayerID & GameState & GameStateError \\
+        drawCard & PlayerID & Card & EmptyDeckException \\
+        declareSuit & Suit & None & InvalidDeclarationException \\
+        \bottomrule
+    \end{tabular}
 \end{center}
 
 \subsection{Semantics}
@@ -1200,9 +1199,8 @@ The Scoreboard View Module handles the graphical display of player scores, game 
 
 \subsection{Uses}
 \begin{itemize}
-    \item M9 Game State Manager Module
-    \item M17 Scoring Module
-    \item M18 Base Conversion Module
+    \item \hyperref[sec:scoring-module]{M17 Scoring Module}
+    \item \hyperref[sec:base-conversion-module]{M18 Base Conversion Module}
 \end{itemize}
 
 \subsection{Syntax}
@@ -1213,17 +1211,17 @@ None.
 \subsubsection{Exported Access Programs}
 
 \begin{center}
-\begin{tabular}{|l|l|l|l|}
-    \hline
-    \textbf{Routine Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
-    \hline
-    renderScores & ScoreList & None & None \\
-    \hline
-    updateScore & PlayerID, Integer & None & None \\
-    \hline
-    toggleBaseDisplay & None & None & None \\
-    \hline
-\end{tabular}
+    \begin{tabular}{|l|l|l|l|}
+        \hline
+        \textbf{Routine Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
+        \hline
+        renderScores & ScoreList & None & None \\
+        \hline
+        updateScore & PlayerID, Integer & None & None \\
+        \hline
+        toggleBaseDisplay & None & None & None \\
+        \hline
+    \end{tabular}
 \end{center}
 
 \subsection{Semantics}
@@ -1275,8 +1273,6 @@ None.
 
 
 
-
-
 \newpage
 \section{MIS of Profile View Module (M14)}\label{sec:profile-view-module}
 
@@ -1285,9 +1281,8 @@ Profile View Module
 
 \subsection{Uses}
 \begin{itemize}
-    \item M9 Game State Manager Module
-    \item M17 Scoring Module
-    \item M22 Database Module
+    \item \hyperref[sec:auth-client-module]{M9 Authentication Client Module}
+    \item \hyperref[sec:scoring-module]{M17 Scoring Module}
 \end{itemize}
 
 \subsection{Syntax}
@@ -1298,15 +1293,15 @@ None.
 \subsubsection{Exported Access Programs}
 
 \begin{center}
-\begin{tabular}{p{4cm} p{3.5cm} p{3cm} p{3.5cm}}
-\toprule
-\textbf{Routine Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
-\midrule
-loadProfile & PlayerID & ProfileData & DatabaseReadError \\
-updateProfile & PlayerID, ProfileData & None & DatabaseWriteError \\
-renderProfile & ProfileData & None & None \\
-\bottomrule
-\end{tabular}
+    \begin{tabular}{p{4cm} p{3.5cm} p{3cm} p{3.5cm}}
+        \toprule
+        \textbf{Routine Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
+        \midrule
+        loadProfile & PlayerID & ProfileData & DatabaseReadError \\
+        updateProfile & PlayerID, ProfileData & None & DatabaseWriteError \\
+        renderProfile & ProfileData & None & None \\
+        \bottomrule
+    \end{tabular}
 \end{center}
 
 \subsection{Semantics}
@@ -1356,6 +1351,7 @@ renderProfile & ProfileData & None & None \\
 \begin{itemize}
     \item This module must protect user data integrity and minimize latency when loading or updating profile information.
 \end{itemize}
+
 \newpage
 \section{MIS of Game Engine Module (M15)}\label{sec:game-engine-module}
 
@@ -1364,10 +1360,9 @@ Game Engine
 
 \subsection{Uses}
 \begin{itemize}
-    \item M12 Move Controller Module
-    \item M16 Rules Module
-    \item M17 Scoring Module
-    \item M9 Game State Manager Module
+    \item \hyperref[sec:rules-module]{M16 Rules Module}
+    \item \hyperref[sec:scoring-module]{M17 Scoring Module}
+    \item \hyperref[sec:game-actions-module]{M19 Game Actions Module}
 \end{itemize}
 
 \subsection{Syntax}
@@ -1378,16 +1373,16 @@ None.
 \subsubsection{Exported Access Programs}
 
 \begin{center}
-\begin{tabular}{p{4cm} p{3.5cm} p{3cm} p{4cm}}
-\toprule
-\textbf{Routine Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
-\midrule
-initializeGame & PlayerList & GameState & InvalidSetupException \\
-processTurn & Action & GameState & InvalidActionException \\
-checkWinCondition & GameState & Boolean & None \\
-reshuffleDeck & None & None & EmptyDeckException \\
-\bottomrule
-\end{tabular}
+    \begin{tabular}{p{4cm} p{3.5cm} p{3cm} p{4cm}}
+        \toprule
+        \textbf{Routine Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
+        \midrule
+        initializeGame & PlayerList & GameState & InvalidSetupException \\
+        processTurn & Action & GameState & InvalidActionException \\
+        checkWinCondition & GameState & Boolean & None \\
+        reshuffleDeck & None & None & EmptyDeckException \\
+        \bottomrule
+    \end{tabular}
 \end{center}
 
 \subsection{Semantics}
@@ -1443,6 +1438,7 @@ reshuffleDeck & None & None & EmptyDeckException \\
 \begin{itemize}
     \item The module must maintain consistency across all players and prevent race conditions during state transitions.
 \end{itemize}
+
 \newpage
 \section{MIS of Rules Module (M16)}\label{sec:rules-module}
 
@@ -1451,8 +1447,8 @@ Rules Module
 
 \subsection{Uses}
 \begin{itemize}
-    \item M15 Game Engine Module
-    \item M17 Scoring Module
+    \item \hyperref[sec:game-engine-module]{M15 Game Engine Module}
+    \item \hyperref[sec:scoring-module]{M17 Scoring Module}
 \end{itemize}
 
 \subsection{Syntax}
@@ -1466,16 +1462,16 @@ Rules Module
 \subsubsection{Exported Access Programs}
 
 \begin{center}
-\begin{tabular}{p{4cm} p{3.5cm} p{3cm} p{4cm}}
-\toprule
-\textbf{Routine Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
-\midrule
-isValidMove & Card, Card & Boolean & None \\
-isWildCard & Card & Boolean & None \\
-getAllowedSuits & Card & SuitList & None \\
-applyRuleVariant & GameState, VariantID & GameState & InvalidVariantException \\
-\bottomrule
-\end{tabular}
+    \begin{tabular}{p{4cm} p{3.5cm} p{3cm} p{4cm}}
+        \toprule
+        \textbf{Routine Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
+        \midrule
+        isValidMove & Card, Card & Boolean & None \\
+        isWildCard & Card & Boolean & None \\
+        getAllowedSuits & Card & SuitList & None \\
+        applyRuleVariant & GameState, VariantID & GameState & InvalidVariantException \\
+        \bottomrule
+    \end{tabular}
 \end{center}
 
 \subsection{Semantics}
@@ -1526,6 +1522,7 @@ applyRuleVariant & GameState, VariantID & GameState & InvalidVariantException \\
 \begin{itemize}
     \item Rules must remain modular and easy to extend for new variants without changing engine code.
 \end{itemize}
+
 \newpage
 \newpage
 \section{MIS of Scoring Module (M17)}\label{sec:scoring-module}
@@ -1535,9 +1532,8 @@ Scoring Module
 
 \subsection{Uses}
 \begin{itemize}
-    \item M15 Game Engine Module
-    \item M18 Base Conversion Module
-    \item M13 Scoreboard View Module
+    \item \hyperref[sec:game-engine-module]{M15 Game Engine Module}
+    \item \hyperref[sec:base-conversion-module]{M18 Base Conversion Module}
 \end{itemize}
 
 \subsection{Syntax}
@@ -1551,15 +1547,15 @@ Scoring Module
 \subsubsection{Exported Access Programs}
 
 \begin{center}
-\begin{tabular}{p{4cm} p{3.5cm} p{3cm} p{3cm}}
-\toprule
-\textbf{Routine Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
-\midrule
-calculateScore & PlayerState & Integer & None \\
-updateScores & GameState & ScoreList & None \\
-getWinner & GameState & PlayerID & None \\
-\bottomrule
-\end{tabular}
+    \begin{tabular}{p{4cm} p{3.5cm} p{3cm} p{3cm}}
+        \toprule
+        \textbf{Routine Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
+        \midrule
+        calculateScore & PlayerState & Integer & None \\
+        updateScores & GameState & ScoreList & None \\
+        getWinner & GameState & PlayerID & None \\
+        \bottomrule
+    \end{tabular}
 \end{center}
 
 \subsection{Semantics}
@@ -1605,6 +1601,7 @@ getWinner & GameState & PlayerID & None \\
 \begin{itemize}
     \item The scoring algorithm must remain deterministic and verifiable for test reproducibility.
 \end{itemize}
+
 \newpage
 \section{MIS of Base Conversion Module (M18)}\label{sec:base-conversion-module}
 
@@ -1613,8 +1610,7 @@ Base Conversion Module
 
 \subsection{Uses}
 \begin{itemize}
-    \item M17 Scoring Module
-    \item M13 Scoreboard View Module
+    \item \hyperref[sec:scoring-module]{M17 Scoring Module}
 \end{itemize}
 
 \subsection{Syntax}
@@ -1627,14 +1623,14 @@ Base Conversion Module
 \subsubsection{Exported Access Programs}
 
 \begin{center}
-\begin{tabular}{p{4cm} p{3.5cm} p{3cm} p{4cm}}
-\toprule
-\textbf{Routine Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
-\midrule
-decimalToDozenal & Integer & String & None \\
-dozenalToDecimal & String & Integer & InvalidFormatException \\
-\bottomrule
-\end{tabular}
+    \begin{tabular}{p{4cm} p{3.5cm} p{3cm} p{4cm}}
+        \toprule
+        \textbf{Routine Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
+        \midrule
+        decimalToDozenal & Integer & String & None \\
+        dozenalToDecimal & String & Integer & InvalidFormatException \\
+        \bottomrule
+    \end{tabular}
 \end{center}
 
 \subsection{Semantics}
@@ -1674,6 +1670,7 @@ dozenalToDecimal & String & Integer & InvalidFormatException \\
 \begin{itemize}
     \item Module must handle both positive and zero values accurately; negative numbers optional.
 \end{itemize}
+
 \newpage
 \section{MIS of Game Actions Module (M19)}\label{sec:game-actions-module}
 
@@ -1682,9 +1679,9 @@ Game Actions Module
 
 \subsection{Uses}
 \begin{itemize}
-    \item M12 Move Controller Module
-    \item M15 Game Engine Module
-    \item M16 Rules Module
+    \item \hyperref[sec:move-controller-module]{M12 Move Controller Module}
+    \item \hyperref[sec:game-engine-module]{M15 Game Engine Module}
+    \item \hyperref[sec:rules-module]{M16 Rules Module}
 \end{itemize}
 
 \subsection{Syntax}
@@ -1694,16 +1691,16 @@ None.
 
 \subsubsection{Exported Access Programs}
 \begin{center}
-\begin{tabular}{p{3.5cm} p{3.5cm} p{3cm} p{4cm}}
-\toprule
-\textbf{Routine Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
-\midrule
-createAction & ActionType, Parameters & Action & InvalidActionType \\
-validateAction & Action, GameState & Boolean & InvalidMoveException \\
-executeAction & Action, GameState & GameState & ActionExecutionError \\
-undoAction & Action, GameState & GameState & None \\
-\bottomrule
-\end{tabular}
+    \begin{tabular}{p{3.5cm} p{3.5cm} p{3cm} p{4cm}}
+        \toprule
+        \textbf{Routine Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
+        \midrule
+        createAction & ActionType, Parameters & Action & InvalidActionType \\
+        validateAction & Action, GameState & Boolean & InvalidMoveException \\
+        executeAction & Action, GameState & GameState & ActionExecutionError \\
+        undoAction & Action, GameState & GameState & None \\
+        \bottomrule
+    \end{tabular}
 \end{center}
 
 \subsection{Semantics}
@@ -1765,10 +1762,7 @@ undoAction & Action, GameState & GameState & None \\
 Operating System Module
 
 \subsection{Uses}
-\begin{itemize}
-    \item M21 Browser Runtime Module
-    \item M22 Database Module
-\end{itemize}
+None.
 
 \subsection{Syntax}
 
@@ -1777,15 +1771,15 @@ None.
 
 \subsubsection{Exported Access Programs}
 \begin{center}
-\begin{tabular}{p{4cm} p{3.5cm} p{3cm} p{3cm}}
-\toprule
-\textbf{Routine Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
-\midrule
-scheduleTask & Function, Delay & None & None \\
-readFile & Path & String & IOError \\
-writeFile & Path, String & None & IOError \\
-\bottomrule
-\end{tabular}
+    \begin{tabular}{p{4cm} p{3.5cm} p{3cm} p{3cm}}
+        \toprule
+        \textbf{Routine Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
+        \midrule
+        scheduleTask & Function, Delay & None & None \\
+        readFile & Path & String & IOError \\
+        writeFile & Path, String & None & IOError \\
+        \bottomrule
+    \end{tabular}
 \end{center}
 
 \subsection{Semantics}
@@ -1832,6 +1826,7 @@ writeFile & Path, String & None & IOError \\
 \begin{itemize}
     \item This module ensures portability across Windows, macOS, and Linux.
 \end{itemize}
+
 \newpage
 \section{MIS of Browser Runtime Module (M21)}\label{sec:browser-runtime-module}
 
@@ -1839,10 +1834,7 @@ writeFile & Path, String & None & IOError \\
 Browser Runtime Module
 
 \subsection{Uses}
-\begin{itemize}
-    \item M20 Operating System Module
-    \item M22 Database Module
-\end{itemize}
+None.
 
 \subsection{Syntax}
 
@@ -1851,15 +1843,15 @@ None.
 
 \subsubsection{Exported Access Programs}
 \begin{center}
-\begin{tabular}{p{4cm} p{3.5cm} p{3cm} p{4cm}}
-\toprule
-\textbf{Routine Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
-\midrule
-registerEvent & String, Callback & None & None \\
-renderElement & HTMLElement & None & None \\
-storeLocalData & Key, Value & None & StorageException \\
-\bottomrule
-\end{tabular}
+    \begin{tabular}{p{4cm} p{3.5cm} p{3cm} p{4cm}}
+        \toprule
+        \textbf{Routine Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
+        \midrule
+        registerEvent & String, Callback & None & None \\
+        renderElement & HTMLElement & None & None \\
+        storeLocalData & Key, Value & None & StorageException \\
+        \bottomrule
+    \end{tabular}
 \end{center}
 
 \subsection{Semantics}
@@ -1915,9 +1907,7 @@ storeLocalData & Key, Value & None & StorageException \\
 Database Module
 
 \subsection{Uses}
-\begin{itemize}
-    \item M20 Operating System Module
-\end{itemize}
+None.
 
 \subsection{Syntax}
 
@@ -1926,16 +1916,16 @@ None.
 
 \subsubsection{Exported Access Programs}
 \begin{center}
-\begin{tabular}{p{4cm} p{3.5cm} p{3cm} p{4.5cm}}
-\toprule
-\textbf{Routine Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
-\midrule
-connect & ConnectionString & Boolean & DatabaseConnectionError \\
-query & SQLStatement & ResultSet & QueryError \\
-insertRecord & Table, Data & Boolean & InsertError \\
-updateRecord & Table, Data & Boolean & UpdateError \\
-\bottomrule
-\end{tabular}
+    \begin{tabular}{p{4cm} p{3.5cm} p{3cm} p{4.5cm}}
+        \toprule
+        \textbf{Routine Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
+        \midrule
+        connect & ConnectionString & Boolean & DatabaseConnectionError \\
+        query & SQLStatement & ResultSet & QueryError \\
+        insertRecord & Table, Data & Boolean & InsertError \\
+        updateRecord & Table, Data & Boolean & UpdateError \\
+        \bottomrule
+    \end{tabular}
 \end{center}
 
 \subsection{Semantics}
@@ -1989,6 +1979,7 @@ updateRecord & Table, Data & Boolean & UpdateError \\
 \begin{itemize}
     \item Database operations must remain atomic and logged to ensure integrity and traceability.
 \end{itemize}
+
 
 ~\newpage
 
