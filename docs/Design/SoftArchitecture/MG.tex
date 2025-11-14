@@ -52,9 +52,12 @@
 \begin{tabularx}{\textwidth}{p{3cm}p{2cm}X}
 \toprule {\bf Date} & {\bf Version} & {\bf Notes}\\
 \midrule
+Nov 6 & Alvin, Ammar, Ruida, Jim & Initial draft of basic MG (not in report)\\
+Nov 7 & Above \& Chris Schankula & Review and feedback of basic MG\\
 Nov 8 & Alvin & Module Hierarchy and decomposition\\
 Nov 9 & Alvin & Updated API's for game action modules\\
 Nov 13 & Alvin & modified module decomposition to remove incorrect content\\
+Nov 13 & Ammar & added ACs, AC Traceability, Use Hierarchy, UI, Design of CPs; WebSocket, Timeline\\
 \bottomrule
 \end{tabularx}
 
@@ -159,47 +162,9 @@ the completeness of the design against the requirements provided in the SRS. The
 other shows the relation between anticipated changes and the modules. Section
 \ref{SecUse} describes the use relation between modules.
 
+
+%%add
 \section{Anticipated and Unlikely Changes} \label{SecChange}
-
-This section lists possible changes to the system. According to the likeliness
-of the change, the possible changes are classified into two
-categories. Anticipated changes are listed in Section \ref{SecAchange}, and
-unlikely changes are listed in Section \ref{SecUchange}.
-
-\subsection{Anticipated Changes} \label{SecAchange}
-
-Anticipated changes are the source of the information that is to be hidden
-inside the modules. Ideally, changing one of the anticipated changes will only
-require changing the one module that hides the associated decision. The approach
-adapted here is called design for
-change.
-
-\begin{description}
-\item[\refstepcounter{acnum} \actheacnum \label{acHardware}:] The specific
-  hardware on which the software is running.
-\item[\refstepcounter{acnum} \actheacnum \label{acInput}:] The format of the
-  initial input data.
-\item ...
-\end{description}
-
-\wss{Anticipated changes relate to changes that would be made in requirements,
-design or implementation choices.  They are not related to changes that are made
-at run-time, like the values of parameters.}
-
-\subsection{Unlikely Changes} \label{SecUchange}
-
-The module design should be as general as possible. However, a general system is
-more complex. Sometimes this complexity is not necessary. Fixing some design
-decisions at the system architecture stage can simplify the software design. If
-these decision should later need to be changed, then many parts of the design
-will potentially need to be modified. Hence, it is not intended that these
-decisions will be changed.
-
-\begin{description}
-\item[\refstepcounter{ucnum} \uctheucnum \label{ucIO}:] Input/Output devices
-  (Input: File and/or Keyboard, Output: File, Memory, and/or Screen).
-\item ...
-\end{description}
 
 \section{Module Hierarchy} \label{SecMH}
 
@@ -667,6 +632,9 @@ SR-10 (Input validation) & \mref{mAPI}, \mref{mRealtimeGateway}, \mref{mMoveCont
 \end{tabularx}
 \end{table}
 
+
+%%add
+
 \begin{table}[H]
 \centering
 \caption{Trace Between Anticipated Changes and Modules (TblACT)}
@@ -685,55 +653,30 @@ SR-10 (Input validation) & \mref{mAPI}, \mref{mRealtimeGateway}, \mref{mMoveCont
 \bottomrule
 \end{tabularx}
 \end{table}
-\section{Use Hierarchy Between Modules} \label{SecUse}
 
-In this section, the uses hierarchy between modules is
-provided. \citet{Parnas1978} said of two programs A and B that A {\em uses} B if
-correct execution of B may be necessary for A to complete the task described in
-its specification. That is, A {\em uses} B if there exist situations in which
-the correct functioning of A depends upon the availability of a correct
-implementation of B.  Figure \ref{FigUH} illustrates the use relation between
-the modules. It can be seen that the graph is a directed acyclic graph
-(DAG). Each level of the hierarchy offers a testable and usable subset of the
-system, and modules in the higher level of the hierarchy are essentially simpler
-because they use modules from the lower levels.
 
-\wss{The uses relation is not a data flow diagram.  In the code there will often
-be an import statement in module A when it directly uses module B.  Module B
-provides the services that module A needs.  The code for module A needs to be
-able to see these services (hence the import statement).  Since the uses
-relation is transitive, there is a use relation without an import, but the
-arrows in the diagram typically correspond to the presence of import statement.}
-
-\wss{If module A uses module B, the arrow is directed from A to B.}
-
-\begin{figure}[H]
-\centering
+\section{Use Hierarchy} \label{SecUse}
 %\includegraphics[width=0.7\textwidth]{UsesHierarchy.png}
-\caption{Use hierarchy among modules}
-\label{FigUH}
-\end{figure}
 
-%\section*{References}
+
+
+%%add
 
 \section{User Interfaces}
 
-\wss{Design of user interface for software and hardware.  Attach an appendix if
-needed. Drawings, Sketches, Figma}
+%%add
 
 \section{Design of Communication Protocols}
 
-\wss{If appropriate}
+%%add
 
 \section{Timeline}
 
-\wss{Schedule of tasks and who is responsible}
+%%add
 
-\wss{You can point to GitHub if this information is included there}
+\newpage
 
 \bibliographystyle {plainnat}
 \bibliography{../../../refs/References}
-
-\newpage{}
 
 \end{document}
